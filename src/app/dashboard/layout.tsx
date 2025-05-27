@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
-import { Navigation } from '@/components/layout/navigation'
 
 export default function DashboardLayout({
   children,
@@ -64,11 +63,8 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {children}
-      </main>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {children}
     </div>
   )
 } 

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/hooks/use-toast'
 import { Settings, Send, CheckCircle, AlertCircle, Eye, EyeOff } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
 
 interface WhatsAppSettings {
   id?: string
@@ -29,7 +30,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
   const [showToken, setShowToken] = useState(false)
-  const [testMessage, setTestMessage] = useState('Hello! This is a test message from your WhatsApp automation system. 🚀')
+  const [testMessage, setTestMessage] = useState('Hello! This is a test message from your ClientPing automation system. 🚀')
 
   const supabase = createClientComponentClient()
 
@@ -152,29 +153,35 @@ export default function SettingsPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>
+    return (
+      <DashboardLayout
+        title="WhatsApp Settings"
+        description="Configure your WhatsApp Business API credentials to enable message sending"
+        icon={<Settings className="h-8 w-8 text-purple-600 dark:text-purple-400" />}
+      >
+        <div className="flex justify-center items-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-          <Settings className="h-8 w-8" />
-          WhatsApp Settings
-        </h1>
-        <p className="mt-2 text-gray-600">Configure your WhatsApp Business API credentials to enable message sending</p>
-      </div>
-
+    <DashboardLayout
+      title="WhatsApp Settings"
+      description="Configure your WhatsApp Business API credentials to enable message sending"
+      icon={<Settings className="h-8 w-8 text-purple-600 dark:text-purple-400" />}
+    >
       <div className="grid gap-6 max-w-4xl">
         {/* Setup Instructions */}
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
           <CardHeader>
-            <CardTitle className="text-blue-800 flex items-center gap-2">
+            <CardTitle className="text-blue-800 dark:text-blue-300 flex items-center gap-2">
               <AlertCircle className="h-5 w-5" />
               How to Get WhatsApp Business API Credentials
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-blue-700 space-y-2">
+          <CardContent className="text-blue-700 dark:text-blue-300 space-y-2">
             <p><strong>1.</strong> Go to <a href="https://developers.facebook.com/" target="_blank" rel="noopener noreferrer" className="underline">Facebook Developers</a></p>
             <p><strong>2.</strong> Create a new app and add WhatsApp Business API</p>
             <p><strong>3.</strong> Get your Phone Number ID from the WhatsApp Business API dashboard</p>
@@ -184,33 +191,35 @@ export default function SettingsPage() {
         </Card>
 
         {/* WhatsApp Configuration */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>WhatsApp Business API Configuration</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white">WhatsApp Business API Configuration</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="api-url">API URL</Label>
+              <Label htmlFor="api-url" className="text-gray-700 dark:text-gray-300">API URL</Label>
               <Input
                 id="api-url"
                 value={settings.whatsapp_api_url}
                 onChange={(e) => setSettings({ ...settings, whatsapp_api_url: e.target.value })}
                 placeholder="https://graph.facebook.com/v15.0"
+                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="phone-id">Phone Number ID</Label>
+              <Label htmlFor="phone-id" className="text-gray-700 dark:text-gray-300">Phone Number ID</Label>
               <Input
                 id="phone-id"
                 value={settings.whatsapp_phone_id}
                 onChange={(e) => setSettings({ ...settings, whatsapp_phone_id: e.target.value })}
                 placeholder="Enter your WhatsApp Phone Number ID"
+                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="access-token">Access Token</Label>
+              <Label htmlFor="access-token" className="text-gray-700 dark:text-gray-300">Access Token</Label>
               <div className="relative">
                 <Input
                   id="access-token"
@@ -218,13 +227,13 @@ export default function SettingsPage() {
                   value={settings.whatsapp_access_token}
                   onChange={(e) => setSettings({ ...settings, whatsapp_access_token: e.target.value })}
                   placeholder="Enter your WhatsApp Access Token"
-                  className="pr-10"
+                  className="pr-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3"
+                  className="absolute right-0 top-0 h-full px-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                   onClick={() => setShowToken(!showToken)}
                 >
                   {showToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -239,35 +248,37 @@ export default function SettingsPage() {
         </Card>
 
         {/* Test Message */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
               <Send className="h-5 w-5" />
               Test WhatsApp Message
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="test-phone">Test Phone Number</Label>
+              <Label htmlFor="test-phone" className="text-gray-700 dark:text-gray-300">Test Phone Number</Label>
               <Input
                 id="test-phone"
                 value={settings.test_phone_number}
                 onChange={(e) => setSettings({ ...settings, test_phone_number: e.target.value })}
                 placeholder="Enter phone number with country code (e.g., +1234567890)"
+                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Include country code without + symbol (e.g., 1234567890 for US number)
               </p>
             </div>
 
             <div>
-              <Label htmlFor="test-message">Test Message</Label>
+              <Label htmlFor="test-message" className="text-gray-700 dark:text-gray-300">Test Message</Label>
               <Textarea
                 id="test-message"
                 value={testMessage}
                 onChange={(e) => setTestMessage(e.target.value)}
                 placeholder="Enter your test message"
                 rows={3}
+                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
               />
             </div>
 
@@ -290,40 +301,40 @@ export default function SettingsPage() {
         </Card>
 
         {/* Status Indicators */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Configuration Status</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white">Configuration Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 {settings.whatsapp_phone_id ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500" />
+                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
                 )}
-                <span>Phone Number ID</span>
+                <span className="text-gray-700 dark:text-gray-300">Phone Number ID</span>
               </div>
               <div className="flex items-center gap-2">
                 {settings.whatsapp_access_token ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500" />
+                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
                 )}
-                <span>Access Token</span>
+                <span className="text-gray-700 dark:text-gray-300">Access Token</span>
               </div>
               <div className="flex items-center gap-2">
                 {settings.test_phone_number ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500" />
+                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
                 )}
-                <span>Test Phone Number</span>
+                <span className="text-gray-700 dark:text-gray-300">Test Phone Number</span>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </DashboardLayout>
   )
 } 

@@ -6,6 +6,9 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useTheme } from 'next-themes'
+import { Moon, Sun, LogOut } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -18,6 +21,12 @@ export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClientComponentClient()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -25,13 +34,19 @@ export function Navigation() {
     router.refresh()
   }
 
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
+
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-xl font-bold text-gray-900">WhatsApp Automation</h1>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                📱 ClientPing
+              </h1>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navigation.map((item) => (
@@ -39,10 +54,10 @@ export function Navigation() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
+                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
                     pathname === item.href
-                      ? 'border-indigo-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      ? 'border-blue-500 text-gray-900 dark:text-white'
+                      : 'border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200'
                   )}
                 >
                   {item.name}
@@ -50,8 +65,23 @@ export function Navigation() {
               ))}
             </div>
           </div>
-          <div className="flex items-center">
-            <Button variant="outline" onClick={handleSignOut}>
+          <div className="flex items-center space-x-3">
+            {mounted && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            )}
+            <Button variant="outline" onClick={handleSignOut} size="sm">
+              <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
           </div>

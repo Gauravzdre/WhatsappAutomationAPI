@@ -9,8 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { toast } from '@/hooks/use-toast'
-import { Trash2, Edit, Upload } from 'lucide-react'
+import { Trash2, Edit, Upload, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
 
 interface Client {
   id: string
@@ -130,62 +131,79 @@ export default function ClientsPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>
+    return (
+      <DashboardLayout
+        title="Clients"
+        description="Manage your client contacts"
+        icon={<Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />}
+      >
+        <div className="flex justify-center items-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Clients</h1>
-          <p className="mt-2 text-gray-600">Manage your WhatsApp contacts</p>
-        </div>
-        <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/dashboard/clients/import')}
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Import CSV
-          </Button>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openNewClientDialog}>Add Client</Button>
-            </DialogTrigger>
-            <DialogContent>
+    <DashboardLayout
+      title="Clients"
+      description="Manage your client contacts"
+      icon={<Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />}
+    >
+      {/* Action Buttons */}
+      <div className="flex justify-end space-x-2 mb-6">
+        <Button
+          variant="outline"
+          onClick={() => router.push('/dashboard/clients/import')}
+          className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          <Upload className="h-4 w-4 mr-2" />
+          Import CSV
+        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={openNewClientDialog}>
+              <Users className="h-4 w-4 mr-2" />
+              Add Client
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-gray-900 dark:text-white">
                 {editingClient ? 'Edit Client' : 'Add New Client'}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">Name</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone" className="text-gray-700 dark:text-gray-300">Phone</Label>
                 <Input
                   id="phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+1234567890"
                   required
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                 />
               </div>
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                 />
               </div>
               <div className="flex justify-end space-x-2">
@@ -193,6 +211,7 @@ export default function ClientsPage() {
                   type="button"
                   variant="outline"
                   onClick={() => setIsDialogOpen(false)}
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Cancel
                 </Button>
@@ -203,63 +222,69 @@ export default function ClientsPage() {
             </form>
           </DialogContent>
         </Dialog>
-        </div>
       </div>
 
-      <Card>
+      {/* Clients Table */}
+      <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>All Clients</CardTitle>
+          <CardTitle className="text-gray-900 dark:text-white">All Clients ({clients.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {clients.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No clients found. Add your first client to get started.</p>
+            <div className="text-center py-12">
+              <Users className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 text-lg">No clients found</p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm">Add your first client to get started.</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {clients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.name}</TableCell>
-                    <TableCell>{client.phone}</TableCell>
-                    <TableCell>{client.email}</TableCell>
-                    <TableCell>
-                      {new Date(client.created_at).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEdit(client)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDelete(client.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-200 dark:border-gray-700">
+                    <TableHead className="text-gray-700 dark:text-gray-300">Name</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Phone</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Email</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Created</TableHead>
+                    <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {clients.map((client) => (
+                    <TableRow key={client.id} className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <TableCell className="font-medium text-gray-900 dark:text-white">{client.name}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-300">{client.phone}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-300">{client.email}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-300">
+                        {new Date(client.created_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(client)}
+                            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(client.id)}
+                            className="border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
-    </div>
+    </DashboardLayout>
   )
 } 

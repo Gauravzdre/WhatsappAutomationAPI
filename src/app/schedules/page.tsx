@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast'
 import { ScheduleBuilder } from '@/components/schedule-builder'
 import { Badge } from '@/components/ui/badge'
 import { Trash2, Edit, Calendar, Clock, Send } from 'lucide-react'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
 
 interface Client {
   id: string
@@ -273,29 +274,40 @@ export default function SchedulesPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>
+    return (
+      <DashboardLayout
+        title="Message Schedules"
+        description="Set up automated WhatsApp messages - no technical knowledge required!"
+        icon={<Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />}
+      >
+        <div className="flex justify-center items-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">📅 Message Schedules</h1>
-          <p className="mt-2 text-gray-600">Set up automated WhatsApp messages - no technical knowledge required!</p>
-        </div>
+    <DashboardLayout
+      title="Message Schedules"
+      description="Set up automated WhatsApp messages - no technical knowledge required!"
+      icon={<Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />}
+    >
+      {/* Create Schedule Button */}
+      <div className="flex justify-end mb-6">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={openNewScheduleDialog} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={openNewScheduleDialog} className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
               <Calendar className="h-4 w-4 mr-2" />
               Create Schedule
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-gray-900 dark:text-white">
                 {editingSchedule ? 'Edit Schedule' : 'Add New Schedule'}
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-gray-600 dark:text-gray-300">
                 {editingSchedule 
                   ? 'Update your automated message schedule settings.' 
                   : 'Set up a new automated WhatsApp message schedule with simple, user-friendly options.'
@@ -304,17 +316,17 @@ export default function SchedulesPage() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="client">Client</Label>
+                <Label htmlFor="client" className="text-gray-700 dark:text-gray-300">Client</Label>
                 <Select
                   value={formData.client_id}
                   onValueChange={(value) => setFormData({ ...formData, client_id: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white">
                     <SelectValue placeholder="Select a client" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                     {clients.map((client) => (
-                      <SelectItem key={client.id} value={client.id}>
+                      <SelectItem key={client.id} value={client.id} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
                         {client.name} ({client.phone})
                       </SelectItem>
                     ))}
@@ -322,17 +334,18 @@ export default function SchedulesPage() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="message">Message</Label>
+                <Label htmlFor="message" className="text-gray-700 dark:text-gray-300">Message</Label>
                 <Textarea
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Enter your message here..."
                   required
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                 />
               </div>
               <div>
-                <Label className="text-base font-medium mb-4 block">
+                <Label className="text-base font-medium mb-4 block text-gray-700 dark:text-gray-300">
                   📅 When should this message be sent?
                 </Label>
                 <ScheduleBuilder
@@ -345,6 +358,7 @@ export default function SchedulesPage() {
                   type="button"
                   variant="outline"
                   onClick={() => setIsDialogOpen(false)}
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Cancel
                 </Button>
@@ -357,98 +371,104 @@ export default function SchedulesPage() {
         </Dialog>
       </div>
 
-      <Card>
+      {/* Schedules Table */}
+      <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>All Schedules</CardTitle>
+          <CardTitle className="text-gray-900 dark:text-white">All Schedules ({schedules.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {schedules.length === 0 ? (
             <div className="text-center py-12">
-              <div className="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Calendar className="h-12 w-12 text-blue-600" />
+              <div className="mx-auto w-24 h-24 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4">
+                <Calendar className="h-12 w-12 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No schedules yet</h3>
-              <p className="text-gray-500 mb-4">Create your first automated message schedule to get started!</p>
-              <Button onClick={openNewScheduleDialog} variant="outline">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No schedules yet</h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">Create your first automated message schedule to get started!</p>
+              <Button onClick={openNewScheduleDialog} variant="outline" className="border-green-300 dark:border-green-600 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20">
                 <Calendar className="h-4 w-4 mr-2" />
                 Create Your First Schedule
               </Button>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Message</TableHead>
-                  <TableHead>Schedule</TableHead>
-                  <TableHead>Last Sent</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {schedules.map((schedule) => (
-                  <TableRow key={schedule.id}>
-                    <TableCell className="font-medium">
-                      {schedule.clients?.name || 'Unknown'}
-                    </TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {schedule.message}
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-blue-500" />
-                          <span className="font-medium">{getReadableSchedule(schedule.cron)}</span>
-                        </div>
-                        <div className="text-xs text-gray-500 font-mono">
-                          {schedule.cron}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {schedule.last_sent 
-                        ? new Date(schedule.last_sent).toLocaleString()
-                        : 'Never'
-                      }
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => testScheduleMessage(schedule)}
-                          disabled={testingSchedule === schedule.id}
-                          title="Send test message now"
-                        >
-                          {testingSchedule === schedule.id ? (
-                            <Clock className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Send className="h-4 w-4" />
-                          )}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEdit(schedule)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDelete(schedule.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-200 dark:border-gray-700">
+                    <TableHead className="text-gray-700 dark:text-gray-300">Client</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Message</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Schedule</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Last Sent</TableHead>
+                    <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {schedules.map((schedule) => (
+                    <TableRow key={schedule.id} className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <TableCell className="font-medium text-gray-900 dark:text-white">
+                        {schedule.clients?.name || 'Unknown'}
+                      </TableCell>
+                      <TableCell className="max-w-xs truncate text-gray-700 dark:text-gray-300">
+                        {schedule.message}
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-green-500 dark:text-green-400" />
+                            <span className="font-medium text-gray-900 dark:text-white">{getReadableSchedule(schedule.cron)}</span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                            {schedule.cron}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-300">
+                        {schedule.last_sent 
+                          ? new Date(schedule.last_sent).toLocaleString()
+                          : 'Never'
+                        }
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => testScheduleMessage(schedule)}
+                            disabled={testingSchedule === schedule.id}
+                            title="Send test message now"
+                            className="border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          >
+                            {testingSchedule === schedule.id ? (
+                              <Clock className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Send className="h-4 w-4" />
+                            )}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(schedule)}
+                            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(schedule.id)}
+                            className="border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
-    </div>
+    </DashboardLayout>
   )
 } 
