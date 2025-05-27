@@ -54,6 +54,9 @@ export default function SchedulesPage() {
 
   const fetchData = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
       const [schedulesResult, clientsResult] = await Promise.all([
         supabase
           .from('schedules')
@@ -66,10 +69,12 @@ export default function SchedulesPage() {
               email
             )
           `)
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false }),
         supabase
           .from('clients')
           .select('*')
+          .eq('user_id', user.id)
           .order('name', { ascending: true })
       ])
 

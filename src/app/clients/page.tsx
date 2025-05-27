@@ -41,9 +41,13 @@ export default function ClientsPage() {
 
   const fetchClients = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
       const { data, error } = await supabase
         .from('clients')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -63,6 +67,9 @@ export default function ClientsPage() {
     e.preventDefault()
     
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
       if (editingClient) {
         const { error } = await supabase
           .from('clients')
@@ -74,7 +81,7 @@ export default function ClientsPage() {
       } else {
         const { error } = await supabase
           .from('clients')
-          .insert([formData])
+          .insert([{ ...formData, user_id: user.id }])
 
         if (error) throw error
         toast({ title: 'Success', description: 'Client created successfully' })

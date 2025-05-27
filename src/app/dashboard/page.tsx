@@ -7,10 +7,17 @@ import { BarChart3, Users, Calendar, MessageSquare, ArrowRight } from 'lucide-re
 export default async function DashboardPage() {
   const supabase = createServerComponentClient({ cookies })
 
-  // Fetch summary data
+  // Get the current user
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    return <div>Not authenticated</div>
+  }
+
+  // Fetch summary data for the current user only
   const [clientsResult, schedulesResult] = await Promise.all([
-    supabase.from('clients').select('id', { count: 'exact' }),
-    supabase.from('schedules').select('id, last_sent', { count: 'exact' }),
+    supabase.from('clients').select('id', { count: 'exact' }).eq('user_id', user.id),
+    supabase.from('schedules').select('id, last_sent', { count: 'exact' }).eq('user_id', user.id),
   ])
 
   const totalClients = clientsResult.count || 0
