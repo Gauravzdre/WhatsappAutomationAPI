@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Clock, Calendar, Repeat } from 'lucide-react'
@@ -47,11 +47,11 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
     dayOfMonth: 1
   })
 
-  const [previewText, setPreviewText] = useState('')
+  const [previewText, setPreviewText] = useState('Every day at 9:00 AM')
 
   // Parse existing cron expression to config
   useEffect(() => {
-    if (value) {
+    if (value && value.trim()) {
       const parsed = parseCronExpression(value)
       if (parsed) {
         setConfig(parsed)
@@ -61,17 +61,21 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
 
   // Generate cron expression and preview text
   useEffect(() => {
-    const { cron, preview } = generateCronFromConfig(config)
-    onChange(cron)
-    setPreviewText(preview)
+    if (config.time) {
+      const { cron, preview } = generateCronFromConfig(config)
+      onChange(cron)
+      setPreviewText(preview)
+    }
   }, [config, onChange])
 
   function parseCronExpression(cron: string): ScheduleConfig | null {
     try {
-      const parts = cron.split(' ')
+      const parts = cron.trim().split(' ')
       if (parts.length !== 5) return null
 
       const [minute, hour, dayOfMonth, month, dayOfWeek] = parts
+      
+      if (!minute || !hour) return null
       
       const time = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
       
@@ -84,7 +88,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
       if (dayOfWeek !== '*' && dayOfMonth === '*') {
         const days = dayOfWeek.split(',').map(d => {
           const dayMap: { [key: string]: string } = { '0': 'sun', '1': 'mon', '2': 'tue', '3': 'wed', '4': 'thu', '5': 'fri', '6': 'sat' }
-          return dayMap[d]
+          return dayMap[d?.trim()]
         }).filter(Boolean)
         return { frequency: 'weekly', time, days }
       }
@@ -101,6 +105,10 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
   }
 
   function generateCronFromConfig(config: ScheduleConfig): { cron: string, preview: string } {
+    if (!config.time) {
+      return { cron: '0 9 * * *', preview: 'Daily at 9:00 AM' }
+    }
+    
     const [hour, minute] = config.time.split(':')
     
     switch (config.frequency) {
@@ -111,7 +119,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
         }
       
       case 'weekly':
-        if (!config.days || config.days.length === 0) {
+        if (!Array.isArray(config.days) || config.days.length === 0) {
           return {
             cron: `${minute} ${hour} * * *`,
             preview: `Every day at ${formatTime(config.time)}`
@@ -121,11 +129,11 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
         const dayNumbers = config.days.map(day => {
           const dayMap: { [key: string]: string } = { 'sun': '0', 'mon': '1', 'tue': '2', 'wed': '3', 'thu': '4', 'fri': '5', 'sat': '6' }
           return dayMap[day]
-        }).join(',')
+        }).filter(Boolean).join(',')
         
         const dayNames = config.days.map(day => 
           DAYS_OF_WEEK.find(d => d.value === day)?.short
-        ).join(', ')
+        ).filter(Boolean).join(', ')
         
         return {
           cron: `${minute} ${hour} * * ${dayNumbers}`,
@@ -159,7 +167,9 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
   }
 
   function toggleDay(day: string) {
-    const currentDays = config.days || []
+    if (!day) return
+    
+    const currentDays = Array.isArray(config.days) ? config.days : []
     const newDays = currentDays.includes(day)
       ? currentDays.filter(d => d !== day)
       : [...currentDays, day]
@@ -222,15 +232,19 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
             Which days?
           </Label>
           <div className="flex flex-wrap gap-2">
-            {DAYS_OF_WEEK.map((day) => (
-              <Badge
+            {DAYS_OF_WEEK.filter(day => day && day.value && day.short).map((day) => (
+              <button
                 key={day.value}
-                variant={config.days?.includes(day.value) ? 'default' : 'outline'}
-                className="cursor-pointer px-3 py-1.5 hover:bg-primary/10"
+                type="button"
+                className={`px-3 py-1.5 text-xs font-semibold rounded-full border cursor-pointer transition-colors ${
+                  Array.isArray(config.days) && config.days.includes(day.value) 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
                 onClick={() => toggleDay(day.value)}
               >
                 {day.short}
-              </Badge>
+              </button>
             ))}
           </div>
           <p className="text-sm text-gray-500">
