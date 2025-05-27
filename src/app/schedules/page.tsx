@@ -11,7 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from '@/hooks/use-toast'
-import { Trash2, Edit } from 'lucide-react'
+import { ScheduleBuilder } from '@/components/schedule-builder'
+import { Badge } from '@/components/ui/badge'
+import { Trash2, Edit, Calendar, Clock } from 'lucide-react'
 
 interface Client {
   id: string
@@ -156,6 +158,49 @@ export default function SchedulesPage() {
     setIsDialogOpen(true)
   }
 
+  const getReadableSchedule = (cron: string): string => {
+    try {
+      const parts = cron.split(' ')
+      if (parts.length !== 5) return cron
+
+      const [minute, hour, dayOfMonth, month, dayOfWeek] = parts
+      const time = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
+      
+      const formatTime = (time: string): string => {
+        const [h, m] = time.split(':')
+        const hour = parseInt(h)
+        const period = hour >= 12 ? 'PM' : 'AM'
+        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+        return `${displayHour}:${m} ${period}`
+      }
+
+      // Daily
+      if (dayOfWeek === '*' && dayOfMonth === '*') {
+        return `Daily at ${formatTime(time)}`
+      }
+      
+      // Weekly
+      if (dayOfWeek !== '*' && dayOfMonth === '*') {
+        const dayNames = dayOfWeek.split(',').map(d => {
+          const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+          return days[parseInt(d)] || d
+        }).join(', ')
+        return `${dayNames} at ${formatTime(time)}`
+      }
+      
+      // Monthly
+      if (dayOfWeek === '*' && dayOfMonth !== '*') {
+        const day = parseInt(dayOfMonth)
+        const suffix = day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th'
+        return `${day}${suffix} of each month at ${formatTime(time)}`
+      }
+
+      return cron
+    } catch {
+      return cron
+    }
+  }
+
   if (loading) {
     return <div className="flex justify-center items-center h-64">Loading...</div>
   }
@@ -164,14 +209,17 @@ export default function SchedulesPage() {
     <div className="px-4 py-6 sm:px-0">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Schedules</h1>
-          <p className="mt-2 text-gray-600">Manage your automated message schedules</p>
+          <h1 className="text-3xl font-bold text-gray-900">📅 Message Schedules</h1>
+          <p className="mt-2 text-gray-600">Set up automated WhatsApp messages - no technical knowledge required!</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={openNewScheduleDialog}>Add Schedule</Button>
+            <Button onClick={openNewScheduleDialog} className="bg-blue-600 hover:bg-blue-700">
+              <Calendar className="h-4 w-4 mr-2" />
+              Create Schedule
+            </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingSchedule ? 'Edit Schedule' : 'Add New Schedule'}
@@ -207,17 +255,13 @@ export default function SchedulesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="cron">Cron Expression</Label>
-                <Input
-                  id="cron"
+                <Label className="text-base font-medium mb-4 block">
+                  📅 When should this message be sent?
+                </Label>
+                <ScheduleBuilder
                   value={formData.cron}
-                  onChange={(e) => setFormData({ ...formData, cron: e.target.value })}
-                  placeholder="0 9 * * * (daily at 9 AM)"
-                  required
+                  onChange={(cron) => setFormData({ ...formData, cron })}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Examples: "0 9 * * *" (daily 9 AM), "0 9 * * 1" (Mondays 9 AM)
-                </p>
               </div>
               <div className="flex justify-end space-x-2">
                 <Button
@@ -242,8 +286,16 @@ export default function SchedulesPage() {
         </CardHeader>
         <CardContent>
           {schedules.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No schedules found. Create your first schedule to get started.</p>
+            <div className="text-center py-12">
+              <div className="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <Calendar className="h-12 w-12 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No schedules yet</h3>
+              <p className="text-gray-500 mb-4">Create your first automated message schedule to get started!</p>
+              <Button onClick={openNewScheduleDialog} variant="outline">
+                <Calendar className="h-4 w-4 mr-2" />
+                Create Your First Schedule
+              </Button>
             </div>
           ) : (
             <Table>
@@ -265,8 +317,16 @@ export default function SchedulesPage() {
                     <TableCell className="max-w-xs truncate">
                       {schedule.message}
                     </TableCell>
-                    <TableCell className="font-mono text-sm">
-                      {schedule.cron}
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-blue-500" />
+                          <span className="font-medium">{getReadableSchedule(schedule.cron)}</span>
+                        </div>
+                        <div className="text-xs text-gray-500 font-mono">
+                          {schedule.cron}
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       {schedule.last_sent 
