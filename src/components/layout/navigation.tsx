@@ -11,6 +11,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
   { name: 'Clients', href: '/clients' },
   { name: 'Schedules', href: '/schedules' },
+  { name: 'Settings', href: '/settings' },
 ]
 
 export function Navigation() {

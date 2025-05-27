@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 // import { Badge } from '@/components/ui/badge'
@@ -48,23 +48,29 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
   })
 
   const [previewText, setPreviewText] = useState('Every day at 9:00 AM')
+  const lastValueRef = useRef(value)
 
-  // Parse existing cron expression to config
+  // Parse existing cron expression to config only when value changes from outside
   useEffect(() => {
-    if (value && value.trim()) {
+    if (value && value.trim() && value !== lastValueRef.current) {
       const parsed = parseCronExpression(value)
       if (parsed) {
         setConfig(parsed)
       }
+      lastValueRef.current = value
     }
   }, [value])
 
-  // Generate cron expression and preview text
+  // Generate cron expression and preview text when config changes
   useEffect(() => {
     if (config.time) {
       const { cron, preview } = generateCronFromConfig(config)
-      onChange(cron)
       setPreviewText(preview)
+      // Only call onChange if this is a user-initiated change
+      if (cron !== lastValueRef.current) {
+        lastValueRef.current = cron
+        onChange(cron)
+      }
     }
   }, [config, onChange])
 
@@ -81,7 +87,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
       
       // Daily
       if (dayOfWeek === '*' && dayOfMonth === '*') {
-        return { frequency: 'daily', time }
+        return { frequency: 'daily', time, days: [] }
       }
       
       // Weekly
@@ -95,10 +101,10 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
       
       // Monthly
       if (dayOfWeek === '*' && dayOfMonth !== '*') {
-        return { frequency: 'monthly', time, dayOfMonth: parseInt(dayOfMonth) }
+        return { frequency: 'monthly', time, dayOfMonth: parseInt(dayOfMonth), days: [] }
       }
 
-      return { frequency: 'custom', time }
+      return { frequency: 'custom', time, days: [] }
     } catch {
       return null
     }

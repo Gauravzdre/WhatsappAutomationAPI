@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@/hooks/use-toast'
 import { ScheduleBuilder } from '@/components/schedule-builder'
 import { Badge } from '@/components/ui/badge'
-import { Trash2, Edit, Calendar, Clock } from 'lucide-react'
+import { Trash2, Edit, Calendar, Clock, Send } from 'lucide-react'
 
 interface Client {
   id: string
@@ -38,6 +38,7 @@ export default function SchedulesPage() {
   const [loading, setLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null)
+  const [testingSchedule, setTestingSchedule] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     client_id: '',
     message: '',
@@ -91,6 +92,9 @@ export default function SchedulesPage() {
     e.preventDefault()
     
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
       if (editingSchedule) {
         const { error } = await supabase
           .from('schedules')
@@ -102,7 +106,7 @@ export default function SchedulesPage() {
       } else {
         const { error } = await supabase
           .from('schedules')
-          .insert([formData])
+          .insert([{ ...formData, user_id: user.id }])
 
         if (error) throw error
         toast({ title: 'Success', description: 'Schedule created successfully' })
@@ -156,6 +160,73 @@ export default function SchedulesPage() {
     setEditingSchedule(null)
     setFormData({ client_id: '', message: '', cron: '' })
     setIsDialogOpen(true)
+  }
+
+  const testScheduleMessage = async (schedule: Schedule) => {
+    if (!schedule.clients) {
+      toast({
+        title: 'Error',
+        description: 'Client information not found',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    setTestingSchedule(schedule.id)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // Get user's WhatsApp settings
+      const { data: settings, error: settingsError } = await supabase
+        .from('settings')
+        .select('whatsapp_phone_id, whatsapp_access_token, whatsapp_api_url')
+        .eq('user_id', user.id)
+        .single()
+
+      if (settingsError || !settings?.whatsapp_phone_id || !settings?.whatsapp_access_token) {
+        toast({
+          title: 'WhatsApp Not Configured',
+          description: 'Please configure your WhatsApp settings first',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      const response = await fetch('/api/test-whatsapp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneId: settings.whatsapp_phone_id,
+          accessToken: settings.whatsapp_access_token,
+          apiUrl: settings.whatsapp_api_url,
+          to: schedule.clients.phone,
+          message: schedule.message
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok && result.success) {
+        toast({
+          title: 'Test Message Sent! ✅',
+          description: `Message sent to ${schedule.clients.name} (${schedule.clients.phone})`,
+        })
+      } else {
+        throw new Error(result.error || 'Failed to send test message')
+      }
+    } catch (error) {
+      console.error('Test failed:', error)
+      toast({
+        title: 'Test Failed ❌',
+        description: error instanceof Error ? error.message : 'Failed to send test message',
+        variant: 'destructive',
+      })
+    } finally {
+      setTestingSchedule(null)
+    }
   }
 
   const getReadableSchedule = (cron: string): string => {
@@ -342,6 +413,19 @@ export default function SchedulesPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => testScheduleMessage(schedule)}
+                          disabled={testingSchedule === schedule.id}
+                          title="Send test message now"
+                        >
+                          {testingSchedule === schedule.id ? (
+                            <Clock className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Send className="h-4 w-4" />
+                          )}
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"

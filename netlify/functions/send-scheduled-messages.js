@@ -42,7 +42,8 @@ exports.handler = async (event, context) => {
       .from('schedules')
       .select(`
         *,
-        clients!inner(*)
+        clients!inner(*),
+        user_id
       `)
       .eq('status', 'active')
       .contains('days', [currentDay])
@@ -77,16 +78,31 @@ exports.handler = async (event, context) => {
     // Process each schedule
     for (const schedule of schedules) {
       try {
-        // Send WhatsApp message
-        const response = await fetch(`https://graph.facebook.com/v18.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`, {
+        // Get user's WhatsApp settings
+        const { data: userSettings, error: settingsError } = await supabase
+          .from('settings')
+          .select('whatsapp_phone_id, whatsapp_access_token, whatsapp_api_url')
+          .eq('user_id', schedule.user_id)
+          .single()
+
+        if (settingsError || !userSettings?.whatsapp_phone_id || !userSettings?.whatsapp_access_token) {
+          errorCount++
+          errors.push(`No WhatsApp settings configured for user ${schedule.user_id}`)
+          console.error(`No WhatsApp settings for user ${schedule.user_id}`)
+          continue
+        }
+
+        // Send WhatsApp message using user's credentials
+        const apiUrl = userSettings.whatsapp_api_url || 'https://graph.facebook.com/v15.0'
+        const response = await fetch(`${apiUrl}/${userSettings.whatsapp_phone_id}/messages`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+            'Authorization': `Bearer ${userSettings.whatsapp_access_token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             messaging_product: 'whatsapp',
-            to: schedule.clients.phone,
+            to: schedule.clients.phone.replace(/\D/g, ''), // Clean phone number
             type: 'text',
             text: {
               body: schedule.message
