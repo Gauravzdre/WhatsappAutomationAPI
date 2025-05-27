@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:netlify": "NETLIFY=true next build",
     "start": "next start",
     "lint": "next lint",
     "jobs": "node --loader ts-node/esm src/server/jobs/runner.ts"

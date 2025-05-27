@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { BarChart3, Users, Calendar, MessageSquare, ArrowRight } from 'lucide-react'
 
+// Force dynamic rendering for this authenticated page
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const supabase = createServerComponentClient({ cookies })
 
