@@ -5,9 +5,32 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { EnhancedCard, EnhancedCardContent, EnhancedCardHeader, EnhancedCardTitle } from '@/components/ui/enhanced-card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from '@/hooks/use-toast'
-import { Settings, Send, CheckCircle, AlertCircle, Eye, EyeOff } from 'lucide-react'
+import { 
+  Settings, 
+  Send, 
+  CheckCircle, 
+  AlertCircle, 
+  Eye, 
+  EyeOff, 
+  Bot,
+  Palette,
+  MessageSquare,
+  Shield,
+  Zap,
+  Brain,
+  Target,
+  Activity,
+  Globe,
+  Smartphone,
+  Key,
+  Database,
+  Sparkles
+} from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 
@@ -16,7 +39,32 @@ interface WhatsAppSettings {
   whatsapp_phone_id: string
   whatsapp_access_token: string
   whatsapp_api_url: string
+  whatsapp_verify_token: string
   test_phone_number: string
+}
+
+interface AISettings {
+  model: string
+  temperature: number
+  max_tokens: number
+  response_style: string
+  language: string
+}
+
+interface SocialMediaSettings {
+  facebook_access_token: string
+  facebook_page_id: string
+  instagram_access_token: string
+  instagram_account_id: string
+  twitter_api_key: string
+  twitter_api_secret: string
+  twitter_access_token: string
+  twitter_access_token_secret: string
+  linkedin_access_token: string
+  linkedin_page_id: string
+  tiktok_access_token: string
+  youtube_api_key: string
+  youtube_channel_id: string
 }
 
 export default function SettingsPage() {
@@ -24,13 +72,40 @@ export default function SettingsPage() {
     whatsapp_phone_id: '',
     whatsapp_access_token: '',
     whatsapp_api_url: 'https://graph.facebook.com/v15.0',
+    whatsapp_verify_token: '',
     test_phone_number: ''
   })
+  
+  const [aiSettings, setAiSettings] = useState<AISettings>({
+    model: 'gpt-4',
+    temperature: 0.7,
+    max_tokens: 1000,
+    response_style: 'professional',
+    language: 'en'
+  })
+
+  const [socialSettings, setSocialSettings] = useState<SocialMediaSettings>({
+    facebook_access_token: '',
+    facebook_page_id: '',
+    instagram_access_token: '',
+    instagram_account_id: '',
+    twitter_api_key: '',
+    twitter_api_secret: '',
+    twitter_access_token: '',
+    twitter_access_token_secret: '',
+    linkedin_access_token: '',
+    linkedin_page_id: '',
+    tiktok_access_token: '',
+    youtube_api_key: '',
+    youtube_channel_id: ''
+  })
+
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
   const [showToken, setShowToken] = useState(false)
-  const [testMessage, setTestMessage] = useState('Hello! This is a test message from your ClientPing automation system. 🚀')
+  const [testMessage, setTestMessage] = useState('Hello! This is a test message from your AI-powered automation system. 🚀')
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'testing'>('disconnected')
 
   const supabase = createClientComponentClient()
 
@@ -49,12 +124,28 @@ export default function SettingsPage() {
         .eq('user_id', user.id)
         .single()
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+      if (error && error.code !== 'PGRST116') {
         throw error
       }
 
       if (data) {
         setSettings(data)
+        setSocialSettings({
+          facebook_access_token: data.facebook_access_token || '',
+          facebook_page_id: data.facebook_page_id || '',
+          instagram_access_token: data.instagram_access_token || '',
+          instagram_account_id: data.instagram_account_id || '',
+          twitter_api_key: data.twitter_api_key || '',
+          twitter_api_secret: data.twitter_api_secret || '',
+          twitter_access_token: data.twitter_access_token || '',
+          twitter_access_token_secret: data.twitter_access_token_secret || '',
+          linkedin_access_token: data.linkedin_access_token || '',
+          linkedin_page_id: data.linkedin_page_id || '',
+          tiktok_access_token: data.tiktok_access_token || '',
+          youtube_api_key: data.youtube_api_key || '',
+          youtube_channel_id: data.youtube_channel_id || ''
+        })
+        setConnectionStatus('connected')
       }
     } catch (error) {
       console.error('Error fetching settings:', error)
@@ -79,6 +170,7 @@ export default function SettingsPage() {
         whatsapp_phone_id: settings.whatsapp_phone_id,
         whatsapp_access_token: settings.whatsapp_access_token,
         whatsapp_api_url: settings.whatsapp_api_url,
+        whatsapp_verify_token: settings.whatsapp_verify_token,
         test_phone_number: settings.test_phone_number
       }
 
@@ -88,15 +180,49 @@ export default function SettingsPage() {
 
       if (error) throw error
 
+      setConnectionStatus('connected')
       toast({
-        title: 'Success',
-        description: 'Settings saved successfully',
+        title: 'Success ✅',
+        description: 'WhatsApp settings saved successfully',
       })
     } catch (error) {
       console.error('Error saving settings:', error)
       toast({
         title: 'Error',
         description: 'Failed to save settings',
+        variant: 'destructive',
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const saveSocialSettings = async () => {
+    setSaving(true)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const settingsData = {
+        user_id: user.id,
+        ...socialSettings
+      }
+
+      const { error } = await supabase
+        .from('settings')
+        .upsert(settingsData, { onConflict: 'user_id' })
+
+      if (error) throw error
+
+      toast({
+        title: 'Success ✅',
+        description: 'Social media settings saved successfully',
+      })
+    } catch (error) {
+      console.error('Error saving social settings:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to save social media settings',
         variant: 'destructive',
       })
     } finally {
@@ -115,6 +241,7 @@ export default function SettingsPage() {
     }
 
     setTesting(true)
+    setConnectionStatus('testing')
     try {
       const response = await fetch('/api/test-whatsapp', {
         method: 'POST',
@@ -122,9 +249,6 @@ export default function SettingsPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          phoneId: settings.whatsapp_phone_id,
-          accessToken: settings.whatsapp_access_token,
-          apiUrl: settings.whatsapp_api_url,
           to: settings.test_phone_number,
           message: testMessage
         }),
@@ -133,14 +257,17 @@ export default function SettingsPage() {
       const result = await response.json()
 
       if (response.ok && result.success) {
+        setConnectionStatus('connected')
         toast({
-          title: 'Test Successful! ✅',
+          title: 'Test Successful! 🎉',
           description: 'WhatsApp message sent successfully. Check your phone!',
         })
       } else {
+        setConnectionStatus('disconnected')
         throw new Error(result.error || 'Failed to send test message')
       }
     } catch (error) {
+      setConnectionStatus('disconnected')
       console.error('Test failed:', error)
       toast({
         title: 'Test Failed ❌',
@@ -152,15 +279,28 @@ export default function SettingsPage() {
     }
   }
 
+  const getStatusIcon = (status: typeof connectionStatus) => {
+    switch (status) {
+      case 'connected': return <CheckCircle className="h-5 w-5" />
+      case 'disconnected': return <AlertCircle className="h-5 w-5" />
+      case 'testing': return <Activity className="h-5 w-5 animate-spin" />
+      default: return <AlertCircle className="h-5 w-5" />
+    }
+  }
+
   if (loading) {
     return (
       <DashboardLayout
-        title="WhatsApp Settings"
-        description="Configure your WhatsApp Business API credentials to enable message sending"
-        icon={<Settings className="h-8 w-8 text-purple-600 dark:text-purple-400" />}
+        title="Settings"
+        description="Configure your automation platform"
+        icon={<Settings className="h-8 w-8" />}
+        gradient="purple"
       >
         <div className="flex justify-center items-center h-64">
-          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+          <div className="flex items-center space-x-2">
+            <Activity className="h-6 w-6 animate-spin text-purple-600" />
+            <span className="text-gray-600 dark:text-gray-300 text-lg">Loading settings...</span>
+          </div>
         </div>
       </DashboardLayout>
     )
@@ -168,173 +308,563 @@ export default function SettingsPage() {
 
   return (
     <DashboardLayout
-      title="WhatsApp Settings"
-      description="Configure your WhatsApp Business API credentials to enable message sending"
-      icon={<Settings className="h-8 w-8 text-purple-600 dark:text-purple-400" />}
+      title="Settings"
+      description="Configure your automation platform"
+      icon={<Settings className="h-8 w-8" />}
+      gradient="purple"
     >
-      <div className="grid gap-6 max-w-4xl">
-        {/* Setup Instructions */}
-        <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
-          <CardHeader>
-            <CardTitle className="text-blue-800 dark:text-blue-300 flex items-center gap-2">
-              <AlertCircle className="h-5 w-5" />
-              How to Get WhatsApp Business API Credentials
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-blue-700 dark:text-blue-300 space-y-2">
-            <p><strong>1.</strong> Go to <a href="https://developers.facebook.com/" target="_blank" rel="noopener noreferrer" className="underline">Facebook Developers</a></p>
-            <p><strong>2.</strong> Create a new app and add WhatsApp Business API</p>
-            <p><strong>3.</strong> Get your Phone Number ID from the WhatsApp Business API dashboard</p>
-            <p><strong>4.</strong> Generate a permanent access token (not the temporary one)</p>
-            <p><strong>5.</strong> Add your test phone number to the verified numbers list</p>
-          </CardContent>
-        </Card>
-
-        {/* WhatsApp Configuration */}
-        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">WhatsApp Business API Configuration</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="api-url" className="text-gray-700 dark:text-gray-300">API URL</Label>
-              <Input
-                id="api-url"
-                value={settings.whatsapp_api_url}
-                onChange={(e) => setSettings({ ...settings, whatsapp_api_url: e.target.value })}
-                placeholder="https://graph.facebook.com/v15.0"
-                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-              />
+      {/* Status Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <EnhancedCard variant="gradient" gradient="purple">
+          <EnhancedCardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <EnhancedCardTitle className="text-lg text-white">WhatsApp Status</EnhancedCardTitle>
+              <Smartphone className="h-6 w-6 text-purple-200" />
             </div>
-
-            <div>
-              <Label htmlFor="phone-id" className="text-gray-700 dark:text-gray-300">Phone Number ID</Label>
-              <Input
-                id="phone-id"
-                value={settings.whatsapp_phone_id}
-                onChange={(e) => setSettings({ ...settings, whatsapp_phone_id: e.target.value })}
-                placeholder="Enter your WhatsApp Phone Number ID"
-                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-              />
+          </EnhancedCardHeader>
+          <EnhancedCardContent>
+            <div className="flex items-center space-x-2">
+              {getStatusIcon(connectionStatus)}
+              <span className="text-white font-medium capitalize">{connectionStatus}</span>
             </div>
+            <p className="text-purple-100 text-sm mt-1">Business API connection</p>
+          </EnhancedCardContent>
+        </EnhancedCard>
 
-            <div>
-              <Label htmlFor="access-token" className="text-gray-700 dark:text-gray-300">Access Token</Label>
-              <div className="relative">
-                <Input
-                  id="access-token"
-                  type={showToken ? 'text' : 'password'}
-                  value={settings.whatsapp_access_token}
-                  onChange={(e) => setSettings({ ...settings, whatsapp_access_token: e.target.value })}
-                  placeholder="Enter your WhatsApp Access Token"
-                  className="pr-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+        <EnhancedCard variant="gradient" gradient="blue">
+          <EnhancedCardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <EnhancedCardTitle className="text-lg text-white">AI Models</EnhancedCardTitle>
+              <Brain className="h-6 w-6 text-blue-200" />
+            </div>
+          </EnhancedCardHeader>
+          <EnhancedCardContent>
+            <div className="text-2xl font-bold text-white">{aiSettings.model}</div>
+            <p className="text-blue-100 text-sm mt-1">Active model</p>
+          </EnhancedCardContent>
+        </EnhancedCard>
+
+        <EnhancedCard variant="gradient" gradient="green">
+          <EnhancedCardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <EnhancedCardTitle className="text-lg text-white">System Health</EnhancedCardTitle>
+              <Shield className="h-6 w-6 text-green-200" />
+            </div>
+          </EnhancedCardHeader>
+          <EnhancedCardContent>
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-6 w-6 text-green-100" />
+              <span className="text-white font-medium">Operational</span>
+            </div>
+            <p className="text-green-100 text-sm mt-1">All systems online</p>
+          </EnhancedCardContent>
+        </EnhancedCard>
+      </div>
+
+      <Tabs defaultValue="whatsapp" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-0 shadow-lg">
+          <TabsTrigger value="whatsapp" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white">
+            <MessageSquare className="h-4 w-4 mr-2" />
+            WhatsApp
+          </TabsTrigger>
+          <TabsTrigger value="social" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white">
+            <Globe className="h-4 w-4 mr-2" />
+            Social Media
+          </TabsTrigger>
+          <TabsTrigger value="ai" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
+            <Brain className="h-4 w-4 mr-2" />
+            AI Models
+          </TabsTrigger>
+          <TabsTrigger value="branding" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
+            <Palette className="h-4 w-4 mr-2" />
+            Branding
+          </TabsTrigger>
+          <TabsTrigger value="advanced" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-500 data-[state=active]:to-gray-600 data-[state=active]:text-white">
+            <Database className="h-4 w-4 mr-2" />
+            Advanced
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="whatsapp" className="space-y-6">
+          {/* Setup Instructions */}
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                WhatsApp Business API Setup Guide
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent className="text-blue-700 dark:text-blue-300 space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="font-medium">📱 Step 1: Facebook Developer Account</p>
+                  <p className="text-sm">Create an app at developers.facebook.com</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium">🔑 Step 2: WhatsApp Business API</p>
+                  <p className="text-sm">Add WhatsApp Business to your app</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium">📞 Step 3: Phone Number ID</p>
+                  <p className="text-sm">Get your Phone Number ID from dashboard</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium">🎫 Step 4: Access Token</p>
+                  <p className="text-sm">Generate a permanent access token</p>
+                </div>
+              </div>
+            </EnhancedCardContent>
+          </EnhancedCard>
+
+          {/* WhatsApp Configuration */}
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                <MessageSquare className="h-6 w-6 text-green-600" />
+                <span>WhatsApp Business API Configuration</span>
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="api-url" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                      <Database className="h-4 w-4" />
+                      <span>API URL</span>
+                    </Label>
+                    <Input
+                      id="api-url"
+                      value={settings.whatsapp_api_url}
+                      onChange={(e) => setSettings({...settings, whatsapp_api_url: e.target.value})}
+                      placeholder="https://graph.facebook.com/v15.0"
+                      className="mt-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone-id" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                      <Smartphone className="h-4 w-4" />
+                      <span>Phone Number ID</span>
+                    </Label>
+                    <Input
+                      id="phone-id"
+                      value={settings.whatsapp_phone_id}
+                      onChange={(e) => setSettings({...settings, whatsapp_phone_id: e.target.value})}
+                      placeholder="1234567890123456"
+                      className="mt-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="access-token" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                      <Key className="h-4 w-4" />
+                      <span>Access Token</span>
+                    </Label>
+                    <div className="relative mt-2">
+                      <Input
+                        id="access-token"
+                        type={showToken ? "text" : "password"}
+                        value={settings.whatsapp_access_token}
+                        onChange={(e) => setSettings({...settings, whatsapp_access_token: e.target.value})}
+                        placeholder="EAAxxxxxxxxxxxxxxx"
+                        className="pr-10 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowToken(!showToken)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="test-phone" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                      <Target className="h-4 w-4" />
+                      <span>Test Phone Number</span>
+                    </Label>
+                    <Input
+                      id="test-phone"
+                      value={settings.test_phone_number}
+                      onChange={(e) => setSettings({...settings, test_phone_number: e.target.value})}
+                      placeholder="+1234567890"
+                      className="mt-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="verify-token" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                      <Shield className="h-4 w-4" />
+                      <span>Webhook Verify Token</span>
+                    </Label>
+                    <Input
+                      id="verify-token"
+                      value={settings.whatsapp_verify_token}
+                      onChange={(e) => setSettings({...settings, whatsapp_verify_token: e.target.value})}
+                      placeholder="your_verify_token"
+                      className="mt-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Test Message */}
+              <div>
+                <Label htmlFor="test-message" className="text-gray-700 dark:text-gray-300 flex items-center space-x-2 font-medium">
+                  <Send className="h-4 w-4" />
+                  <span>Test Message</span>
+                </Label>
+                <Textarea
+                  id="test-message"
+                  value={testMessage}
+                  onChange={(e) => setTestMessage(e.target.value)}
+                  placeholder="Enter your test message..."
+                  className="mt-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm"
+                  rows={3}
                 />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 pt-4">
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                  onClick={() => setShowToken(!showToken)}
+                  onClick={saveSettings}
+                  disabled={saving}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
                 >
-                  {showToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {saving ? (
+                    <Activity className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Database className="h-4 w-4 mr-2" />
+                  )}
+                  {saving ? 'Saving...' : 'Save Settings'}
+                </Button>
+                <Button
+                  onClick={testWhatsAppConnection}
+                  disabled={testing}
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                >
+                  {testing ? (
+                    <Activity className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4 mr-2" />
+                  )}
+                  {testing ? 'Testing...' : 'Test Connection'}
                 </Button>
               </div>
-            </div>
+            </EnhancedCardContent>
+          </EnhancedCard>
+        </TabsContent>
 
-            <Button onClick={saveSettings} disabled={saving} className="w-full">
-              {saving ? 'Saving...' : 'Save Settings'}
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Social Media Tab */}
+        <TabsContent value="social" className="space-y-6">
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="text-pink-800 dark:text-pink-300 flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Social Media API Setup Guide
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent className="text-pink-700 dark:text-pink-300 space-y-3">
+              <p className="font-medium">🔑 Enter your own API credentials for each platform you want to use:</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>• Facebook: Get access token from Meta Developer Console</div>
+                <div>• Instagram: Use Facebook Graph API credentials</div>
+                <div>• Twitter: Create app on developer.twitter.com</div>
+                <div>• LinkedIn: Register app on LinkedIn Developer</div>
+                <div>• TikTok: Apply for TikTok for Business API</div>
+                <div>• YouTube: Enable YouTube Data API in Google Cloud</div>
+              </div>
+            </EnhancedCardContent>
+          </EnhancedCard>
 
-        {/* Test Message */}
-        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
-              <Send className="h-5 w-5" />
-              Test WhatsApp Message
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="test-phone" className="text-gray-700 dark:text-gray-300">Test Phone Number</Label>
-              <Input
-                id="test-phone"
-                value={settings.test_phone_number}
-                onChange={(e) => setSettings({ ...settings, test_phone_number: e.target.value })}
-                placeholder="Enter phone number with country code (e.g., +1234567890)"
-                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-              />
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Include country code without + symbol (e.g., 1234567890 for US number)
-              </p>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Facebook & Instagram */}
+            <EnhancedCard variant="glass">
+              <EnhancedCardHeader>
+                <EnhancedCardTitle className="text-blue-600 dark:text-blue-400">Facebook & Instagram</EnhancedCardTitle>
+              </EnhancedCardHeader>
+              <EnhancedCardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="facebook-token">Facebook Access Token</Label>
+                  <Input
+                    id="facebook-token"
+                    type="password"
+                    value={socialSettings.facebook_access_token}
+                    onChange={(e) => setSocialSettings({...socialSettings, facebook_access_token: e.target.value})}
+                    placeholder="EAAxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="facebook-page">Facebook Page ID</Label>
+                  <Input
+                    id="facebook-page"
+                    value={socialSettings.facebook_page_id}
+                    onChange={(e) => setSocialSettings({...socialSettings, facebook_page_id: e.target.value})}
+                    placeholder="123456789012345"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="instagram-token">Instagram Access Token</Label>
+                  <Input
+                    id="instagram-token"
+                    type="password"
+                    value={socialSettings.instagram_access_token}
+                    onChange={(e) => setSocialSettings({...socialSettings, instagram_access_token: e.target.value})}
+                    placeholder="IGQxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="instagram-account">Instagram Account ID</Label>
+                  <Input
+                    id="instagram-account"
+                    value={socialSettings.instagram_account_id}
+                    onChange={(e) => setSocialSettings({...socialSettings, instagram_account_id: e.target.value})}
+                    placeholder="123456789012345"
+                    className="mt-2"
+                  />
+                </div>
+              </EnhancedCardContent>
+            </EnhancedCard>
 
-            <div>
-              <Label htmlFor="test-message" className="text-gray-700 dark:text-gray-300">Test Message</Label>
-              <Textarea
-                id="test-message"
-                value={testMessage}
-                onChange={(e) => setTestMessage(e.target.value)}
-                placeholder="Enter your test message"
-                rows={3}
-                className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-              />
-            </div>
+            {/* Twitter */}
+            <EnhancedCard variant="glass">
+              <EnhancedCardHeader>
+                <EnhancedCardTitle className="text-sky-600 dark:text-sky-400">Twitter / X</EnhancedCardTitle>
+              </EnhancedCardHeader>
+              <EnhancedCardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="twitter-api-key">API Key</Label>
+                  <Input
+                    id="twitter-api-key"
+                    type="password"
+                    value={socialSettings.twitter_api_key}
+                    onChange={(e) => setSocialSettings({...socialSettings, twitter_api_key: e.target.value})}
+                    placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="twitter-api-secret">API Secret Key</Label>
+                  <Input
+                    id="twitter-api-secret"
+                    type="password"
+                    value={socialSettings.twitter_api_secret}
+                    onChange={(e) => setSocialSettings({...socialSettings, twitter_api_secret: e.target.value})}
+                    placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="twitter-access-token">Access Token</Label>
+                  <Input
+                    id="twitter-access-token"
+                    type="password"
+                    value={socialSettings.twitter_access_token}
+                    onChange={(e) => setSocialSettings({...socialSettings, twitter_access_token: e.target.value})}
+                    placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="twitter-access-secret">Access Token Secret</Label>
+                  <Input
+                    id="twitter-access-secret"
+                    type="password"
+                    value={socialSettings.twitter_access_token_secret}
+                    onChange={(e) => setSocialSettings({...socialSettings, twitter_access_token_secret: e.target.value})}
+                    placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+              </EnhancedCardContent>
+            </EnhancedCard>
 
-            <Button 
-              onClick={testWhatsAppConnection} 
-              disabled={testing || !settings.whatsapp_phone_id || !settings.whatsapp_access_token || !settings.test_phone_number}
-              className="w-full"
-              variant="outline"
+            {/* LinkedIn */}
+            <EnhancedCard variant="glass">
+              <EnhancedCardHeader>
+                <EnhancedCardTitle className="text-blue-700 dark:text-blue-400">LinkedIn</EnhancedCardTitle>
+              </EnhancedCardHeader>
+              <EnhancedCardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="linkedin-token">Access Token</Label>
+                  <Input
+                    id="linkedin-token"
+                    type="password"
+                    value={socialSettings.linkedin_access_token}
+                    onChange={(e) => setSocialSettings({...socialSettings, linkedin_access_token: e.target.value})}
+                    placeholder="AQXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="linkedin-page">Page ID</Label>
+                  <Input
+                    id="linkedin-page"
+                    value={socialSettings.linkedin_page_id}
+                    onChange={(e) => setSocialSettings({...socialSettings, linkedin_page_id: e.target.value})}
+                    placeholder="123456789"
+                    className="mt-2"
+                  />
+                </div>
+              </EnhancedCardContent>
+            </EnhancedCard>
+
+            {/* TikTok & YouTube */}
+            <EnhancedCard variant="glass">
+              <EnhancedCardHeader>
+                <EnhancedCardTitle className="text-purple-600 dark:text-purple-400">TikTok & YouTube</EnhancedCardTitle>
+              </EnhancedCardHeader>
+              <EnhancedCardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="tiktok-token">TikTok Access Token</Label>
+                  <Input
+                    id="tiktok-token"
+                    type="password"
+                    value={socialSettings.tiktok_access_token}
+                    onChange={(e) => setSocialSettings({...socialSettings, tiktok_access_token: e.target.value})}
+                    placeholder="act.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="youtube-api">YouTube API Key</Label>
+                  <Input
+                    id="youtube-api"
+                    type="password"
+                    value={socialSettings.youtube_api_key}
+                    onChange={(e) => setSocialSettings({...socialSettings, youtube_api_key: e.target.value})}
+                    placeholder="AIzaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="youtube-channel">YouTube Channel ID</Label>
+                  <Input
+                    id="youtube-channel"
+                    value={socialSettings.youtube_channel_id}
+                    onChange={(e) => setSocialSettings({...socialSettings, youtube_channel_id: e.target.value})}
+                    placeholder="UCxxxxxxxxxxxxxxxxxxxxxxx"
+                    className="mt-2"
+                  />
+                </div>
+              </EnhancedCardContent>
+            </EnhancedCard>
+          </div>
+
+          <div className="flex justify-end">
+            <Button
+              onClick={saveSocialSettings}
+              disabled={saving}
+              className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700"
             >
-              {testing ? (
-                'Sending Test Message...'
+              {saving ? (
+                <Activity className="h-4 w-4 mr-2 animate-spin" />
               ) : (
-                <>
-                  <Send className="h-4 w-4 mr-2" />
-                  Send Test Message
-                </>
+                <Database className="h-4 w-4 mr-2" />
               )}
+              {saving ? 'Saving...' : 'Save Social Media Settings'}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </TabsContent>
 
-        {/* Status Indicators */}
-        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Configuration Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                {settings.whatsapp_phone_id ? (
-                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
-                )}
-                <span className="text-gray-700 dark:text-gray-300">Phone Number ID</span>
+        {/* AI Models Tab */}
+        <TabsContent value="ai" className="space-y-6">
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                <Brain className="h-6 w-6 text-blue-600" />
+                <span>AI Model Configuration</span>
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-gray-700 dark:text-gray-300 font-medium">Model Selection</Label>
+                    <div className="mt-2 space-y-2">
+                      {['gpt-4', 'gpt-3.5-turbo', 'claude-3'].map((model) => (
+                        <label key={model} className="flex items-center space-x-3">
+                          <input
+                            type="radio"
+                            name="model"
+                            value={model}
+                            checked={aiSettings.model === model}
+                            onChange={(e) => setAiSettings({...aiSettings, model: e.target.value})}
+                            className="text-blue-600"
+                          />
+                          <span className="text-gray-700 dark:text-gray-300">{model}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-gray-700 dark:text-gray-300 font-medium">Temperature: {aiSettings.temperature}</Label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={aiSettings.temperature}
+                      onChange={(e) => setAiSettings({...aiSettings, temperature: parseFloat(e.target.value)})}
+                      className="w-full mt-2"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Conservative</span>
+                      <span>Creative</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                {settings.whatsapp_access_token ? (
-                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
-                )}
-                <span className="text-gray-700 dark:text-gray-300">Access Token</span>
+            </EnhancedCardContent>
+          </EnhancedCard>
+        </TabsContent>
+
+        {/* Branding Tab */}
+        <TabsContent value="branding" className="space-y-6">
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                <Palette className="h-6 w-6 text-purple-600" />
+                <span>Brand Customization</span>
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent>
+              <div className="text-center py-8">
+                <Sparkles className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Brand Settings</h3>
+                <p className="text-gray-600 dark:text-gray-400">Configure your brand voice and style preferences.</p>
               </div>
-              <div className="flex items-center gap-2">
-                {settings.test_phone_number ? (
-                  <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400" />
-                )}
-                <span className="text-gray-700 dark:text-gray-300">Test Phone Number</span>
+            </EnhancedCardContent>
+          </EnhancedCard>
+        </TabsContent>
+
+        {/* Advanced Tab */}
+        <TabsContent value="advanced" className="space-y-6">
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                <Database className="h-6 w-6 text-gray-600" />
+                <span>Advanced Configuration</span>
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent>
+              <div className="text-center py-8">
+                <Database className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Advanced Settings</h3>
+                <p className="text-gray-600 dark:text-gray-400">Database connections, webhooks, and integrations.</p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </EnhancedCardContent>
+          </EnhancedCard>
+        </TabsContent>
+      </Tabs>
     </DashboardLayout>
   )
 } 

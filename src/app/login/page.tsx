@@ -39,7 +39,7 @@ export default function LoginPage() {
           title: 'Welcome back! 👋',
           description: 'Successfully signed in to ClientPing',
         })
-        router.push('/dashboard')
+        router.push('/')
         router.refresh()
       }
     } catch (error) {

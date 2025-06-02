@@ -1,101 +1,89 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-interface WhatsAppMessage {
-  messaging_product: 'whatsapp'
-  to: string
-  type: 'text'
-  text: {
-    body: string
-  }
-}
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { getPlatformCredentials } from '@/lib/credentials'
 
 export async function POST(request: NextRequest) {
   try {
-    const { phoneId, accessToken, apiUrl, to, message } = await request.json()
-
-    // Validate required fields
-    if (!phoneId || !accessToken || !to || !message) {
-      return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
-        { status: 400 }
-      )
-    }
-
-    // Clean phone number (remove non-digits)
-    const cleanPhoneNumber = to.replace(/\D/g, '')
+    const supabase = createRouteHandlerClient({ cookies })
     
-    if (!cleanPhoneNumber) {
+    // Get the current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    
+    if (authError || !user) {
       return NextResponse.json(
-        { success: false, error: 'Invalid phone number format' },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    // Get user's WhatsApp credentials
+    const credentials = await getPlatformCredentials(user.id, 'whatsapp')
+    
+    if (!credentials || !credentials.whatsapp_phone_id || !credentials.whatsapp_access_token) {
+      return NextResponse.json(
+        { success: false, error: 'WhatsApp credentials not configured. Please set up your credentials in Settings.' },
         { status: 400 }
       )
     }
 
-    const payload: WhatsAppMessage = {
+    const { to, message } = await request.json()
+
+    if (!to || !message) {
+      return NextResponse.json(
+        { success: false, error: 'Missing phone number or message' },
+        { status: 400 }
+      )
+    }
+
+    // WhatsApp Business API URL
+    const whatsappUrl = `${credentials.whatsapp_api_url || 'https://graph.facebook.com/v15.0'}/${credentials.whatsapp_phone_id}/messages`
+
+    // Message payload
+    const messageData = {
       messaging_product: 'whatsapp',
-      to: cleanPhoneNumber,
+      to: to.replace(/\D/g, ''), // Remove non-digits
       type: 'text',
       text: {
-        body: message,
-      },
+        body: message
+      }
     }
 
-    const whatsappApiUrl = `${apiUrl}/${phoneId}/messages`
-    
-    console.log('Sending WhatsApp test message to:', cleanPhoneNumber)
-    console.log('Using API URL:', whatsappApiUrl)
-
-    const response = await fetch(whatsappApiUrl, {
+    // Send message to WhatsApp API
+    const response = await fetch(whatsappUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${credentials.whatsapp_access_token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(messageData)
     })
 
-    const responseData = await response.text()
-    
-    if (!response.ok) {
-      console.error('WhatsApp API Error Response:', responseData)
-      
-      let errorMessage = 'Failed to send message'
-      try {
-        const errorJson = JSON.parse(responseData)
-        if (errorJson.error?.message) {
-          errorMessage = errorJson.error.message
-        } else if (errorJson.error?.error_user_msg) {
-          errorMessage = errorJson.error.error_user_msg
-        }
-      } catch {
-        errorMessage = `HTTP ${response.status}: ${responseData}`
-      }
+    const result = await response.json()
 
+    if (response.ok) {
+      return NextResponse.json({
+        success: true,
+        data: result,
+        message: 'Test message sent successfully!'
+      })
+    } else {
       return NextResponse.json(
         { 
           success: false, 
-          error: errorMessage,
-          details: responseData 
+          error: result.error?.message || 'Failed to send message',
+          details: result
         },
         { status: response.status }
       )
     }
-
-    const result = JSON.parse(responseData)
-    console.log('WhatsApp message sent successfully:', result)
-
-    return NextResponse.json({
-      success: true,
-      messageId: result.messages?.[0]?.id,
-      data: result
-    })
-
   } catch (error) {
-    console.error('Error in test-whatsapp API:', error)
+    console.error('WhatsApp API test error:', error)
     return NextResponse.json(
       { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Internal server error' 
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

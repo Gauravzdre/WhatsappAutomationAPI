@@ -1,223 +1,188 @@
-# WhatsApp Automation
+# WhatsApp AI Automation Platform
 
-A Next.js 14 application for automating WhatsApp message scheduling using the WhatsApp Cloud API and Supabase.
+AI-powered WhatsApp automation with multi-agent system using Julep AI.
 
-## Features
-
-- **User Authentication**: Secure login/signup with Supabase Auth
-- **Client Management**: Add, edit, and delete WhatsApp contacts
-- **Message Scheduling**: Create automated message schedules using cron expressions
-- **Real-time Dashboard**: View statistics and manage your automation
-- **Background Jobs**: Automated message sending based on schedules
-
-## Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
-- **UI Components**: Shadcn UI + Radix UI
-- **Backend**: Supabase (Database + Auth)
-- **Messaging**: WhatsApp Cloud API
-- **Scheduling**: node-cron + cron-parser
-
-## Prerequisites
-
-1. **Node.js** (v18 or higher)
-2. **Supabase Account** - [Create one here](https://supabase.com)
-3. **WhatsApp Business Account** - [Set up WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started)
-
-## Setup Instructions
-
-### 1. Clone the Repository
+## 🚀 Quick Start
 
 ```bash
-git clone <your-repo-url>
+# Clone and install
+git clone <repo-url>
 cd whatsapp-automation
-```
-
-### 2. Install Dependencies
-
-```bash
 npm install
-```
 
-### 3. Set Up Supabase
-
-1. Create a new Supabase project
-2. Go to Settings > API to get your project URL and keys
-3. Run the database migration:
-
-```bash
-# If you have Supabase CLI installed
-npx supabase db push
-
-# Or manually run the SQL in supabase/migrations/001_initial_schema.sql
-# in your Supabase SQL editor
-```
-
-### 4. Set Up WhatsApp Cloud API
-
-1. Create a Facebook Developer account
-2. Create a new app and add WhatsApp product
-3. Get your Phone Number ID and Access Token
-4. Add your webhook URL (for production)
-
-### 5. Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```bash
-# Copy from env.example
-cp env.example .env.local
-```
-
-Fill in your environment variables:
-
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-
-# WhatsApp Cloud API Configuration
-WHATSAPP_API_URL=https://graph.facebook.com/v15.0
-WHATSAPP_PHONE_ID=your_whatsapp_phone_number_id
-WHATSAPP_ACCESS_TOKEN=your_whatsapp_access_token
-```
-
-### 6. Run the Application
-
-```bash
-# Start the development server
+# Configure .env.local with your API keys (see .env.example)
+# Start development
 npm run dev
-
-# In a separate terminal, start the background job runner
-npm run jobs
 ```
 
-The application will be available at `http://localhost:3000`.
+## 🛠 Stack
 
-## Usage
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS, Radix UI
+- **Backend**: Next.js API, Supabase PostgreSQL
+- **AI**: Julep SDK, Multi-agent workflows
+- **Integrations**: WhatsApp Business API, Social platforms
+- **Deployment**: Netlify with serverless functions
 
-### 1. Authentication
-- Visit the app and sign up with your email
-- Confirm your email if required by Supabase settings
+## 🤖 AI Agents
 
-### 2. Add Clients
-- Go to the Clients page
-- Add WhatsApp contacts with their phone numbers (include country code)
+- **Brand Persona**: Maintains brand voice consistency
+- **Content Creator**: Generates platform-optimized content  
+- **Scheduler**: AI-powered timing optimization
+- **Sales Agent**: Automated customer interactions
+- **Analytics**: Performance insights and recommendations
+- **Campaign Orchestrator**: Cross-platform coordination
 
-### 3. Create Schedules
-- Go to the Schedules page
-- Select a client, write your message, and set a cron expression
-- Examples:
-  - `0 9 * * *` - Daily at 9 AM
-  - `0 9 * * 1` - Every Monday at 9 AM
-  - `0 9 1 * *` - First day of every month at 9 AM
+## 📋 Setup
 
-### 4. Monitor Dashboard
-- View statistics on total clients, schedules, and pending messages
-- Track when messages were last sent
+1. **Environment Variables** - Copy `.env.example` to `.env.local` and configure:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_key
+   JULEP_API_KEY=your_julep_key
+   WHATSAPP_ACCESS_TOKEN=your_whatsapp_token
+   WHATSAPP_PHONE_NUMBER_ID=your_phone_number_id
+   WHATSAPP_VERIFY_TOKEN=your_webhook_verify_token
+   ```
 
-## Cron Expression Examples
+2. **Database** - Run Supabase migrations:
+   ```bash
+   npx supabase db push
+   ```
 
-| Expression | Description |
-|------------|-------------|
-| `0 9 * * *` | Daily at 9:00 AM |
-| `0 9 * * 1` | Every Monday at 9:00 AM |
-| `0 9 1 * *` | First day of every month at 9:00 AM |
-| `0 9,17 * * *` | Daily at 9:00 AM and 5:00 PM |
-| `*/30 9-17 * * 1-5` | Every 30 minutes, 9 AM to 5 PM, Monday to Friday |
+3. **WhatsApp** - Configure webhook URL:
+   ```
+   https://yourdomain.com/api/whatsapp/webhook
+   ```
 
-## Development
+## 🎯 Features
 
-### Project Structure
+### Brand Management
+- **Complete Brand Setup** - Comprehensive brand identity creation
+- **Edit Brand Details** - Full editing capabilities with validation
+- **Delete Brand** - Safe brand deletion with confirmation
+- **Unsaved Changes Detection** - Prevents accidental data loss
+- **Brand Guidelines** - Custom brand voice and visual identity
+
+### Content & Automation
+- **Content Studio** - Multi-platform content generation
+- **Smart Scheduling** - Audience-optimized timing
+- **Customer Management** - Automated support
+- **Real-time Analytics** - Performance dashboards
+- **WhatsApp Integration** - Business API automation
+
+### User Experience
+- **Responsive Design** - Works on all devices
+- **Dark Mode Support** - Automatic theme switching
+- **Form Validation** - Real-time input validation
+- **Loading States** - Clear feedback for all operations
+- **Error Handling** - Comprehensive error management
+
+## 🚀 Deployment
+
+Deploy to Netlify:
+
+1. Connect your repository to Netlify
+2. Configure environment variables in Netlify dashboard
+3. Deploy with automatic builds on push
+
+## 📁 Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router pages
-│   ├── dashboard/         # Dashboard pages
-│   ├── clients/           # Client management
-│   ├── schedules/         # Schedule management
-│   └── login/             # Authentication
-├── components/            # React components
-│   ├── ui/               # Shadcn UI components
-│   └── layout/           # Layout components
-├── lib/                  # Utility libraries
-│   ├── supabase.ts       # Supabase client config
-│   ├── whatsapp.ts       # WhatsApp API service
-│   └── utils.ts          # General utilities
-├── hooks/                # Custom React hooks
-└── server/               # Server-side code
-    └── jobs/             # Background job runners
+├── app/                    # Next.js app router
+│   ├── api/               # API routes
+│   ├── brand-setup/       # Brand management
+│   ├── dashboard/         # Main dashboard
+│   └── ...
+├── components/            # Reusable components
+├── lib/                   # Utilities and configurations
+├── types/                 # TypeScript type definitions
+└── hooks/                 # Custom React hooks
 ```
 
-### Available Scripts
+## 🧹 Recent Improvements
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run jobs` - Start background job runner
-- `npm run lint` - Run ESLint
+- ✅ Enhanced brand editing with full CRUD operations
+- ✅ Added brand deletion with confirmation dialog
+- ✅ Improved form validation and error handling
+- ✅ Added unsaved changes detection
+- ✅ Cleaned up unnecessary files and documentation
+- ✅ Improved API endpoints for better data handling
+- ✅ Enhanced user experience with better feedback
 
-## Deployment
+## 📞 Support
 
-### Vercel (Recommended)
+- Issues: GitHub Issues
+- Docs: Built-in help system
 
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy
+## 🔐 User Credential Management
 
-### Background Jobs
+The platform now supports **user-specific API credentials** for all social media platforms. Each user can configure their own API keys and access tokens instead of relying on global credentials.
 
-For production, you'll need to run the background job runner separately:
+### Supported Platforms
 
-1. Deploy the job runner to a service like Railway, Render, or a VPS
-2. Or use Supabase Edge Functions for serverless scheduling
-3. Ensure the job runner has access to the same environment variables
+- **WhatsApp Business API**
+  - Phone Number ID
+  - Access Token
+  - API URL (customizable)
+  - Webhook Verify Token
 
-## Troubleshooting
+- **Facebook**
+  - Access Token
+  - Page ID
 
-### Common Issues
+- **Instagram**
+  - Access Token
+  - Account ID
 
-1. **WhatsApp API Errors**
-   - Verify your access token and phone number ID
-   - Check that your WhatsApp Business account is verified
-   - Ensure phone numbers include country codes without '+'
+- **Twitter/X**
+  - API Key
+  - API Secret Key
+  - Access Token
+  - Access Token Secret
 
-2. **Database Connection Issues**
-   - Verify Supabase URL and keys
-   - Check that RLS policies are correctly set up
-   - Ensure the database migration was applied
+- **LinkedIn**
+  - Access Token
+  - Page ID
 
-3. **Scheduling Issues**
-   - Verify cron expressions using online validators
-   - Check that the job runner is running
-   - Monitor console logs for errors
+- **TikTok**
+  - Access Token
 
-### Testing Locally
+- **YouTube**
+  - API Key
+  - Channel ID
 
-To test message scheduling locally:
+### How It Works
 
-1. Set a cron expression like `* * * * *` (every minute)
-2. Create a test schedule
-3. Monitor the job runner console for activity
-4. Check your WhatsApp for received messages
+1. **Users configure their own credentials** in the Settings page
+2. **Credentials are stored securely** in the database with encryption
+3. **APIs automatically use user credentials** instead of global ones
+4. **Each user manages their own integrations** independently
 
-## Contributing
+### Security Features
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+- All sensitive tokens are stored as password fields
+- Row-level security ensures users only access their own credentials
+- Credentials are validated before API calls
+- Clear error messages guide users to configure missing credentials
 
-## License
+### For Developers
 
-MIT License - see LICENSE file for details.
+Use the credential helper functions in your API endpoints:
 
-## Support
+```typescript
+import { getPlatformCredentials, hasValidCredentials } from '@/lib/credentials'
 
-For issues and questions:
-1. Check the troubleshooting section
-2. Review Supabase and WhatsApp API documentation
-3. Create an issue in the repository 
+// Check if user has valid credentials
+const hasCredentials = await hasValidCredentials(userId, 'whatsapp')
+
+// Get platform-specific credentials
+const credentials = await getPlatformCredentials(userId, 'whatsapp')
+```
+
+**Note:** OpenAI API key remains a system-level credential for security reasons.
+
+## 🎨 Recent Improvements
+
+Built with Julep AI agents for intelligent automation. 

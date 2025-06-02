@@ -22,4 +22,4 @@
     Access-Control-Allow-Headers = "Content-Type, Authorization"
 
 [functions]
-  node_bundler = "esbuild" 
+  node_bundler = "esbuild"
