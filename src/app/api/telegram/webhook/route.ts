@@ -29,7 +29,11 @@ export async function POST(request: NextRequest) {
 
       // Process message with AI content generation
       if (message.text && !message.text.startsWith('/')) {
+        let responseContent = '🤖 Hello! I received your message and I\'m processing it...';
+        
         try {
+          console.log('🤖 Generating AI response for:', message.text);
+          
           // Generate AI response
           const aiResponse = await aiContentGenerator.generateResponse({
             userMessage: message.text,
@@ -41,32 +45,47 @@ export async function POST(request: NextRequest) {
             responseType: 'conversational'
           });
 
-          console.log('🤖 AI Response generated:', {
+          console.log('✅ AI Response generated successfully:', {
             content: aiResponse.content.substring(0, 100) + '...',
             confidence: aiResponse.confidence,
             model: aiResponse.metadata.model
           });
 
-          // Send AI-generated response
+          responseContent = aiResponse.content;
+
+        } catch (aiError) {
+          console.error('❌ AI generation failed, using fallback:', aiError);
+          
+          // Intelligent fallback based on message content
+          const userMessage = message.text.toLowerCase();
+          if (userMessage.includes('hello') || userMessage.includes('hi')) {
+            responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
+          } else if (userMessage.includes('help')) {
+            responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
+          } else if (userMessage.includes('feature')) {
+            responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
+          } else {
+            responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
+          }
+        }
+
+        try {
+          // Send response (either AI-generated or fallback)
           await messagingManager.sendMessage(
             message.chatId, 
-            aiResponse.content, 
+            responseContent, 
             'telegram'
           );
+          
+          console.log('✅ Response sent successfully');
 
           // TODO: Store message and response in database
           // TODO: Update analytics
           // TODO: Trigger automation flows if needed
 
-        } catch (error) {
-          console.error('❌ Failed to generate AI response:', error);
-          
-          // Fallback to a simple error message
-          await messagingManager.sendMessage(
-            message.chatId, 
-            '🤖 Sorry, I encountered an issue processing your message. Please try again!', 
-            'telegram'
-          );
+        } catch (sendError) {
+          console.error('❌ Failed to send response:', sendError);
+          // Don't throw error - webhook should still return 200
         }
       }
     }
