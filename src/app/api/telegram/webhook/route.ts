@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { messagingManager } from '@/lib/messaging/manager';
 import { aiContentGenerator } from '@/lib/ai-content-generator';
+import { automationEngine } from '@/lib/automation/engine';
+import { contactManager } from '@/lib/automation/contacts';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,65 +29,124 @@ export async function POST(request: NextRequest) {
         sender: message.sender?.name
       });
 
-      // Process message with AI content generation
+      // Process message with automation system
       if (message.text && !message.text.startsWith('/')) {
-        let responseContent = '🤖 Hello! I received your message and I\'m processing it...';
-        
         try {
-          console.log('🤖 Generating AI response for:', message.text);
+          console.log('🤖 Processing message with automation system:', message.text);
           
-          // Generate AI response
-          const aiResponse = await aiContentGenerator.generateResponse({
-            userMessage: message.text,
-            chatId: message.chatId,
-            userContext: {
-              name: message.sender?.name,
-              previousMessages: [] // TODO: Implement message history
-            },
-            responseType: 'conversational'
-          });
-
-          console.log('✅ AI Response generated successfully:', {
-            content: aiResponse.content.substring(0, 100) + '...',
-            confidence: aiResponse.confidence,
-            model: aiResponse.metadata.model
-          });
-
-          responseContent = aiResponse.content;
-
-        } catch (aiError) {
-          console.error('❌ AI generation failed, using fallback:', aiError);
-          
-          // Intelligent fallback based on message content
-          const userMessage = message.text.toLowerCase();
-          if (userMessage.includes('hello') || userMessage.includes('hi')) {
-            responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
-          } else if (userMessage.includes('help')) {
-            responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
-          } else if (userMessage.includes('feature')) {
-            responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
+          // Get or create contact
+          let contact = contactManager.getContact(message.chatId);
+          if (!contact) {
+            contact = contactManager.createContact(
+              message.chatId, 
+              message.sender?.id || message.chatId, 
+              message.sender?.name
+            );
+            console.log('👤 New contact created:', contact.id);
           } else {
-            responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
+            // Update contact activity
+            contactManager.incrementMessageCount(message.chatId);
+            console.log('👤 Contact updated:', contact.id);
           }
-        }
 
-        try {
-          // Send response (either AI-generated or fallback)
-          await messagingManager.sendMessage(
-            message.chatId, 
-            responseContent, 
-            'telegram'
+          // Process message through automation engine
+          const automationResult = await automationEngine.processMessage(
+            message.chatId,
+            message.text,
+            message.sender?.id || message.chatId,
+            message.sender?.name
           );
+
+          console.log('🔄 Automation result:', {
+            triggered: automationResult.triggered,
+            flowId: automationResult.flowId,
+            actionsTaken: automationResult.actionsTaken
+          });
+
+          let responseContent = '';
+          let useAI = false;
+
+          if (automationResult.triggered && automationResult.actionsTaken.length > 0) {
+            // Check if any action requires AI response
+            const aiAction = automationResult.actionsTaken.find(action => action.includes('ai_response'));
+            if (aiAction) {
+              useAI = true;
+            } else {
+              // Use predefined message from automation flow
+              const messageAction = automationResult.actionsTaken.find(action => action.includes('send_message'));
+              if (messageAction) {
+                // Get the flow and extract the message
+                const flow = automationEngine.getFlow(automationResult.flowId!);
+                const sendAction = flow?.actions.find(a => a.type === 'send_message');
+                if (sendAction?.config.message) {
+                  responseContent = sendAction.config.message;
+                }
+              }
+            }
+          } else {
+            // No automation triggered, use AI for response
+            useAI = true;
+          }
+
+          // Generate response content
+          if (useAI || !responseContent) {
+            try {
+              console.log('🤖 Generating AI response...');
+              
+              const aiResponse = await aiContentGenerator.generateResponse({
+                userMessage: message.text,
+                chatId: message.chatId,
+                userContext: {
+                  name: message.sender?.name,
+                  previousMessages: [] // TODO: Implement message history from contact
+                },
+                responseType: 'conversational'
+              });
+
+              responseContent = aiResponse.content;
+              console.log('✅ AI Response generated:', responseContent.substring(0, 100) + '...');
+
+            } catch (aiError) {
+              console.error('❌ AI generation failed, using intelligent fallback:', aiError);
+              
+              // Intelligent fallback based on message content
+              const userMessage = message.text.toLowerCase();
+              if (userMessage.includes('hello') || userMessage.includes('hi')) {
+                responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
+              } else if (userMessage.includes('help')) {
+                responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
+              } else if (userMessage.includes('feature')) {
+                responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
+              } else {
+                responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
+              }
+            }
+          }
+
+          // Send response
+          if (responseContent) {
+            await messagingManager.sendMessage(
+              message.chatId, 
+              responseContent, 
+              'telegram'
+            );
+            
+            console.log('✅ Response sent successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Message processing error:', error);
           
-          console.log('✅ Response sent successfully');
-
-          // TODO: Store message and response in database
-          // TODO: Update analytics
-          // TODO: Trigger automation flows if needed
-
-        } catch (sendError) {
-          console.error('❌ Failed to send response:', sendError);
-          // Don't throw error - webhook should still return 200
+          // Send fallback error message
+          try {
+            await messagingManager.sendMessage(
+              message.chatId, 
+              '🤖 Sorry, I encountered an issue processing your message. Please try again!', 
+              'telegram'
+            );
+          } catch (sendError) {
+            console.error('❌ Failed to send error message:', sendError);
+          }
         }
       }
     }
