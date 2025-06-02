@@ -3,6 +3,7 @@ import { messagingManager } from '@/lib/messaging/manager';
 import { aiContentGenerator } from '@/lib/ai-content-generator';
 import { automationEngine } from '@/lib/automation/engine';
 import { contactManager } from '@/lib/automation/contacts';
+import { analyticsCollector } from '@/lib/analytics/collector';
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,8 +32,18 @@ export async function POST(request: NextRequest) {
 
       // Process message with automation system
       if (message.text && !message.text.startsWith('/')) {
+        const startTime = Date.now();
+        
         try {
           console.log('🤖 Processing message with automation system:', message.text);
+          
+          // Track message received
+          analyticsCollector.trackMessageReceived(
+            message.chatId,
+            message.sender?.id || message.chatId,
+            'telegram',
+            message.text
+          );
           
           // Get or create contact
           let contact = contactManager.getContact(message.chatId);
@@ -43,10 +54,27 @@ export async function POST(request: NextRequest) {
               message.sender?.name
             );
             console.log('👤 New contact created:', contact.id);
+            
+            // Track new user joined
+            analyticsCollector.trackUserJoined(
+              message.chatId,
+              message.sender?.id || message.chatId,
+              'telegram',
+              contact.segment
+            );
           } else {
             // Update contact activity
             contactManager.incrementMessageCount(message.chatId);
             console.log('👤 Contact updated:', contact.id);
+            
+            // Track user activity
+            analyticsCollector.trackUserActivity(
+              message.chatId,
+              message.sender?.id || message.chatId,
+              'telegram',
+              contact.segment,
+              contact.tags
+            );
           }
 
           // Process message through automation engine
@@ -62,6 +90,17 @@ export async function POST(request: NextRequest) {
             flowId: automationResult.flowId,
             actionsTaken: automationResult.actionsTaken
           });
+
+          // Track automation trigger
+          if (automationResult.triggered && automationResult.flowId) {
+            analyticsCollector.trackAutomationTriggered(
+              message.chatId,
+              message.sender?.id || message.chatId,
+              'telegram',
+              automationResult.flowId,
+              !automationResult.error
+            );
+          }
 
           let responseContent = '';
           let useAI = false;
@@ -106,21 +145,45 @@ export async function POST(request: NextRequest) {
               responseContent = aiResponse.content;
               console.log('✅ AI Response generated:', responseContent.substring(0, 100) + '...');
 
-            } catch (aiError) {
-              console.error('❌ AI generation failed, using intelligent fallback:', aiError);
-              
-              // Intelligent fallback based on message content
-              const userMessage = message.text.toLowerCase();
-              if (userMessage.includes('hello') || userMessage.includes('hi')) {
-                responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
-              } else if (userMessage.includes('help')) {
-                responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
-              } else if (userMessage.includes('feature')) {
-                responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
-              } else {
-                responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
+              // Track AI response
+              const aiResponseTime = Date.now() - startTime;
+              analyticsCollector.trackAiResponse(
+                message.chatId,
+                message.sender?.id || message.chatId,
+                'telegram',
+                aiResponse.metadata.model || 'fallback',
+                aiResponse.confidence,
+                aiResponseTime,
+                true
+              );
+
+                          } catch (aiError) {
+                console.error('❌ AI generation failed, using intelligent fallback:', aiError);
+                
+                // Track AI error
+                const aiErrorTime = Date.now() - startTime;
+                analyticsCollector.trackAiResponse(
+                  message.chatId,
+                  message.sender?.id || message.chatId,
+                  'telegram',
+                  'fallback',
+                  0,
+                  aiErrorTime,
+                  false
+                );
+                
+                // Intelligent fallback based on message content
+                const userMessage = message.text.toLowerCase();
+                if (userMessage.includes('hello') || userMessage.includes('hi')) {
+                  responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
+                } else if (userMessage.includes('help')) {
+                  responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
+                } else if (userMessage.includes('feature')) {
+                  responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
+                } else {
+                  responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
+                }
               }
-            }
           }
 
           // Send response
@@ -132,6 +195,15 @@ export async function POST(request: NextRequest) {
             );
             
             console.log('✅ Response sent successfully');
+            
+            // Track message sent
+            const totalResponseTime = Date.now() - startTime;
+            analyticsCollector.trackMessageSent(
+              message.chatId,
+              message.sender?.id || message.chatId,
+              'telegram',
+              totalResponseTime
+            );
           }
 
         } catch (error) {
