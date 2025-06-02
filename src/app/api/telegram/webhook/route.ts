@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { messagingManager } from '@/lib/messaging/manager';
+import { aiContentGenerator } from '@/lib/ai-content-generator';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,11 @@ export async function POST(request: NextRequest) {
 
     // Ensure platforms are connected
     await messagingManager.connectAll();
+
+    // Initialize AI content generator if not already done
+    if (!aiContentGenerator.isReady()) {
+      await aiContentGenerator.initialize();
+    }
 
     // Process the incoming message
     const message = await messagingManager.receiveMessage(body, 'telegram');
@@ -21,24 +27,46 @@ export async function POST(request: NextRequest) {
         sender: message.sender?.name
       });
 
-      // Here you can add your message processing logic:
-      // - Store in database
-      // - Trigger automation flows
-      // - Generate AI responses
-      // - Update analytics
-      
-      // For now, let's send a simple echo response
+      // Process message with AI content generation
       if (message.text && !message.text.startsWith('/')) {
-        const echoResponse = `🤖 Echo: ${message.text}`;
-        
         try {
+          // Generate AI response
+          const aiResponse = await aiContentGenerator.generateResponse({
+            userMessage: message.text,
+            chatId: message.chatId,
+            userContext: {
+              name: message.sender?.name,
+              previousMessages: [] // TODO: Implement message history
+            },
+            responseType: 'conversational'
+          });
+
+          console.log('🤖 AI Response generated:', {
+            content: aiResponse.content.substring(0, 100) + '...',
+            confidence: aiResponse.confidence,
+            model: aiResponse.metadata.model
+          });
+
+          // Send AI-generated response
           await messagingManager.sendMessage(
             message.chatId, 
-            echoResponse, 
+            aiResponse.content, 
             'telegram'
           );
+
+          // TODO: Store message and response in database
+          // TODO: Update analytics
+          // TODO: Trigger automation flows if needed
+
         } catch (error) {
-          console.error('❌ Failed to send echo response:', error);
+          console.error('❌ Failed to generate AI response:', error);
+          
+          // Fallback to a simple error message
+          await messagingManager.sendMessage(
+            message.chatId, 
+            '🤖 Sorry, I encountered an issue processing your message. Please try again!', 
+            'telegram'
+          );
         }
       }
     }
