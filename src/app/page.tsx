@@ -159,23 +159,39 @@ export default function HomePage() {
       }
 
       // Fetch all data in parallel
+      // Fetch clients without user_id filter (temporary)...
+      console.log('Fetching clients without user_id filter (temporary)...')
+      const clientsResult = await supabase.from('clients').select('id, created_at', { count: 'exact' })
+      console.log('Fetched clients:', clientsResult.data)
+
       const [
-        clientsResult, 
         schedulesResult, 
         brandsResult, 
         agentsResult,
-        messagesResult,
         contentResult,
         conversationsResult
       ] = await Promise.all([
-        tryMultipleTables(['clients', 'customers'], 'id, created_at', { count: 'exact' }),
         safeQuery('schedules', 'id, last_sent, created_at', { count: 'exact' }),
         safeQuery('brands', 'id, name, created_at', { count: 'exact' }),
         safeQuery('ai_agents', 'id, type, status, created_at', { count: 'exact' }),
-        safeQuery('messages', 'id, created_at, sender_type'),
         tryMultipleTables(['content_generation', 'brand_content'], 'id, created_at', { count: 'exact' }),
         safeQuery('conversations', 'id, status, created_at', { count: 'exact' })
       ])
+
+      // Safely query messages with proper error handling
+      let messagesResult: { data: any[], count: number } = { data: [], count: 0 }
+      try {
+        const { data, error, count } = await supabase
+          .from('messages')
+          .select('id, created_at, direction', { count: 'exact' })
+          .eq('user_id', user.id)
+        
+        if (!error) {
+          messagesResult = { data: data || [], count: count || 0 }
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error)
+      }
 
       // Calculate metrics
       const totalClients = clientsResult.count || 0
@@ -217,7 +233,7 @@ export default function HomePage() {
         return new Date(c.created_at) > weekAgo
       }).length || 0
 
-      const aiMessages = messagesResult.data?.filter((m: any) => m.sender_type === 'ai') || []
+      const aiMessages = messagesResult.data?.filter((m: any) => m.direction === 'outbound') || []
       const aiResponseRate = totalMessages > 0 ? ((aiMessages.length / totalMessages) * 100) : 0
 
       setDashboardData({
