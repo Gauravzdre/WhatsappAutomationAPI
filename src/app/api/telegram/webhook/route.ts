@@ -7,6 +7,9 @@ export async function POST(request: NextRequest) {
     
     console.log('📨 Telegram webhook received:', JSON.stringify(body, null, 2));
 
+    // Ensure platforms are connected
+    await messagingManager.connectAll();
+
     // Process the incoming message
     const message = await messagingManager.receiveMessage(body, 'telegram');
     
