@@ -5,9 +5,27 @@ import { usePathname } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
-import { Moon, Sun, LogOut, Building2 } from 'lucide-react'
+import { 
+  Moon, 
+  Sun, 
+  LogOut, 
+  Menu, 
+  X, 
+  Home,
+  MessageSquare,
+  Bot,
+  Users,
+  Calendar,
+  Clock,
+  Palette,
+  Settings,
+  Brain,
+  ChevronDown,
+  Zap
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export function Navigation() {
@@ -18,6 +36,7 @@ export function Navigation() {
   const [mounted, setMounted] = useState(false)
   const [brandExists, setBrandExists] = useState(false)
   const [brandLoading, setBrandLoading] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -47,69 +66,278 @@ export function Navigation() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
-  // Dynamic navigation based on brand existence
-  const navigation = [
-    { name: 'Dashboard', href: '/' },
+  // Organized navigation with icons and grouping
+  const primaryNavigation = [
     { 
-      name: 'Brand Setup', 
-      href: brandExists ? '/brand-setup?edit=true' : '/brand-setup' 
+      name: 'Dashboard', 
+      href: '/', 
+      icon: Home,
+      description: 'Overview & analytics'
     },
-    { name: 'AI Agents', href: '/ai-agents' },
-    { name: 'Clients', href: '/clients' },
-    { name: 'Schedules', href: '/schedules' },
-    { name: 'Brand Content', href: '/brand-content' },
-    { name: 'Settings', href: '/settings' },
+    { 
+      name: 'Templates', 
+      href: '/templates', 
+      icon: MessageSquare,
+      description: 'Message templates'
+    },
+    { 
+      name: 'Social Posts', 
+      href: '/social-posts', 
+      icon: Calendar,
+      description: 'Social media scheduling',
+      isNew: true
+    },
+    { 
+      name: 'AI Agents', 
+      href: '/ai-agents', 
+      icon: Bot,
+      description: 'Automation bots'
+    }
   ]
 
+  const secondaryNavigation = [
+    { 
+      name: 'Clients', 
+      href: '/clients', 
+      icon: Users,
+      description: 'Contact management'
+    },
+    { 
+      name: 'Brand Setup', 
+      href: brandExists ? '/brand-setup?edit=true' : '/brand-setup',
+      icon: Brain,
+      description: brandExists ? 'Edit brand' : 'Setup brand'
+    },
+    { 
+      name: 'Schedules', 
+      href: '/schedules', 
+      icon: Clock,
+      description: 'Message scheduling'
+    },
+    { 
+      name: 'Brand Content', 
+      href: '/brand-content', 
+      icon: Palette,
+      description: 'Content studio'
+    },
+    { 
+      name: 'Settings', 
+      href: '/settings', 
+      icon: Settings,
+      description: 'App settings'
+    }
+  ]
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
+
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                🤖 WhatsApp AI Automation
-              </h1>
+    <>
+      <nav className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            {/* Logo and Brand */}
+            <div className="flex items-center">
+              <Link href="/" className="flex items-center space-x-3 group">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <div className="hidden sm:block">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    WhatsApp AI
+                  </h1>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+                    Automation Platform
+                  </p>
+                </div>
+              </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                    pathname === item.href || (item.name === 'Brand Setup' && pathname === '/brand-setup')
-                      ? 'border-blue-500 text-gray-900 dark:text-white'
-                      : 'border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200'
-                  )}
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {primaryNavigation.map((item) => {
+                const Icon = item.icon
+                const active = isActive(item.href)
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'relative flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group',
+                      active
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                    )}
+                  >
+                    <Icon className={cn(
+                      'w-4 h-4 transition-colors',
+                      active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                    )} />
+                    <span>{item.name}</span>
+                    {item.isNew && (
+                      <Badge className="bg-green-500 text-white text-xs px-1.5 py-0.5 ml-1">
+                        New
+                      </Badge>
+                    )}
+                    {active && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full" />
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Right Side Actions */}
+            <div className="flex items-center space-x-2">
+              {/* Theme Toggle */}
+              {mounted && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleTheme}
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-2"
                 >
-                  {item.name}
-                </Link>
-              ))}
+                  {theme === 'dark' ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                </Button>
+              )}
+
+              {/* Desktop Sign Out */}
+              <div className="hidden sm:block">
+                <Button 
+                  variant="outline" 
+                  onClick={handleSignOut} 
+                  size="sm"
+                  className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="lg:hidden">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-gray-500 dark:text-gray-400 p-2"
+                >
+                  {mobileMenuOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            {mounted && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleTheme}
-                className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
-              </Button>
-            )}
-            <Button variant="outline" onClick={handleSignOut} size="sm">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
           </div>
         </div>
-      </div>
-    </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md">
+            <div className="px-4 py-3 space-y-1">
+              {/* Primary Navigation */}
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+                  Main
+                </p>
+                {primaryNavigation.map((item) => {
+                  const Icon = item.icon
+                  const active = isActive(item.href)
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        'flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors',
+                        active
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      )}
+                    >
+                      <Icon className={cn(
+                        'w-5 h-5',
+                        active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'
+                      )} />
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <span>{item.name}</span>
+                          {item.isNew && (
+                            <Badge className="bg-green-500 text-white text-xs">
+                              New
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {item.description}
+                        </p>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+
+              {/* Secondary Navigation */}
+              <div className="space-y-1 pt-4">
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+                  More
+                </p>
+                {secondaryNavigation.map((item) => {
+                  const Icon = item.icon
+                  const active = isActive(item.href)
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors',
+                        active
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      )}
+                    >
+                      <Icon className={cn(
+                        'w-4 h-4',
+                        active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'
+                      )} />
+                      <span>{item.name}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+
+              {/* Mobile Sign Out */}
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <Button 
+                  variant="ghost" 
+                  onClick={handleSignOut}
+                  className="w-full justify-start text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Sign Out
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+    </>
   )
 } 
