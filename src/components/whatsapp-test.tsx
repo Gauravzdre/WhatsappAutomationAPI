@@ -279,7 +279,7 @@ export default function WhatsAppTest() {
               <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
                 <li>Get WhatsApp Business API credentials from Meta</li>
                 <li>Add your phone number ID and access token to settings</li>
-                <li>Configure webhook URL: <code className="bg-gray-100 px-1 rounded">{window.location.origin}/api/whatsapp/webhook</code></li>
+                <li>Configure webhook URL: <code className="bg-gray-100 px-1 rounded">{typeof window !== 'undefined' ? window.location.origin : '[YOUR_DOMAIN]'}/api/whatsapp/webhook</code></li>
               </ul>
             </div>
             

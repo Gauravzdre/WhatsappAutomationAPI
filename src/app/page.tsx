@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+// Force dynamic rendering since we use authentication
+export const dynamic = 'force-dynamic'
 import { useRouter } from 'next/navigation'
 import { EnhancedCard, EnhancedCardContent, EnhancedCardHeader, EnhancedCardTitle } from '@/components/ui/enhanced-card'
 import { Badge } from '@/components/ui/badge'
