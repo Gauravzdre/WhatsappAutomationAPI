@@ -48,50 +48,19 @@ class AIContentGenerator {
 
   async initialize(): Promise<void> {
     try {
-      await this.julepService.initialize();
+      // For now, skip Julep initialization and use fallback responses
+      // This ensures the system works reliably while we develop the full AI integration
+      console.log('🤖 AI Content Generator initializing with fallback responses...');
       
-      // Create a default brand agent for the platform
-      this.defaultBrandAgent = await this.julepService.createBrandPersonaAgent({
+      // Mock agent for fallback system
+      this.defaultBrandAgent = {
+        id: 'fallback-agent-001',
         name: 'ClientPing AI Assistant',
-        industry: 'Business Automation',
-        voice: {
-          tone: 'friendly',
-          personality: ['helpful', 'professional', 'knowledgeable', 'responsive'],
-          values: ['efficiency', 'customer success', 'innovation', 'reliability'],
-          doNotUse: ['jargon', 'overly technical terms', 'pushy sales language'],
-          preferredLanguage: 'English'
-        },
-        guidelines: `
-          You are ClientPing AI Assistant, a helpful business automation platform assistant.
-          
-          Core Guidelines:
-          - Always be helpful, friendly, and professional
-          - Provide clear, actionable responses
-          - Ask clarifying questions when needed
-          - Offer relevant suggestions for business automation
-          - Keep responses concise but informative
-          - Use emojis sparingly but effectively
-          - Never make promises about features that don't exist
-          - Always maintain a positive, solution-oriented tone
-          
-          Capabilities you can mention:
-          - Message automation and scheduling
-          - AI-powered content generation
-          - Multi-platform messaging (Telegram, WhatsApp coming soon)
-          - Analytics and insights
-          - Team collaboration features
-          - Template libraries
-          
-          When users ask about:
-          - Pricing: Mention we're in beta and gathering feedback
-          - Features: Focus on current capabilities and roadmap
-          - Support: Offer to help with specific questions
-          - Integration: Explain our platform-agnostic approach
-        `
-      });
+        initialized: true
+      };
 
       this.isInitialized = true;
-      console.log('✅ AI Content Generator initialized successfully');
+      console.log('✅ AI Content Generator initialized successfully (fallback mode)');
     } catch (error) {
       console.error('❌ Failed to initialize AI Content Generator:', error);
       // Don't throw error - fall back to simple responses
@@ -101,49 +70,11 @@ class AIContentGenerator {
 
   async generateResponse(request: ContentGenerationRequest): Promise<ContentGenerationResponse> {
     try {
-      // If not initialized, provide a fallback response
-      if (!this.isInitialized) {
-        return this.getFallbackResponse(request);
-      }
-
-      // Create a session for this conversation
-      const session = await this.julepService.createSession({
-        agent_id: this.defaultBrandAgent.id,
-        context: {
-          user_message: request.userMessage,
-          chat_id: request.chatId,
-          user_context: request.userContext,
-          brand_context: request.brandContext,
-          response_type: request.responseType || 'conversational'
-        }
-      });
-
-      // Generate AI response
-      const aiResponse = await this.julepService.sessions.chat({
-        session_id: session.id,
-        message: request.userMessage,
-        context: {
-          previous_messages: request.userContext?.previousMessages || [],
-          user_preferences: request.userContext?.preferences || {},
-          response_requirements: {
-            max_length: 500,
-            include_emojis: true,
-            tone: request.brandContext?.voice?.tone || 'friendly',
-            call_to_action: request.responseType === 'sales'
-          }
-        }
-      });
-
-      return {
-        content: aiResponse.content,
-        confidence: 0.85, // Mock confidence score
-        metadata: {
-          responseType: request.responseType || 'conversational',
-          brandAlignment: 0.9, // Mock brand alignment score
-          generatedAt: new Date().toISOString(),
-          model: 'julep-gpt-4'
-        }
-      };
+      console.log('🤖 Generating AI response for:', request.userMessage);
+      
+      // For now, always use fallback responses to ensure reliability
+      // This provides intelligent responses while we develop the full AI integration
+      return this.getFallbackResponse(request);
 
     } catch (error) {
       console.error('❌ AI content generation failed:', error);
