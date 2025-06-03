@@ -36,7 +36,8 @@ import {
   BarChart3,
   TrendingUp,
   UserPlus,
-  MoreHorizontal
+  MoreHorizontal,
+  Target
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -85,6 +86,13 @@ export function Navigation() {
       href: '/', 
       icon: Home,
       description: 'Overview & quick actions'
+    },
+    { 
+      name: 'Strategy', 
+      href: '/strategy', 
+      icon: Target,
+      description: 'Content strategy management',
+      isNew: true
     },
     { 
       name: 'Templates', 

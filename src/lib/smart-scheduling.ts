@@ -64,6 +64,13 @@ export class SmartSchedulingService {
 
       if (error) {
         console.error('Error fetching message data:', error)
+        
+        // If table doesn't exist (error code 42P01), provide helpful guidance
+        if (error.code === '42P01') {
+          console.warn('⚠️  message_engagement_tracking table does not exist. Smart scheduling features will use default insights.')
+          console.warn('📝 To enable full smart scheduling, create the table using the SQL in database/smart-scheduling-schema.sql')
+        }
+        
         // Return default insights if table doesn't exist or has no data
         return this.getDefaultAudienceInsights()
       }
@@ -155,6 +162,8 @@ export class SmartSchedulingService {
       contentType: string
       platform: string
       targetAudience?: any
+      strategyId?: string
+      contentPillar?: string
     },
     brandId?: string
   ): Promise<ScheduleOptimization> {
@@ -162,12 +171,37 @@ export class SmartSchedulingService {
       // Get audience insights
       const audienceInsights = await this.analyzeAudienceBehavior(userId, brandId)
 
+      // Get strategy context if available
+      let strategyContext = null
+      if (scheduleConfig.strategyId) {
+        try {
+          const { data: strategy } = await this.supabase
+            .from('strategies')
+            .select(`
+              *,
+              audience_segments(*)
+            `)
+            .eq('id', scheduleConfig.strategyId)
+            .single()
+          
+          strategyContext = {
+            ...strategy,
+            content_pillar: scheduleConfig.contentPillar,
+            target_metrics: strategy.target_metrics,
+            business_objectives: strategy.business_objectives
+          }
+        } catch (error) {
+          console.warn('Could not fetch strategy context:', error)
+        }
+      }
+
       // Use AI agent to analyze and recommend optimal timing
       if (brandId) {
         try {
           const optimizedSchedules = await this.aiManager.optimizeScheduling(brandId, [{
             ...scheduleConfig,
-            audienceInsights
+            audienceInsights,
+            strategyContext
           }])
 
           if (optimizedSchedules && optimizedSchedules.length > 0) {
