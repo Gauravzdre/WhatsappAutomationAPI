@@ -24,7 +24,10 @@ import {
   Settings,
   Brain,
   ChevronDown,
-  Zap
+  Zap,
+  BarChart3,
+  TrendingUp,
+  UserPlus
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -72,7 +75,20 @@ export function Navigation() {
       name: 'Dashboard', 
       href: '/', 
       icon: Home,
-      description: 'Overview & analytics'
+      description: 'Overview & quick actions'
+    },
+    { 
+      name: 'Analytics', 
+      href: '/analytics', 
+      icon: BarChart3,
+      description: 'Performance metrics'
+    },
+    { 
+      name: 'Insights', 
+      href: '/insights', 
+      icon: TrendingUp,
+      description: 'AI-powered insights',
+      isNew: true
     },
     { 
       name: 'Templates', 
@@ -93,16 +109,16 @@ export function Navigation() {
       icon: Users,
       description: 'Team collaboration',
       isNew: true
-    },
+    }
+  ]
+
+  const secondaryNavigation = [
     { 
       name: 'AI Agents', 
       href: '/ai-agents', 
       icon: Bot,
       description: 'Automation bots'
-    }
-  ]
-
-  const secondaryNavigation = [
+    },
     { 
       name: 'Clients', 
       href: '/clients', 
@@ -110,16 +126,22 @@ export function Navigation() {
       description: 'Contact management'
     },
     { 
-      name: 'Brand Setup', 
-      href: brandExists ? '/brand-setup?edit=true' : '/brand-setup',
-      icon: Brain,
-      description: brandExists ? 'Edit brand' : 'Setup brand'
-    },
-    { 
       name: 'Schedules', 
       href: '/schedules', 
       icon: Clock,
       description: 'Message scheduling'
+    },
+    { 
+      name: 'Onboarding', 
+      href: '/onboarding', 
+      icon: UserPlus,
+      description: 'Setup wizard'
+    },
+    { 
+      name: 'Brand Setup', 
+      href: brandExists ? '/brand-setup?edit=true' : '/brand-setup',
+      icon: Brain,
+      description: brandExists ? 'Edit brand' : 'Setup brand'
     },
     { 
       name: 'Brand Content', 
