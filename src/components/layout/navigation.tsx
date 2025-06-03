@@ -8,6 +8,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
+} from '@/components/ui/dropdown-menu'
 import { 
   Moon, 
   Sun, 
@@ -27,7 +35,8 @@ import {
   Zap,
   BarChart3,
   TrendingUp,
-  UserPlus
+  UserPlus,
+  MoreHorizontal
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -69,7 +78,7 @@ export function Navigation() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
-  // Organized navigation with icons and grouping
+  // Core navigation - most frequently used features
   const primaryNavigation = [
     { 
       name: 'Dashboard', 
@@ -78,30 +87,16 @@ export function Navigation() {
       description: 'Overview & quick actions'
     },
     { 
-      name: 'Analytics', 
-      href: '/analytics', 
-      icon: BarChart3,
-      description: 'Performance metrics'
-    },
-    { 
-      name: 'Insights', 
-      href: '/insights', 
-      icon: TrendingUp,
-      description: 'AI-powered insights',
-      isNew: true
-    },
-    { 
       name: 'Templates', 
       href: '/templates', 
       icon: MessageSquare,
       description: 'Message templates'
     },
     { 
-      name: 'Social Posts', 
-      href: '/social-posts', 
-      icon: Calendar,
-      description: 'Social media scheduling',
-      isNew: true
+      name: 'Analytics', 
+      href: '/analytics', 
+      icon: BarChart3,
+      description: 'Performance metrics'
     },
     { 
       name: 'Teams', 
@@ -112,7 +107,22 @@ export function Navigation() {
     }
   ]
 
-  const secondaryNavigation = [
+  // Features accessible via "More" dropdown
+  const moreNavigation = [
+    { 
+      name: 'Insights', 
+      href: '/insights', 
+      icon: TrendingUp,
+      description: 'AI-powered insights',
+      isNew: true
+    },
+    { 
+      name: 'Social Posts', 
+      href: '/social-posts', 
+      icon: Calendar,
+      description: 'Social media scheduling',
+      isNew: true
+    },
     { 
       name: 'AI Agents', 
       href: '/ai-agents', 
@@ -130,13 +140,10 @@ export function Navigation() {
       href: '/schedules', 
       icon: Clock,
       description: 'Message scheduling'
-    },
-    { 
-      name: 'Onboarding', 
-      href: '/onboarding', 
-      icon: UserPlus,
-      description: 'Setup wizard'
-    },
+    }
+  ]
+
+  const settingsNavigation = [
     { 
       name: 'Brand Setup', 
       href: brandExists ? '/brand-setup?edit=true' : '/brand-setup',
@@ -148,6 +155,12 @@ export function Navigation() {
       href: '/brand-content', 
       icon: Palette,
       description: 'Content studio'
+    },
+    { 
+      name: 'Onboarding', 
+      href: '/onboarding', 
+      icon: UserPlus,
+      description: 'Setup wizard'
     },
     { 
       name: 'Settings', 
@@ -175,10 +188,10 @@ export function Navigation() {
                 </div>
                 <div className="hidden sm:block">
                   <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    WhatsApp AI
+                    Schedsy.ai
                   </h1>
                   <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                    Automation Platform
+                    Smart Automation
                   </p>
                 </div>
               </Link>
@@ -216,6 +229,56 @@ export function Navigation() {
                   </Link>
                 )
               })}
+              
+              {/* More Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                  >
+                    <MoreHorizontal className="w-4 h-4" />
+                    <span>More</span>
+                    <ChevronDown className="w-3 h-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Features</DropdownMenuLabel>
+                  {moreNavigation.map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <DropdownMenuItem key={item.name} asChild>
+                        <Link href={item.href} className="flex items-center space-x-2 w-full">
+                          <Icon className="w-4 h-4" />
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <span>{item.name}</span>
+                              {item.isNew && (
+                                <Badge className="bg-green-500 text-white text-xs px-1 py-0">
+                                  New
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      </DropdownMenuItem>
+                    )
+                  })}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                  {settingsNavigation.map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <DropdownMenuItem key={item.name} asChild>
+                        <Link href={item.href} className="flex items-center space-x-2 w-full">
+                          <Icon className="w-4 h-4" />
+                          <span>{item.name}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    )
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Right Side Actions */}
@@ -314,12 +377,49 @@ export function Navigation() {
                 })}
               </div>
 
-              {/* Secondary Navigation */}
+              {/* More Features */}
               <div className="space-y-1 pt-4">
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
-                  More
+                  Features
                 </p>
-                {secondaryNavigation.map((item) => {
+                {moreNavigation.map((item) => {
+                  const Icon = item.icon
+                  const active = isActive(item.href)
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors',
+                        active
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      )}
+                    >
+                      <Icon className={cn(
+                        'w-4 h-4',
+                        active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'
+                      )} />
+                      <div className="flex items-center space-x-2">
+                        <span>{item.name}</span>
+                        {item.isNew && (
+                          <Badge className="bg-green-500 text-white text-xs">
+                            New
+                          </Badge>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+
+              {/* Settings */}
+              <div className="space-y-1 pt-4">
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+                  Settings
+                </p>
+                {settingsNavigation.map((item) => {
                   const Icon = item.icon
                   const active = isActive(item.href)
                   return (

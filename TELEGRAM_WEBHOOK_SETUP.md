@@ -1,6 +1,6 @@
 # 🤖 Telegram Webhook Setup Guide
 
-This guide will help you set up your Telegram bot webhook URL for your WhatsApp AI Automation Platform.
+This guide will help you set up your Telegram bot webhook URL for your Schedsy.ai Smart Automation Platform.
 
 ## 📋 Prerequisites
 

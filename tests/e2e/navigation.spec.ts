@@ -69,7 +69,7 @@ test.describe('Navigation', () => {
       await expect(page.locator('nav')).toBeVisible()
       
       // Check if content is properly displayed
-      await expect(page.getByText(/WhatsApp AI Automation/i)).toBeVisible()
+      await expect(page.getByText(/Schedsy\.ai/i)).toBeVisible()
     }
   })
 })

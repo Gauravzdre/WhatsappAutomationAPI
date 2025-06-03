@@ -57,7 +57,7 @@ export function generateInvitationEmailTemplate(data: TeamInvitationData): strin
       <div class="container">
         <div class="header">
           <h1>🎉 You're Invited!</h1>
-          <p>Join ${data.teamName} on WhatsApp AI Automation Platform</p>
+          <p>Join ${data.teamName} on Schedsy.ai</p>
         </div>
         <div class="content">
           <h2>Hi there!</h2>
@@ -90,7 +90,7 @@ export function generateInvitationEmailTemplate(data: TeamInvitationData): strin
         <div class="footer">
           <p>This invitation will expire in 7 days.</p>
           <p>If you didn't expect this invitation, you can safely ignore this email.</p>
-          <p>© 2025 WhatsApp AI Automation Platform</p>
+          <p>© 2025 Schedsy.ai</p>
         </div>
       </div>
     </body>

@@ -176,7 +176,7 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
               </div>
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">
-                  Welcome to WhatsApp AI Automation! 🎉
+                  Welcome to Schedsy.ai! 🎉
                 </h2>
                 <p className="text-blue-100 mb-4">
                   Let's get you set up in just a few minutes. Complete these steps to start automating your messages.

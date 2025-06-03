@@ -137,28 +137,11 @@ export function PerformanceInsightsDashboard({ className }: PerformanceInsightsD
   if (loading && insights.length === 0) {
     return (
       <div className={`space-y-6 ${className}`}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">Performance Insights</h2>
-            <p className="text-muted-foreground">AI-powered business intelligence and recommendations</p>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading performance insights...</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <RefreshCw className="h-4 w-4 animate-spin" />
-            <span className="text-sm text-muted-foreground">Loading insights...</span>
-          </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((i) => (
-            <Card key={i}>
-              <CardHeader className="space-y-0 pb-2">
-                <div className="h-4 bg-muted rounded animate-pulse" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-8 bg-muted rounded animate-pulse mb-2" />
-                <div className="h-3 bg-muted rounded animate-pulse" />
-              </CardContent>
-            </Card>
-          ))}
         </div>
       </div>
     )
@@ -181,12 +164,8 @@ export function PerformanceInsightsDashboard({ className }: PerformanceInsightsD
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Header */}
+      {/* Controls */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Performance Insights</h2>
-          <p className="text-muted-foreground">AI-powered business intelligence and recommendations</p>
-        </div>
         <div className="flex items-center space-x-2">
           <Select value={timeframe} onValueChange={(value: any) => setTimeframe(value)}>
             <SelectTrigger className="w-32">
@@ -294,13 +273,13 @@ export function PerformanceInsightsDashboard({ className }: PerformanceInsightsD
                         {getInsightIcon(insight.type)}
                         <div>
                           <CardTitle className="text-lg">{insight.title}</CardTitle>
-                          <CardDescription className="flex items-center space-x-2 mt-1">
+                          <div className="flex items-center space-x-2 mt-1 text-sm text-muted-foreground">
                             {getCategoryIcon(insight.category)}
                             <span className="capitalize">{insight.category.replace('_', ' ')}</span>
                             <Badge variant={getImpactColor(insight.impact) as any}>
                               {insight.impact} impact
                             </Badge>
-                          </CardDescription>
+                          </div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -456,9 +435,9 @@ export function PerformanceInsightsDashboard({ className }: PerformanceInsightsD
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle className="capitalize">{report.reportType} Report</CardTitle>
-                        <CardDescription>
+                        <div className="text-sm text-muted-foreground">
                           {new Date(report.periodStart).toLocaleDateString()} - {new Date(report.periodEnd).toLocaleDateString()}
-                        </CardDescription>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         {report.aiGenerated && (

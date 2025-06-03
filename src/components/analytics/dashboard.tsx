@@ -111,7 +111,7 @@ export default function AnalyticsDashboard() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading analytics...</p>
+                      <p className="text-muted-foreground">Loading analytics...</p>
         </div>
       </div>
     );
@@ -131,19 +131,15 @@ export default function AnalyticsDashboard() {
   if (!data) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-600">No analytics data available</p>
+        <p className="text-muted-foreground">No analytics data available</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Controls */}
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-600">Real-time insights into your automation platform</p>
-        </div>
         <div className="flex items-center space-x-4">
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger className="w-32">
@@ -183,15 +179,15 @@ export default function AnalyticsDashboard() {
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{data.realtime.totalEvents}</div>
-              <div className="text-sm text-gray-600">Total Events</div>
+              <div className="text-sm text-muted-foreground">Total Events</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">{data.realtime.recentActivity}</div>
-              <div className="text-sm text-gray-600">Recent Activity</div>
+              <div className="text-sm text-muted-foreground">Recent Activity</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">{data.realtime.activeUsers}</div>
-              <div className="text-sm text-gray-600">Active Users</div>
+              <div className="text-sm text-muted-foreground">Active Users</div>
             </div>
           </div>
         </CardContent>
@@ -201,11 +197,11 @@ export default function AnalyticsDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Messages</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatNumber(data.metrics.totalMessages)}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               {formatNumber(data.metrics.messagesReceived)} received • {formatNumber(data.metrics.messagesSent)} sent
             </div>
           </CardContent>
@@ -213,11 +209,11 @@ export default function AnalyticsDashboard() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Active Users</CardTitle>
+            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatNumber(data.metrics.activeUsers)}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               {formatNumber(data.metrics.newUsers)} new users
             </div>
           </CardContent>
@@ -225,11 +221,11 @@ export default function AnalyticsDashboard() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Response Time</CardTitle>
+            <CardTitle className="text-sm font-medium">Response Time</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatTime(data.metrics.averageResponseTime)}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               Average response time
             </div>
           </CardContent>
@@ -237,11 +233,11 @@ export default function AnalyticsDashboard() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">AI Success Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">AI Success Rate</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatPercentage(data.metrics.aiSuccessRate)}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               {formatNumber(data.metrics.aiResponses)} AI responses
             </div>
           </CardContent>
@@ -257,10 +253,10 @@ export default function AnalyticsDashboard() {
         <CardContent>
           <div className="space-y-4">
             {data.flows.map((flow) => (
-              <div key={flow.flowId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={flow.flowId} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div>
                   <div className="font-medium">{flow.name}</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     {flow.triggered} triggers • {flow.completed} completed
                   </div>
                 </div>
@@ -284,10 +280,10 @@ export default function AnalyticsDashboard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {data.contacts.segmentBreakdown.map((segment) => (
-              <div key={segment.segment} className="text-center p-3 bg-gray-50 rounded-lg">
+              <div key={segment.segment} className="text-center p-3 bg-muted/50 rounded-lg">
                 <div className="text-lg font-bold">{segment.count}</div>
-                <div className="text-sm text-gray-600 capitalize">{segment.segment}</div>
-                <div className="text-xs text-gray-500">{formatPercentage(segment.percentage)}</div>
+                <div className="text-sm text-muted-foreground capitalize">{segment.segment}</div>
+                <div className="text-xs text-muted-foreground">{formatPercentage(segment.percentage)}</div>
               </div>
             ))}
           </div>
@@ -303,17 +299,17 @@ export default function AnalyticsDashboard() {
         <CardContent>
           <div className="space-y-3">
             {data.metrics.platformBreakdown.map((platform) => (
-              <div key={platform.platform} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={platform.platform} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                   <div>
                     <div className="font-medium capitalize">{platform.platform}</div>
-                    <div className="text-sm text-gray-600">{platform.users} users</div>
+                    <div className="text-sm text-muted-foreground">{platform.users} users</div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold">{formatNumber(platform.messages)}</div>
-                  <div className="text-sm text-gray-600">messages</div>
+                  <div className="text-sm text-muted-foreground">messages</div>
                 </div>
               </div>
             ))}
@@ -341,7 +337,7 @@ export default function AnalyticsDashboard() {
       )}
 
       {/* Footer */}
-      <div className="text-center text-sm text-gray-500">
+      <div className="text-center text-sm text-muted-foreground">
         Last updated: {new Date(data.timestamp).toLocaleString()}
       </div>
     </div>

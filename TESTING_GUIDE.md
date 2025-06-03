@@ -1,6 +1,6 @@
 # Testing Guide
 
-This document provides comprehensive information about testing in the WhatsApp AI Automation Platform.
+This document provides comprehensive information about testing in the Schedsy.ai Smart Automation Platform.
 
 ## Table of Contents
 

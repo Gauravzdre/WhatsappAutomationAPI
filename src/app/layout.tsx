@@ -7,8 +7,8 @@ import { ThemeProvider } from '@/components/theme-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ClientPing',
-  description: 'Schedule and send WhatsApp messages automatically to your clients',
+  title: 'Schedsy.ai',
+  description: 'AI-powered smart automation platform for scheduling and messaging',
 }
 
 export default function RootLayout({

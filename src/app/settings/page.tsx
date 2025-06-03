@@ -321,7 +321,7 @@ export default function SettingsPage() {
         <EnhancedCard variant="gradient" gradient="purple">
           <EnhancedCardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <EnhancedCardTitle className="text-lg text-white">WhatsApp Status</EnhancedCardTitle>
+              <EnhancedCardTitle className="text-lg text-white">Messaging Status</EnhancedCardTitle>
               <Smartphone className="h-6 w-6 text-purple-200" />
             </div>
           </EnhancedCardHeader>

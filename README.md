@@ -1,13 +1,13 @@
-# WhatsApp AI Automation Platform
+# Schedsy.ai
 
-AI-powered WhatsApp automation with multi-agent system using Julep AI.
+AI-powered smart automation platform with multi-agent system using Julep AI.
 
 ## 🚀 Quick Start
 
 ```bash
 # Clone and install
 git clone <repo-url>
-cd whatsapp-automation
+cd schedsy-ai
 npm install
 
 # Configure .env.local with your API keys (see .env.example)

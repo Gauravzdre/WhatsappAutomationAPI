@@ -212,7 +212,7 @@ export default function SchedulesPage() {
 
       if (settingsError || !settings?.whatsapp_phone_id || !settings?.whatsapp_access_token) {
         toast({
-          title: 'WhatsApp Not Configured',
+          title: 'Messaging Not Configured',
           description: 'Please configure your WhatsApp settings first',
           variant: 'destructive',
         })

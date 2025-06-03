@@ -1,7 +1,7 @@
-# WhatsApp AI Automation Platform - Development Tracking
+# Schedsy.ai - Development Tracking
 
 ## 🎯 **Project Overview**
-**Goal**: Launch MVP WhatsApp AI Automation Platform with 12 essential features in 4 weeks  
+**Goal**: Launch MVP Schedsy.ai Smart Automation Platform with 12 essential features in 4 weeks  
 **Tech Stack**: Next.js 14, TypeScript, Tailwind CSS, Radix UI, Supabase, Julep AI  
 **Target**: 1000+ users in first month, 60% retention, 80% setup completion
 

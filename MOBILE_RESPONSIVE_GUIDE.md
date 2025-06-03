@@ -2,7 +2,7 @@
 
 ## 🎯 **Mobile Optimization Completed**
 
-This guide documents the mobile responsive design improvements implemented for the WhatsApp AI Automation Platform.
+This guide documents the mobile responsive design improvements implemented for the Schedsy.ai Smart Automation Platform.
 
 ---
 
