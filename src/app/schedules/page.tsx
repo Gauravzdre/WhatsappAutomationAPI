@@ -16,7 +16,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
 import { ScheduleBuilder } from '@/components/schedule-builder'
-import { Trash2, Edit, Calendar, Clock, Send, Plus, Activity, MessageCircle, Timer, CalendarPlus } from 'lucide-react'
+import { SmartScheduleBuilder } from '@/components/smart-schedule-builder'
+import { ScheduleAnalytics } from '@/components/schedule-analytics'
+import { Trash2, Edit, Calendar, Clock, Send, Plus, Activity, MessageCircle, Timer, CalendarPlus, Brain, Zap, TrendingUp, BarChart3 } from 'lucide-react'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 
 interface Client {
@@ -48,6 +50,8 @@ export default function SchedulesPage() {
     message: '',
     cron: '',
   })
+  const [useSmartScheduling, setUseSmartScheduling] = useState(true)
+  const [optimization, setOptimization] = useState<any>(null)
 
   const supabase = createClientComponentClient()
 
@@ -357,6 +361,97 @@ export default function SchedulesPage() {
         </EnhancedCard>
       </div>
 
+      {/* Smart Scheduling Optimization */}
+      <EnhancedCard variant="glass" className="mb-6 border-purple-200 bg-purple-50/30 dark:bg-purple-950/20 dark:border-purple-800">
+        <EnhancedCardHeader>
+          <EnhancedCardTitle className="text-purple-900 dark:text-purple-100 flex items-center space-x-2">
+            <Brain className="h-6 w-6 text-purple-600" />
+            <span>Smart Scheduling</span>
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+              AI-Powered
+            </Badge>
+          </EnhancedCardTitle>
+        </EnhancedCardHeader>
+        <EnhancedCardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h4 className="font-medium text-purple-900 dark:text-purple-100 flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Optimization Features
+              </h4>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li className="flex items-center gap-2">
+                  <TrendingUp className="h-3 w-3 text-green-500" />
+                  Audience behavior analysis
+                </li>
+                <li className="flex items-center gap-2">
+                  <Clock className="h-3 w-3 text-blue-500" />
+                  Optimal timing recommendations
+                </li>
+                <li className="flex items-center gap-2">
+                  <Brain className="h-3 w-3 text-purple-500" />
+                  AI-powered engagement prediction
+                </li>
+                <li className="flex items-center gap-2">
+                  <Calendar className="h-3 w-3 text-orange-500" />
+                  Smart frequency optimization
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <Button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/smart-scheduling/optimize', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({})
+                    })
+                    const data = await response.json()
+                    if (data.success) {
+                      toast({
+                        title: 'Optimization Complete ✨',
+                        description: `${data.totalOptimized} schedules optimized`
+                      })
+                      fetchData() // Refresh the data
+                    }
+                  } catch (error) {
+                    toast({
+                      title: 'Optimization Failed',
+                      description: 'Failed to optimize schedules',
+                      variant: 'destructive'
+                    })
+                  }
+                }}
+                className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Optimize All Schedules
+              </Button>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Automatically optimize your existing schedules based on audience behavior and engagement patterns.
+              </p>
+            </div>
+          </div>
+        </EnhancedCardContent>
+      </EnhancedCard>
+
+      {/* Schedule Analytics */}
+      <EnhancedCard variant="glass" className="mb-6">
+        <EnhancedCardHeader>
+          <EnhancedCardTitle className="text-gray-900 dark:text-white flex items-center space-x-2">
+            <BarChart3 className="h-6 w-6 text-blue-600" />
+            <span>Performance Analytics</span>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              Insights
+            </Badge>
+          </EnhancedCardTitle>
+        </EnhancedCardHeader>
+        <EnhancedCardContent>
+          <ScheduleAnalytics />
+        </EnhancedCardContent>
+      </EnhancedCard>
+
       {/* Action Buttons */}
       <div className="flex justify-end mb-6">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -395,19 +490,57 @@ export default function SchedulesPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <Label htmlFor="cron" className="text-gray-700 dark:text-gray-300 font-medium">Schedule</Label>
-                  <Input
-                    id="cron"
-                    value={formData.cron}
-                    onChange={(e) => setFormData({ ...formData, cron: e.target.value })}
-                    placeholder="0 9 * * *"
-                    required
-                    className="bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm border-gray-300 dark:border-gray-600 mt-1"
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Cron format: minute hour day month dayOfWeek
-                  </p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-gray-700 dark:text-gray-300 font-medium">Schedule Type</Label>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        type="button"
+                        variant={useSmartScheduling ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setUseSmartScheduling(true)}
+                        className="text-xs"
+                      >
+                        <Brain className="h-3 w-3 mr-1" />
+                        Smart
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={!useSmartScheduling ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setUseSmartScheduling(false)}
+                        className="text-xs"
+                      >
+                        <Clock className="h-3 w-3 mr-1" />
+                        Manual
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {useSmartScheduling ? (
+                    <div className="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                      <SmartScheduleBuilder
+                        value={formData.cron}
+                        onChange={(cron) => setFormData({ ...formData, cron })}
+                        messageContent={formData.message}
+                        onOptimizationChange={setOptimization}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <Input
+                        id="cron"
+                        value={formData.cron}
+                        onChange={(e) => setFormData({ ...formData, cron: e.target.value })}
+                        placeholder="0 9 * * *"
+                        required
+                        className="bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm border-gray-300 dark:border-gray-600"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Cron format: minute hour day month dayOfWeek
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div>
@@ -480,6 +613,7 @@ export default function SchedulesPage() {
                     <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Client</TableHead>
                     <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Message</TableHead>
                     <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Schedule</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Optimization</TableHead>
                     <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Status</TableHead>
                     <TableHead className="text-gray-700 dark:text-gray-300 font-semibold">Actions</TableHead>
                   </TableRow>
@@ -507,6 +641,25 @@ export default function SchedulesPage() {
                         <Badge variant="outline" className="text-xs">
                           {getReadableSchedule(schedule.cron)}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {(schedule as any).ai_optimized ? (
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 text-xs">
+                              <Brain className="h-3 w-3 mr-1" />
+                              AI Optimized
+                            </Badge>
+                            {(schedule as any).optimization_settings?.confidence && (
+                              <span className="text-xs text-gray-500">
+                                {Math.round((schedule as any).optimization_settings.confidence * 100)}%
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <Badge variant="outline" className="text-xs text-gray-500">
+                            Manual
+                          </Badge>
+                        )}
                       </TableCell>
                       <TableCell>
                         {schedule.last_sent ? (

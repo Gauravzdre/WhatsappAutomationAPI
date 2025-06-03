@@ -88,6 +88,13 @@ export function Navigation() {
       isNew: true
     },
     { 
+      name: 'Teams', 
+      href: '/teams', 
+      icon: Users,
+      description: 'Team collaboration',
+      isNew: true
+    },
+    { 
       name: 'AI Agents', 
       href: '/ai-agents', 
       icon: Bot,

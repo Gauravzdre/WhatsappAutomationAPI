@@ -135,4 +135,54 @@
   .animate-pulse-slow {
     animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    /* Ensure minimum touch target size */
+    button, a, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better mobile spacing */
+    .mobile-spacing {
+      @apply space-y-4;
+    }
+
+    /* Mobile-friendly form inputs */
+    input, textarea, select {
+      @apply text-base; /* Prevents zoom on iOS */
+    }
+
+    /* Mobile card improvements */
+    .mobile-card {
+      @apply rounded-lg shadow-sm border;
+    }
+
+    /* Better mobile typography */
+    h1 { @apply text-2xl; }
+    h2 { @apply text-xl; }
+    h3 { @apply text-lg; }
+    h4 { @apply text-base; }
+    h5 { @apply text-sm; }
+    h6 { @apply text-xs; }
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  /* Mobile-first responsive utilities */
+  .mobile-hidden {
+    @apply hidden sm:block;
+  }
+
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+
+  .mobile-full-width {
+    @apply w-full sm:w-auto;
+  }
 } 

@@ -200,14 +200,14 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
       )}
 
       {/* Quick Actions - Primary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {primaryActions.map((action) => {
           const Icon = action.icon
           return (
             <a
               key={action.id}
               href={action.href}
-              className="group relative overflow-hidden bg-gradient-to-br p-6 rounded-xl text-white hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gradient-to-br p-4 sm:p-6 rounded-xl text-white hover:scale-105 transition-all duration-300 hover:shadow-2xl touch-target"
               style={{ background: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient}`} />
@@ -229,8 +229,8 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
                   <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 
-                <h3 className="font-bold text-lg mb-2">{action.title}</h3>
-                <p className="text-white/80 text-sm">{action.description}</p>
+                <h3 className="font-bold text-base sm:text-lg mb-2">{action.title}</h3>
+                <p className="text-white/80 text-xs sm:text-sm">{action.description}</p>
                 
                 {action.priority === 'high' && !action.isCompleted && (
                   <div className="mt-3">

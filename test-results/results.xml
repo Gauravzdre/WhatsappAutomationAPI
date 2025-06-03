@@ -1,0 +1,1392 @@
+<testsuites id="" name="" tests="60" failures="60" skipped="0" errors="0" time="48.209811">
+<testsuite name="navigation.spec.ts" timestamp="2025-06-03T06:14:17.883Z" hostname="chromium" tests="12" failures="12" skipped="0" time="0.31" errors="0">
+<testcase name="Navigation › should display the main navigation" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:9:7 should display the main navigation" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:9:7 › Navigation › should display the main navigation ────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-display-the-main-navigation-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-display-the-main-navigation-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to templates page" classname="navigation.spec.ts" time="0.025">
+<failure message="navigation.spec.ts:19:7 should navigate to templates page" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:19:7 › Navigation › should navigate to templates page ────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-templates-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-templates-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to teams page" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:30:7 should navigate to teams page" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:30:7 › Navigation › should navigate to teams page ────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-teams-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-teams-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should work on mobile viewport" classname="navigation.spec.ts" time="0.03">
+<failure message="navigation.spec.ts:41:7 should work on mobile viewport" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:41:7 › Navigation › should work on mobile viewport ───────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-work-on-mobile-viewport-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-work-on-mobile-viewport-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should handle responsive design" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:57:7 should handle responsive design" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:57:7 › Navigation › should handle responsive design ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-handle-responsive-design-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-handle-responsive-design-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should display dashboard content" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:78:7 should display dashboard content" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:78:7 › Dashboard › should display dashboard content ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-display-dashboard-content-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-display-dashboard-content-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should handle loading states" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:98:7 should handle loading states" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:98:7 › Dashboard › should handle loading states ──────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-handle-loading-states-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-handle-loading-states-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper heading structure" classname="navigation.spec.ts" time="0.035">
+<failure message="navigation.spec.ts:113:7 should have proper heading structure" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:113:7 › Accessibility › should have proper heading structure ─────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have keyboard navigation" classname="navigation.spec.ts" time="0.031">
+<failure message="navigation.spec.ts:124:7 should have keyboard navigation" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:124:7 › Accessibility › should have keyboard navigation ──────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-keyboard-navigation-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-keyboard-navigation-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper ARIA labels" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:135:7 should have proper ARIA labels" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:135:7 › Accessibility › should have proper ARIA labels ───────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-proper-ARIA-labels-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-proper-ARIA-labels-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should load within reasonable time" classname="navigation.spec.ts" time="0.028">
+<failure message="navigation.spec.ts:160:7 should load within reasonable time" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:160:7 › Performance › should load within reasonable time ─────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-load-within-reasonable-time-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-load-within-reasonable-time-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should not have console errors" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:174:7 should not have console errors" type="FAILURE">
+<![CDATA[  [chromium] › navigation.spec.ts:174:7 › Performance › should not have console errors ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-not-have-console-errors-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-not-have-console-errors-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2025-06-03T06:14:17.883Z" hostname="firefox" tests="12" failures="12" skipped="0" time="0.382" errors="0">
+<testcase name="Navigation › should display the main navigation" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:9:7 should display the main navigation" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:9:7 › Navigation › should display the main navigation ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-display-the-main-navigation-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-display-the-main-navigation-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to templates page" classname="navigation.spec.ts" time="0.019">
+<failure message="navigation.spec.ts:19:7 should navigate to templates page" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:19:7 › Navigation › should navigate to templates page ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-templates-page-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-templates-page-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to teams page" classname="navigation.spec.ts" time="0.083">
+<failure message="navigation.spec.ts:30:7 should navigate to teams page" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:30:7 › Navigation › should navigate to teams page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-teams-page-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-teams-page-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should work on mobile viewport" classname="navigation.spec.ts" time="0.048">
+<failure message="navigation.spec.ts:41:7 should work on mobile viewport" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:41:7 › Navigation › should work on mobile viewport ────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-work-on-mobile-viewport-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-work-on-mobile-viewport-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should handle responsive design" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:57:7 should handle responsive design" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:57:7 › Navigation › should handle responsive design ───────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-handle-responsive-design-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-handle-responsive-design-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should display dashboard content" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:78:7 should display dashboard content" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:78:7 › Dashboard › should display dashboard content ───────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-display-dashboard-content-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-display-dashboard-content-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should handle loading states" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:98:7 should handle loading states" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:98:7 › Dashboard › should handle loading states ───────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-handle-loading-states-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-handle-loading-states-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper heading structure" classname="navigation.spec.ts" time="0.028">
+<failure message="navigation.spec.ts:113:7 should have proper heading structure" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:113:7 › Accessibility › should have proper heading structure ──────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have keyboard navigation" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:124:7 should have keyboard navigation" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:124:7 › Accessibility › should have keyboard navigation ───────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-keyboard-navigation-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-keyboard-navigation-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper ARIA labels" classname="navigation.spec.ts" time="0.025">
+<failure message="navigation.spec.ts:135:7 should have proper ARIA labels" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:135:7 › Accessibility › should have proper ARIA labels ────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-proper-ARIA-labels-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-proper-ARIA-labels-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should load within reasonable time" classname="navigation.spec.ts" time="0.031">
+<failure message="navigation.spec.ts:160:7 should load within reasonable time" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:160:7 › Performance › should load within reasonable time ──────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-load-within-reasonable-time-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-load-within-reasonable-time-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should not have console errors" classname="navigation.spec.ts" time="0.035">
+<failure message="navigation.spec.ts:174:7 should not have console errors" type="FAILURE">
+<![CDATA[  [firefox] › navigation.spec.ts:174:7 › Performance › should not have console errors ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\firefox-1482\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-not-have-console-errors-firefox\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-not-have-console-errors-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2025-06-03T06:14:17.883Z" hostname="webkit" tests="12" failures="12" skipped="0" time="0.296" errors="0">
+<testcase name="Navigation › should display the main navigation" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:9:7 should display the main navigation" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:9:7 › Navigation › should display the main navigation ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-display-the-main-navigation-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-display-the-main-navigation-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to templates page" classname="navigation.spec.ts" time="0.02">
+<failure message="navigation.spec.ts:19:7 should navigate to templates page" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:19:7 › Navigation › should navigate to templates page ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-templates-page-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-templates-page-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to teams page" classname="navigation.spec.ts" time="0.029">
+<failure message="navigation.spec.ts:30:7 should navigate to teams page" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:30:7 › Navigation › should navigate to teams page ──────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-teams-page-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-teams-page-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should work on mobile viewport" classname="navigation.spec.ts" time="0.026">
+<failure message="navigation.spec.ts:41:7 should work on mobile viewport" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:41:7 › Navigation › should work on mobile viewport ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-work-on-mobile-viewport-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-work-on-mobile-viewport-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should handle responsive design" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:57:7 should handle responsive design" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:57:7 › Navigation › should handle responsive design ────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-handle-responsive-design-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-handle-responsive-design-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should display dashboard content" classname="navigation.spec.ts" time="0.026">
+<failure message="navigation.spec.ts:78:7 should display dashboard content" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:78:7 › Dashboard › should display dashboard content ────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-display-dashboard-content-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-display-dashboard-content-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should handle loading states" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:98:7 should handle loading states" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:98:7 › Dashboard › should handle loading states ────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-handle-loading-states-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-handle-loading-states-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper heading structure" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:113:7 should have proper heading structure" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:113:7 › Accessibility › should have proper heading structure ───────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have keyboard navigation" classname="navigation.spec.ts" time="0.029">
+<failure message="navigation.spec.ts:124:7 should have keyboard navigation" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:124:7 › Accessibility › should have keyboard navigation ────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-keyboard-navigation-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-keyboard-navigation-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper ARIA labels" classname="navigation.spec.ts" time="0.027">
+<failure message="navigation.spec.ts:135:7 should have proper ARIA labels" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:135:7 › Accessibility › should have proper ARIA labels ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-proper-ARIA-labels-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-proper-ARIA-labels-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should load within reasonable time" classname="navigation.spec.ts" time="0.019">
+<failure message="navigation.spec.ts:160:7 should load within reasonable time" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:160:7 › Performance › should load within reasonable time ───────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-load-within-reasonable-time-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-load-within-reasonable-time-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should not have console errors" classname="navigation.spec.ts" time="0.027">
+<failure message="navigation.spec.ts:174:7 should not have console errors" type="FAILURE">
+<![CDATA[  [webkit] › navigation.spec.ts:174:7 › Performance › should not have console errors ───────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-not-have-console-errors-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-not-have-console-errors-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2025-06-03T06:14:17.883Z" hostname="Mobile Chrome" tests="12" failures="12" skipped="0" time="0.291" errors="0">
+<testcase name="Navigation › should display the main navigation" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:9:7 should display the main navigation" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:9:7 › Navigation › should display the main navigation ───────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-display-the-main-navigation-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-display-the-main-navigation-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to templates page" classname="navigation.spec.ts" time="0.02">
+<failure message="navigation.spec.ts:19:7 should navigate to templates page" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:19:7 › Navigation › should navigate to templates page ───────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-templates-page-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-templates-page-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to teams page" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:30:7 should navigate to teams page" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:30:7 › Navigation › should navigate to teams page ───────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-teams-page-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-teams-page-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should work on mobile viewport" classname="navigation.spec.ts" time="0.031">
+<failure message="navigation.spec.ts:41:7 should work on mobile viewport" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:41:7 › Navigation › should work on mobile viewport ──────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-work-on-mobile-viewport-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-work-on-mobile-viewport-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should handle responsive design" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:57:7 should handle responsive design" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:57:7 › Navigation › should handle responsive design ─────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-handle-responsive-design-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-handle-responsive-design-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should display dashboard content" classname="navigation.spec.ts" time="0.024">
+<failure message="navigation.spec.ts:78:7 should display dashboard content" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:78:7 › Dashboard › should display dashboard content ─────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-display-dashboard-content-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-display-dashboard-content-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should handle loading states" classname="navigation.spec.ts" time="0.026">
+<failure message="navigation.spec.ts:98:7 should handle loading states" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:98:7 › Dashboard › should handle loading states ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-handle-loading-states-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-handle-loading-states-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper heading structure" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:113:7 should have proper heading structure" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:113:7 › Accessibility › should have proper heading structure 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have keyboard navigation" classname="navigation.spec.ts" time="0.029">
+<failure message="navigation.spec.ts:124:7 should have keyboard navigation" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:124:7 › Accessibility › should have keyboard navigation ─────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-keyboard-navigation-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-keyboard-navigation-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper ARIA labels" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:135:7 should have proper ARIA labels" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:135:7 › Accessibility › should have proper ARIA labels ──────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-proper-ARIA-labels-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-proper-ARIA-labels-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should load within reasonable time" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:160:7 should load within reasonable time" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:160:7 › Performance › should load within reasonable time ────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-load-within-reasonable-time-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-load-within-reasonable-time-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should not have console errors" classname="navigation.spec.ts" time="0.026">
+<failure message="navigation.spec.ts:174:7 should not have console errors" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › navigation.spec.ts:174:7 › Performance › should not have console errors ────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\chromium_headless_shell-1169\chrome-win\headless_shell.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-not-have-console-errors-Mobile-Chrome\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-not-have-console-errors-Mobile-Chrome\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2025-06-03T06:14:17.883Z" hostname="Mobile Safari" tests="12" failures="12" skipped="0" time="0.29" errors="0">
+<testcase name="Navigation › should display the main navigation" classname="navigation.spec.ts" time="0.025">
+<failure message="navigation.spec.ts:9:7 should display the main navigation" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:9:7 › Navigation › should display the main navigation ───────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-display-the-main-navigation-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-display-the-main-navigation-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to templates page" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:19:7 should navigate to templates page" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:19:7 › Navigation › should navigate to templates page ───────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-templates-page-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-templates-page-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should navigate to teams page" classname="navigation.spec.ts" time="0.029">
+<failure message="navigation.spec.ts:30:7 should navigate to teams page" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:30:7 › Navigation › should navigate to teams page ───────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-navigate-to-teams-page-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-navigate-to-teams-page-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should work on mobile viewport" classname="navigation.spec.ts" time="0.027">
+<failure message="navigation.spec.ts:41:7 should work on mobile viewport" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:41:7 › Navigation › should work on mobile viewport ──────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-work-on-mobile-viewport-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-work-on-mobile-viewport-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation › should handle responsive design" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:57:7 should handle responsive design" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:57:7 › Navigation › should handle responsive design ─────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Navigation-should-handle-responsive-design-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Navigation-should-handle-responsive-design-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should display dashboard content" classname="navigation.spec.ts" time="0.027">
+<failure message="navigation.spec.ts:78:7 should display dashboard content" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:78:7 › Dashboard › should display dashboard content ─────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-display-dashboard-content-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-display-dashboard-content-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard › should handle loading states" classname="navigation.spec.ts" time="0.022">
+<failure message="navigation.spec.ts:98:7 should handle loading states" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:98:7 › Dashboard › should handle loading states ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Dashboard-should-handle-loading-states-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Dashboard-should-handle-loading-states-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper heading structure" classname="navigation.spec.ts" time="0.027">
+<failure message="navigation.spec.ts:113:7 should have proper heading structure" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:113:7 › Accessibility › should have proper heading structure 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-s-0e9dc-ve-proper-heading-structure-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have keyboard navigation" classname="navigation.spec.ts" time="0.023">
+<failure message="navigation.spec.ts:124:7 should have keyboard navigation" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:124:7 › Accessibility › should have keyboard navigation ─────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-keyboard-navigation-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-keyboard-navigation-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Accessibility › should have proper ARIA labels" classname="navigation.spec.ts" time="0.028">
+<failure message="navigation.spec.ts:135:7 should have proper ARIA labels" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:135:7 › Accessibility › should have proper ARIA labels ──────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Accessibility-should-have-proper-ARIA-labels-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Accessibility-should-have-proper-ARIA-labels-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should load within reasonable time" classname="navigation.spec.ts" time="0.018">
+<failure message="navigation.spec.ts:160:7 should load within reasonable time" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:160:7 › Performance › should load within reasonable time ────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-load-within-reasonable-time-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-load-within-reasonable-time-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance › should not have console errors" classname="navigation.spec.ts" time="0.021">
+<failure message="navigation.spec.ts:174:7 should not have console errors" type="FAILURE">
+<![CDATA[  [Mobile Safari] › navigation.spec.ts:174:7 › Performance › should not have console errors ────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\BlackKnight\AppData\Local\ms-playwright\webkit-2158\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\..\test-results\navigation-Performance-should-not-have-console-errors-Mobile-Safari\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|navigation-Performance-should-not-have-console-errors-Mobile-Safari\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

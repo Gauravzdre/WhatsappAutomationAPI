@@ -471,15 +471,161 @@ class AIAgentManager {
         throw new Error('Scheduler agent not found for brand');
       }
 
-      // This would optimize the scheduling based on audience behavior
-      // Implementation would involve analyzing engagement patterns
       console.log('Optimizing schedules for brand:', brandId);
       
-      return schedules; // Return optimized schedules
+      // Process each schedule for optimization
+      const optimizedSchedules = [];
+      
+      for (const schedule of schedules) {
+        try {
+          // Create a task for the scheduler agent to analyze and optimize
+          const task = await this.julepService.createTask(
+            scheduler.julep_agent_id,
+            {
+              name: `optimize_schedule_${Date.now()}`,
+              description: 'Optimize message scheduling based on audience behavior and engagement patterns',
+              main: [
+                {
+                  tool: 'analyze_engagement_patterns',
+                  arguments: {
+                    platform: schedule.platform || 'whatsapp',
+                    time_range: '30_days',
+                    audience_segment: 'all',
+                    current_schedule: schedule.currentTime,
+                    message_content: schedule.messageContent,
+                    frequency: schedule.frequency,
+                    audience_insights: schedule.audienceInsights
+                  }
+                }
+              ]
+            }
+          );
+
+          // For now, since we're using mock implementation, we'll use rule-based optimization
+          // In a real implementation, you would execute the task and wait for results
+          console.log('Created optimization task:', task.id);
+          
+          // Use rule-based optimization as the primary method for now
+          const optimizedSchedule = this.getRuleBasedOptimization(schedule);
+          optimizedSchedules.push(optimizedSchedule);
+
+        } catch (scheduleError) {
+          console.error('Error optimizing individual schedule:', scheduleError);
+          // Add rule-based fallback for this schedule
+          optimizedSchedules.push(this.getRuleBasedOptimization(schedule));
+        }
+      }
+
+      return optimizedSchedules;
     } catch (error) {
       console.error('Error optimizing scheduling:', error);
       throw error;
     }
+  }
+
+  // Helper methods for extracting AI optimization results
+  private extractRecommendedTime(aiResponse: any, schedule: any): string {
+    try {
+      // Try to extract from AI response
+      if (aiResponse?.recommended_time) {
+        return aiResponse.recommended_time;
+      }
+      
+      // Fallback to audience insights
+      if (schedule.audienceInsights?.mostActiveHours?.length > 0) {
+        const bestHour = schedule.audienceInsights.mostActiveHours[0];
+        return `${bestHour.toString().padStart(2, '0')}:00`;
+      }
+      
+      return schedule.currentTime || '09:00';
+    } catch (error) {
+      return schedule.currentTime || '09:00';
+    }
+  }
+
+  private extractConfidence(aiResponse: any): number {
+    try {
+      if (aiResponse?.confidence) {
+        return Math.min(Math.max(aiResponse.confidence, 0), 1);
+      }
+      return 0.75; // Default confidence
+    } catch (error) {
+      return 0.75;
+    }
+  }
+
+  private extractReasoning(aiResponse: any, schedule: any): string {
+    try {
+      if (aiResponse?.reasoning) {
+        return aiResponse.reasoning;
+      }
+      
+      // Generate reasoning based on audience insights
+      const insights = schedule.audienceInsights;
+      if (insights?.mostActiveHours?.length > 0) {
+        const bestHour = insights.mostActiveHours[0];
+        const avgResponse = Math.round(insights.averageResponseTime / 60);
+        return `Based on audience analysis, ${bestHour}:00 shows highest engagement. Average response time is ${avgResponse} minutes. This timing aligns with your audience's active periods.`;
+      }
+      
+      return 'Optimized based on general best practices for audience engagement.';
+    } catch (error) {
+      return 'Optimized based on general best practices for audience engagement.';
+    }
+  }
+
+  private extractAlternativeTimes(aiResponse: any, schedule: any): string[] {
+    try {
+      if (aiResponse?.alternative_times && Array.isArray(aiResponse.alternative_times)) {
+        return aiResponse.alternative_times;
+      }
+      
+      // Generate alternatives from audience insights
+      if (schedule.audienceInsights?.mostActiveHours?.length > 1) {
+        return schedule.audienceInsights.mostActiveHours
+          .slice(1, 4)
+          .map((hour: number) => `${hour.toString().padStart(2, '0')}:00`);
+      }
+      
+      return ['10:00', '14:00', '18:00']; // Default alternatives
+    } catch (error) {
+      return ['10:00', '14:00', '18:00'];
+    }
+  }
+
+  private extractExpectedEngagement(aiResponse: any): number {
+    try {
+      if (aiResponse?.expected_engagement) {
+        return Math.min(Math.max(aiResponse.expected_engagement, 0), 1);
+      }
+      return 0.35; // Default expected engagement
+    } catch (error) {
+      return 0.35;
+    }
+  }
+
+  private getRuleBasedOptimization(schedule: any) {
+    const insights = schedule.audienceInsights;
+    
+    // Rule-based optimization fallback
+    let recommendedTime = '09:00';
+    let reasoning = 'Optimized using rule-based analysis.';
+    
+    if (insights?.mostActiveHours?.length > 0) {
+      const bestHour = insights.mostActiveHours[0];
+      recommendedTime = `${bestHour.toString().padStart(2, '0')}:00`;
+      reasoning = `Based on audience data, ${bestHour}:00 shows the highest engagement rate.`;
+    }
+    
+    return {
+      ...schedule,
+      recommendedTime,
+      confidence: 0.7,
+      reasoning,
+      alternativeTimes: insights?.mostActiveHours?.slice(1, 4)?.map((h: number) => `${h.toString().padStart(2, '0')}:00`) || ['10:00', '14:00', '18:00'],
+      expectedEngagement: insights?.engagementPatterns?.[0]?.engagement_rate || 0.3,
+      audienceSize: insights?.engagementPatterns?.length || 0
+    };
   }
 
   async updateAgentMemory(agentId: string, newContext: any) {
