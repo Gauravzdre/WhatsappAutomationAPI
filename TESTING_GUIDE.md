@@ -8,7 +8,7 @@ This guide provides step-by-step instructions for testing all features of the Sc
 ### Initial Setup
 1. **Access the Application**
    - Open your web browser
-   - Navigate to `http://localhost:3000`
+   - Navigate to `https://aito.netlify.app/`
    - Verify the application loads without errors
 
 2. **Authentication Check**

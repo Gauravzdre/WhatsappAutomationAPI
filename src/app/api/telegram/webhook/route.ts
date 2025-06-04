@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { messagingManager } from '@/lib/messaging/manager';
 import { aiContentGenerator } from '@/lib/ai-content-generator';
+import { intelligentAI } from '@/lib/intelligent-ai-generator';
 import { automationEngine } from '@/lib/automation/engine';
 import { contactManager } from '@/lib/automation/contacts';
 import { analyticsCollector } from '@/lib/analytics/collector';
@@ -14,9 +15,19 @@ export async function POST(request: NextRequest) {
     // Ensure platforms are connected
     await messagingManager.connectAll();
 
-    // Initialize AI content generator if not already done
+    // Initialize AI systems if not already done
     if (!aiContentGenerator.isReady()) {
       await aiContentGenerator.initialize();
+    }
+    
+    // Initialize intelligent AI system
+    if (!intelligentAI.isReady()) {
+      try {
+        await intelligentAI.initialize();
+        console.log('✅ Intelligent AI system ready');
+      } catch (error) {
+        console.log('⚠️ Intelligent AI not available, using fallback:', error instanceof Error ? error.message : 'Unknown error');
+      }
     }
 
     // Process the incoming message
@@ -130,60 +141,79 @@ export async function POST(request: NextRequest) {
           // Generate response content
           if (useAI || !responseContent) {
             try {
-              console.log('🤖 Generating AI response...');
+              console.log('🤖 Generating intelligent AI response...');
               
-              const aiResponse = await aiContentGenerator.generateResponse({
-                userMessage: message.text,
-                chatId: message.chatId,
-                userContext: {
-                  name: message.sender?.name,
-                  previousMessages: [] // TODO: Implement message history from contact
-                },
-                responseType: 'conversational'
-              });
+              // Try intelligent AI first (with conversation context)
+              if (intelligentAI.isReady()) {
+                const intelligentResponse = await intelligentAI.generateIntelligentResponse({
+                  userMessage: message.text,
+                  chatId: message.chatId,
+                  userName: message.sender?.name,
+                  platform: 'telegram'
+                });
 
-              responseContent = aiResponse.content;
-              console.log('✅ AI Response generated:', responseContent.substring(0, 100) + '...');
+                responseContent = intelligentResponse.content;
+                console.log(`✅ Intelligent AI response generated (${intelligentResponse.conversationLength} messages in context):`, 
+                  responseContent.substring(0, 100) + '...');
 
-              // Track AI response
-              const aiResponseTime = Date.now() - startTime;
-              analyticsCollector.trackAiResponse(
-                message.chatId,
-                message.sender?.id || message.chatId,
-                'telegram',
-                aiResponse.metadata.model || 'fallback',
-                aiResponse.confidence,
-                aiResponseTime,
-                true
-              );
-
-                          } catch (aiError) {
-                console.error('❌ AI generation failed, using intelligent fallback:', aiError);
-                
-                // Track AI error
-                const aiErrorTime = Date.now() - startTime;
+                // Track intelligent AI response
                 analyticsCollector.trackAiResponse(
                   message.chatId,
                   message.sender?.id || message.chatId,
                   'telegram',
-                  'fallback',
-                  0,
-                  aiErrorTime,
-                  false
+                  intelligentResponse.metadata.model,
+                  intelligentResponse.confidence,
+                  intelligentResponse.metadata.responseTime,
+                  true
                 );
-                
-                // Intelligent fallback based on message content
-                const userMessage = message.text.toLowerCase();
-                if (userMessage.includes('hello') || userMessage.includes('hi')) {
-                  responseContent = '👋 Hello! I\'m ClientPing AI Assistant. How can I help you today?';
-                } else if (userMessage.includes('help')) {
-                  responseContent = '🤝 I\'m here to help with business automation and messaging. What do you need assistance with?';
-                } else if (userMessage.includes('feature')) {
-                  responseContent = '🚀 I offer AI-powered messaging automation, content generation, and business insights. What interests you most?';
-                } else {
-                  responseContent = `🤖 Thanks for your message! I'm ClientPing AI Assistant. I can help with automation and messaging. How can I assist you?`;
-                }
+              } else {
+                // Fallback to original AI system
+                console.log('🔄 Using fallback AI system...');
+                const aiResponse = await aiContentGenerator.generateResponse({
+                  userMessage: message.text,
+                  chatId: message.chatId,
+                  userContext: {
+                    name: message.sender?.name,
+                    previousMessages: []
+                  },
+                  responseType: 'conversational'
+                });
+
+                responseContent = aiResponse.content;
+                console.log('✅ Fallback AI response generated:', responseContent.substring(0, 100) + '...');
+
+                // Track fallback AI response
+                const aiResponseTime = Date.now() - startTime;
+                analyticsCollector.trackAiResponse(
+                  message.chatId,
+                  message.sender?.id || message.chatId,
+                  'telegram',
+                  aiResponse.metadata.model || 'fallback',
+                  aiResponse.confidence,
+                  aiResponseTime,
+                  true
+                );
               }
+
+            } catch (aiError) {
+              console.error('❌ All AI systems failed, using basic fallback:', aiError);
+              
+              // Track AI error
+              const aiErrorTime = Date.now() - startTime;
+              analyticsCollector.trackAiResponse(
+                message.chatId,
+                message.sender?.id || message.chatId,
+                'telegram',
+                'basic-fallback',
+                0,
+                aiErrorTime,
+                false
+              );
+              
+              // Basic fallback response
+              const userName = message.sender?.name ? ` ${message.sender.name}` : '';
+              responseContent = `🤖 Hello${userName}! I'm ClientPing AI Assistant. I'm experiencing some technical difficulties right now, but I'm here to help with business automation and messaging. Please try asking your question again!`;
+            }
           }
 
           // Send response
