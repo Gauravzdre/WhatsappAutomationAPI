@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Generation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Content Generation API Test</h1>
+        
+        <div class="test-section">
+            <h3>🔧 Configuration</h3>
+            <div class="form-group">
+                <label for="baseUrl">Base URL:</label>
+                <input type="text" id="baseUrl" value="https://your-app-name.netlify.app" placeholder="Enter your Netlify URL">
+            </div>
+            <button onclick="updateBaseUrl()">Update URL</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🏥 Health Check</h3>
+            <p>Test if the API is running and environment variables are configured.</p>
+            <button onclick="testHealth()">Test Health Check</button>
+            <div id="healthResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Content Generation Test</h3>
+            <p>Test the post text generation API.</p>
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" value="Test Product">
+            </div>
+            <div class="form-group">
+                <label for="productDescription">Product Description:</label>
+                <input type="text" id="productDescription" value="A test product for API verification">
+            </div>
+            <div class="form-group">
+                <label for="platform">Platform:</label>
+                <select id="platform">
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                </select>
+            </div>
+            <button onclick="testContentGeneration()">Test Content Generation</button>
+            <div id="contentResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🖼️ Image Generation Test</h3>
+            <p>Test the image generation API.</p>
+            <div class="form-group">
+                <label for="imagePrompt">Image Prompt:</label>
+                <input type="text" id="imagePrompt" value="A professional logo design for a tech company">
+            </div>
+            <button onclick="testImageGeneration()">Test Image Generation</button>
+            <div id="imageResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 Environment Variables Test</h3>
+            <p>Check if environment variables are properly configured.</p>
+            <button onclick="testEnvironment()">Test Environment Variables</button>
+            <div id="envResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let baseUrl = 'https://your-app-name.netlify.app';
+
+        function updateBaseUrl() {
+            baseUrl = document.getElementById('baseUrl').value;
+            if (!baseUrl.startsWith('http')) {
+                baseUrl = 'https://' + baseUrl;
+            }
+            showResult('info', 'Base URL updated to: ' + baseUrl, 'healthResult');
+        }
+
+        async function makeRequest(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(baseUrl + endpoint, options);
+                const result = await response.json();
+                
+                return {
+                    status: response.status,
+                    ok: response.ok,
+                    data: result
+                };
+            } catch (error) {
+                return {
+                    status: 0,
+                    ok: false,
+                    error: error.message
+                };
+            }
+        }
+
+        function showResult(type, message, elementId) {
+            const element = document.getElementById(elementId);
+            element.className = `result ${type}`;
+            element.textContent = message;
+        }
+
+        async function testHealth() {
+            showResult('info', 'Testing health check...', 'healthResult');
+            
+            const result = await makeRequest('/api/health');
+            
+            if (result.ok) {
+                showResult('success', 
+                    `✅ Health Check PASSED\nStatus: ${result.status}\n\nResponse:\n${JSON.stringify(result.data, null, 2)}`, 
+                    'healthResult'
+                );
+            } else {
+                showResult('error', 
+                    `❌ Health Check FAILED\nStatus: ${result.status}\nError: ${result.error || JSON.stringify(result.data)}`, 
+                    'healthResult'
+                );
+            }
+        }
+
+        async function testContentGeneration() {
+            showResult('info', 'Testing content generation...', 'contentResult');
+            
+            const testData = {
+                productName: document.getElementById('productName').value,
+                productDescription: document.getElementById('productDescription').value,
+                platform: document.getElementById('platform').value,
+                targetAudience: "Developers and testers",
+                keyBenefits: "Easy testing and verification",
+                callToAction: "Try it now!",
+                tone: "Professional",
+                contentType: "post",
+                includeHashtags: true,
+                includeEmojis: false
+            };
+
+            const result = await makeRequest('/api/generate-post-text', 'POST', testData);
+            
+            if (result.ok) {
+                if (result.data.error) {
+                    showResult('error', 
+                        `❌ Content Generation FAILED\nError: ${result.data.error}`, 
+                        'contentResult'
+                    );
+                } else {
+                    showResult('success', 
+                        `✅ Content Generation PASSED\n\nGenerated Text:\n${result.data.generatedText || 'No text generated'}`, 
+                        'contentResult'
+                    );
+                }
+            } else {
+                showResult('error', 
+                    `❌ Content Generation FAILED\nStatus: ${result.status}\nError: ${result.error || JSON.stringify(result.data)}`, 
+                    'contentResult'
+                );
+            }
+        }
+
+        async function testImageGeneration() {
+            showResult('info', 'Testing image generation...', 'imageResult');
+            
+            const testData = {
+                prompt: document.getElementById('imagePrompt').value,
+                style: "minimalist",
+                aspectRatio: "1:1",
+                colorScheme: "blue",
+                productName: "Test Product"
+            };
+
+            const result = await makeRequest('/api/generate-image', 'POST', testData);
+            
+            if (result.ok) {
+                if (result.data.error) {
+                    showResult('error', 
+                        `❌ Image Generation FAILED\nError: ${result.data.error}`, 
+                        'imageResult'
+                    );
+                } else {
+                    showResult('success', 
+                        `✅ Image Generation PASSED\n\nImage URL:\n${result.data.imageUrl || 'No image URL returned'}`, 
+                        'imageResult'
+                    );
+                }
+            } else {
+                showResult('error', 
+                    `❌ Image Generation FAILED\nStatus: ${result.status}\nError: ${result.error || JSON.stringify(result.data)}`, 
+                    'imageResult'
+                );
+            }
+        }
+
+        async function testEnvironment() {
+            showResult('info', 'Testing environment variables...', 'envResult');
+            
+            const result = await makeRequest('/api/ai/status');
+            
+            if (result.ok) {
+                showResult('success', 
+                    `✅ Environment Test PASSED\n\nResponse:\n${JSON.stringify(result.data, null, 2)}`, 
+                    'envResult'
+                );
+            } else {
+                showResult('error', 
+                    `❌ Environment Test FAILED\nStatus: ${result.status}\nError: ${result.error || JSON.stringify(result.data)}`, 
+                    'envResult'
+                );
+            }
+        }
+
+        // Auto-update base URL on page load
+        window.onload = function() {
+            updateBaseUrl();
+        };
+    </script>
+</body>
+</html>

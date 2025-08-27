@@ -1,0 +1,939 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { 
+  Bot, 
+  MessageSquare, 
+  Users, 
+  Settings, 
+  Zap, 
+  Globe, 
+  Brain,
+  Target,
+  Workflow,
+  Database,
+  ChevronRight,
+  ChevronLeft,
+  Check,
+  Plus,
+  X
+} from 'lucide-react';
+
+interface ChatbotRequirements {
+  // Basic Information
+  name: string;
+  description: string;
+  industry: string;
+  businessType: string;
+  
+  // Channels & Platforms
+  channels: string[];
+  primaryChannel: string;
+  
+  // Languages & Localization
+  languages: string[];
+  defaultLanguage: string;
+  
+  // Use Cases & Functionality
+  useCases: string[];
+  customUseCases: string[];
+  
+  // Knowledge Base
+  hasKnowledgeBase: boolean;
+  knowledgeBaseType: string[];
+  businessData: {
+    products: string;
+    services: string;
+    policies: string;
+    faqs: string;
+  };
+  
+  // User Segmentation
+  userSegments: Array<{
+    name: string;
+    criteria: string;
+    description: string;
+  }>;
+  
+  // Conversation Flow
+  conversationStyle: string;
+  responseTime: string;
+  escalationRules: string[];
+  
+  // Integration Requirements
+  integrations: string[];
+  customIntegrations: string[];
+  
+  // Analytics & Reporting
+  analyticsNeeds: string[];
+  reportingFrequency: string;
+  
+  // Advanced Features
+  advancedFeatures: string[];
+  customFeatures: string[];
+}
+
+const STEPS = [
+  { id: 1, title: 'Basic Info', icon: Bot, description: 'Tell us about your chatbot' },
+  { id: 2, title: 'Channels', icon: MessageSquare, description: 'Where will it operate?' },
+  { id: 3, title: 'Languages', icon: Globe, description: 'Multi-language support' },
+  { id: 4, title: 'Use Cases', icon: Target, description: 'What should it do?' },
+  { id: 5, title: 'Knowledge', icon: Database, description: 'Business information' },
+  { id: 6, title: 'Users', icon: Users, description: 'Audience segmentation' },
+  { id: 7, title: 'Flow', icon: Workflow, description: 'Conversation design' },
+  { id: 8, title: 'Integrations', icon: Zap, description: 'Connect your tools' },
+  { id: 9, title: 'Analytics', icon: Brain, description: 'Insights & reporting' },
+  { id: 10, title: 'Advanced', icon: Settings, description: 'Special features' }
+];
+
+const INDUSTRIES = [
+  'E-commerce', 'Healthcare', 'Education', 'Finance', 'Real Estate',
+  'Restaurant', 'Retail', 'Technology', 'Travel', 'Automotive',
+  'Insurance', 'Legal', 'Marketing', 'Consulting', 'Other'
+];
+
+const CHANNELS = [
+  { id: 'whatsapp', name: 'WhatsApp Business', popular: true },
+  { id: 'telegram', name: 'Telegram', popular: true },
+  { id: 'facebook', name: 'Facebook Messenger', popular: true },
+  { id: 'instagram', name: 'Instagram DM', popular: false },
+  { id: 'website', name: 'Website Widget', popular: true },
+  { id: 'sms', name: 'SMS', popular: false },
+  { id: 'email', name: 'Email', popular: false },
+  { id: 'slack', name: 'Slack', popular: false },
+  { id: 'discord', name: 'Discord', popular: false }
+];
+
+const USE_CASES = [
+  { id: 'customer_support', name: 'Customer Support', description: 'Answer questions, resolve issues' },
+  { id: 'lead_generation', name: 'Lead Generation', description: 'Capture and qualify leads' },
+  { id: 'sales_assistance', name: 'Sales Assistance', description: 'Product recommendations, orders' },
+  { id: 'appointment_booking', name: 'Appointment Booking', description: 'Schedule meetings, reservations' },
+  { id: 'order_tracking', name: 'Order Tracking', description: 'Check order status, shipping' },
+  { id: 'product_catalog', name: 'Product Catalog', description: 'Browse products, get info' },
+  { id: 'feedback_collection', name: 'Feedback Collection', description: 'Surveys, reviews, ratings' },
+  { id: 'onboarding', name: 'User Onboarding', description: 'Guide new users through setup' },
+  { id: 'notifications', name: 'Notifications', description: 'Send updates, alerts, reminders' },
+  { id: 'content_delivery', name: 'Content Delivery', description: 'Share articles, videos, resources' }
+];
+
+const LANGUAGES = [
+  'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese',
+  'Arabic', 'Chinese', 'Japanese', 'Korean', 'Russian', 'Hindi',
+  'Dutch', 'Swedish', 'Norwegian', 'Danish', 'Finnish'
+];
+
+const INTEGRATIONS = [
+  { id: 'crm', name: 'CRM Systems', options: ['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho'] },
+  { id: 'ecommerce', name: 'E-commerce', options: ['Shopify', 'WooCommerce', 'Magento', 'BigCommerce'] },
+  { id: 'calendar', name: 'Calendar', options: ['Google Calendar', 'Outlook', 'Calendly', 'Acuity'] },
+  { id: 'payment', name: 'Payment', options: ['Stripe', 'PayPal', 'Square', 'Razorpay'] },
+  { id: 'analytics', name: 'Analytics', options: ['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar'] },
+  { id: 'email', name: 'Email Marketing', options: ['Mailchimp', 'SendGrid', 'ConvertKit', 'ActiveCampaign'] },
+  { id: 'helpdesk', name: 'Help Desk', options: ['Zendesk', 'Freshdesk', 'Intercom', 'Help Scout'] }
+];
+
+export default function ChatbotBuilderWizard() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [requirements, setRequirements] = useState<ChatbotRequirements>({
+    name: '',
+    description: '',
+    industry: '',
+    businessType: '',
+    channels: [],
+    primaryChannel: '',
+    languages: ['English'],
+    defaultLanguage: 'English',
+    useCases: [],
+    customUseCases: [],
+    hasKnowledgeBase: false,
+    knowledgeBaseType: [],
+    businessData: {
+      products: '',
+      services: '',
+      policies: '',
+      faqs: ''
+    },
+    userSegments: [],
+    conversationStyle: '',
+    responseTime: '',
+    escalationRules: [],
+    integrations: [],
+    customIntegrations: [],
+    analyticsNeeds: [],
+    reportingFrequency: '',
+    advancedFeatures: [],
+    customFeatures: []
+  });
+
+  const progress = (currentStep / STEPS.length) * 100;
+
+  const updateRequirements = (updates: Partial<ChatbotRequirements>) => {
+    setRequirements(prev => ({ ...prev, ...updates }));
+  };
+
+  const addUserSegment = () => {
+    const newSegment = {
+      name: '',
+      criteria: '',
+      description: ''
+    };
+    updateRequirements({
+      userSegments: [...requirements.userSegments, newSegment]
+    });
+  };
+
+  const updateUserSegment = (index: number, field: string, value: string) => {
+    const updatedSegments = requirements.userSegments.map((segment, i) => 
+      i === index ? { ...segment, [field]: value } : segment
+    );
+    updateRequirements({ userSegments: updatedSegments });
+  };
+
+  const removeUserSegment = (index: number) => {
+    const updatedSegments = requirements.userSegments.filter((_, i) => i !== index);
+    updateRequirements({ userSegments: updatedSegments });
+  };
+
+  const nextStep = () => {
+    if (currentStep < STEPS.length) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1: // Basic Info
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="name">Chatbot Name *</Label>
+              <Input
+                id="name"
+                value={requirements.name}
+                onChange={(e) => updateRequirements({ name: e.target.value })}
+                placeholder="e.g., CustomerCare Bot, Sales Assistant"
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={requirements.description}
+                onChange={(e) => updateRequirements({ description: e.target.value })}
+                placeholder="Describe what your chatbot will do and how it will help your business..."
+                className="mt-1"
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="industry">Industry *</Label>
+              <Select value={requirements.industry} onValueChange={(value) => updateRequirements({ industry: value })}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select your industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INDUSTRIES.map(industry => (
+                    <SelectItem key={industry} value={industry}>{industry}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="businessType">Business Type</Label>
+              <Input
+                id="businessType"
+                value={requirements.businessType}
+                onChange={(e) => updateRequirements({ businessType: e.target.value })}
+                placeholder="e.g., B2B SaaS, Local Restaurant, Online Store"
+                className="mt-1"
+              />
+            </div>
+          </div>
+        );
+
+      case 2: // Channels
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Select Channels *</Label>
+              <p className="text-sm text-gray-600 mb-4">Choose where your chatbot will operate</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {CHANNELS.map(channel => (
+                  <div key={channel.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                    <Checkbox
+                      id={channel.id}
+                      checked={requirements.channels.includes(channel.id)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ channels: [...requirements.channels, channel.id] });
+                        } else {
+                          updateRequirements({ 
+                            channels: requirements.channels.filter(c => c !== channel.id),
+                            primaryChannel: requirements.primaryChannel === channel.id ? '' : requirements.primaryChannel
+                          });
+                        }
+                      }}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor={channel.id} className="font-medium">{channel.name}</Label>
+                      {channel.popular && <Badge variant="secondary" className="ml-2 text-xs">Popular</Badge>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {requirements.channels.length > 0 && (
+              <div>
+                <Label htmlFor="primaryChannel">Primary Channel *</Label>
+                <Select value={requirements.primaryChannel} onValueChange={(value) => updateRequirements({ primaryChannel: value })}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select your main channel" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {requirements.channels.map(channelId => {
+                      const channel = CHANNELS.find(c => c.id === channelId);
+                      return channel ? (
+                        <SelectItem key={channelId} value={channelId}>{channel.name}</SelectItem>
+                      ) : null;
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+        );
+
+      case 3: // Languages
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Supported Languages *</Label>
+              <p className="text-sm text-gray-600 mb-4">Select all languages your chatbot should support</p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {LANGUAGES.map(language => (
+                  <div key={language} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={language}
+                      checked={requirements.languages.includes(language)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ languages: [...requirements.languages, language] });
+                        } else if (requirements.languages.length > 1) {
+                          updateRequirements({ 
+                            languages: requirements.languages.filter(l => l !== language),
+                            defaultLanguage: requirements.defaultLanguage === language ? requirements.languages[0] : requirements.defaultLanguage
+                          });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={language} className="text-sm">{language}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="defaultLanguage">Default Language *</Label>
+              <Select value={requirements.defaultLanguage} onValueChange={(value) => updateRequirements({ defaultLanguage: value })}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select default language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {requirements.languages.map(language => (
+                    <SelectItem key={language} value={language}>{language}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case 4: // Use Cases
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Primary Use Cases *</Label>
+              <p className="text-sm text-gray-600 mb-4">What should your chatbot help with?</p>
+              
+              <div className="grid grid-cols-1 gap-3">
+                {USE_CASES.map(useCase => (
+                  <div key={useCase.id} className="flex items-start space-x-3 p-4 border rounded-lg">
+                    <Checkbox
+                      id={useCase.id}
+                      checked={requirements.useCases.includes(useCase.id)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ useCases: [...requirements.useCases, useCase.id] });
+                        } else {
+                          updateRequirements({ useCases: requirements.useCases.filter(u => u !== useCase.id) });
+                        }
+                      }}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor={useCase.id} className="font-medium">{useCase.name}</Label>
+                      <p className="text-sm text-gray-600 mt-1">{useCase.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="customUseCases">Custom Use Cases</Label>
+              <Textarea
+                id="customUseCases"
+                value={requirements.customUseCases.join('\n')}
+                onChange={(e) => updateRequirements({ customUseCases: e.target.value.split('\n').filter(Boolean) })}
+                placeholder="Describe any specific use cases not listed above (one per line)..."
+                className="mt-1"
+                rows={3}
+              />
+            </div>
+          </div>
+        );
+
+      case 5: // Knowledge Base
+        return (
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Checkbox
+                  id="hasKnowledgeBase"
+                  checked={requirements.hasKnowledgeBase}
+                  onCheckedChange={(checked) => updateRequirements({ hasKnowledgeBase: !!checked })}
+                />
+                <Label htmlFor="hasKnowledgeBase" className="text-base font-medium">
+                  My chatbot needs a knowledge base
+                </Label>
+              </div>
+              <p className="text-sm text-gray-600">
+                A knowledge base helps your chatbot provide accurate, business-specific information
+              </p>
+            </div>
+
+            {requirements.hasKnowledgeBase && (
+              <>
+                <div>
+                  <Label className="text-base font-medium">Knowledge Base Content</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                    <div>
+                      <Label htmlFor="products">Products/Services</Label>
+                      <Textarea
+                        id="products"
+                        value={requirements.businessData.products}
+                        onChange={(e) => updateRequirements({ 
+                          businessData: { ...requirements.businessData, products: e.target.value }
+                        })}
+                        placeholder="List your main products or services..."
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="services">Business Policies</Label>
+                      <Textarea
+                        id="policies"
+                        value={requirements.businessData.policies}
+                        onChange={(e) => updateRequirements({ 
+                          businessData: { ...requirements.businessData, policies: e.target.value }
+                        })}
+                        placeholder="Return policy, shipping, terms of service..."
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="faqs">Common Questions</Label>
+                      <Textarea
+                        id="faqs"
+                        value={requirements.businessData.faqs}
+                        onChange={(e) => updateRequirements({ 
+                          businessData: { ...requirements.businessData, faqs: e.target.value }
+                        })}
+                        placeholder="Frequently asked questions and answers..."
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="services">Additional Info</Label>
+                      <Textarea
+                        id="services"
+                        value={requirements.businessData.services}
+                        onChange={(e) => updateRequirements({ 
+                          businessData: { ...requirements.businessData, services: e.target.value }
+                        })}
+                        placeholder="Hours, locations, contact info..."
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        );
+
+      case 6: // User Segments
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">User Segments</Label>
+              <p className="text-sm text-gray-600 mb-4">
+                Define different types of users for personalized experiences
+              </p>
+              
+              <Button onClick={addUserSegment} variant="outline" className="mb-4">
+                <Plus className="w-4 h-4 mr-2" />
+                Add User Segment
+              </Button>
+
+              <div className="space-y-4">
+                {requirements.userSegments.map((segment, index) => (
+                  <Card key={index} className="p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-medium">Segment {index + 1}</h4>
+                      <Button
+                        onClick={() => removeUserSegment(index)}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor={`segment-name-${index}`}>Segment Name</Label>
+                        <Input
+                          id={`segment-name-${index}`}
+                          value={segment.name}
+                          onChange={(e) => updateUserSegment(index, 'name', e.target.value)}
+                          placeholder="e.g., VIP Customers, New Users"
+                          className="mt-1"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor={`segment-criteria-${index}`}>Criteria</Label>
+                        <Input
+                          id={`segment-criteria-${index}`}
+                          value={segment.criteria}
+                          onChange={(e) => updateUserSegment(index, 'criteria', e.target.value)}
+                          placeholder="e.g., Purchase > $1000, First time visitor"
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3">
+                      <Label htmlFor={`segment-description-${index}`}>Description</Label>
+                      <Textarea
+                        id={`segment-description-${index}`}
+                        value={segment.description}
+                        onChange={(e) => updateUserSegment(index, 'description', e.target.value)}
+                        placeholder="How should the chatbot behave differently for this segment?"
+                        className="mt-1"
+                        rows={2}
+                      />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 7: // Conversation Flow
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="conversationStyle">Conversation Style *</Label>
+              <Select value={requirements.conversationStyle} onValueChange={(value) => updateRequirements({ conversationStyle: value })}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="How should your chatbot communicate?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="professional">Professional & Formal</SelectItem>
+                  <SelectItem value="friendly">Friendly & Casual</SelectItem>
+                  <SelectItem value="helpful">Helpful & Supportive</SelectItem>
+                  <SelectItem value="enthusiastic">Enthusiastic & Energetic</SelectItem>
+                  <SelectItem value="concise">Concise & Direct</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="responseTime">Expected Response Time</Label>
+              <Select value={requirements.responseTime} onValueChange={(value) => updateRequirements({ responseTime: value })}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="How quickly should it respond?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="instant">Instant (< 1 second)</SelectItem>
+                  <SelectItem value="fast">Fast (1-3 seconds)</SelectItem>
+                  <SelectItem value="normal">Normal (3-5 seconds)</SelectItem>
+                  <SelectItem value="thoughtful">Thoughtful (5-10 seconds)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-base font-medium">Escalation Rules</Label>
+              <p className="text-sm text-gray-600 mb-3">When should conversations be handed over to humans?</p>
+              
+              <div className="space-y-2">
+                {[
+                  'Complex technical issues',
+                  'Billing or payment problems',
+                  'Complaints or negative feedback',
+                  'High-value sales opportunities',
+                  'User explicitly requests human agent',
+                  'Chatbot confidence is low',
+                  'After multiple failed attempts'
+                ].map(rule => (
+                  <div key={rule} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={rule}
+                      checked={requirements.escalationRules.includes(rule)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ escalationRules: [...requirements.escalationRules, rule] });
+                        } else {
+                          updateRequirements({ escalationRules: requirements.escalationRules.filter(r => r !== rule) });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={rule} className="text-sm">{rule}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 8: // Integrations
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">System Integrations</Label>
+              <p className="text-sm text-gray-600 mb-4">Connect your chatbot to existing tools and systems</p>
+              
+              <div className="space-y-4">
+                {INTEGRATIONS.map(integration => (
+                  <Card key={integration.id} className="p-4">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <Checkbox
+                        id={integration.id}
+                        checked={requirements.integrations.includes(integration.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            updateRequirements({ integrations: [...requirements.integrations, integration.id] });
+                          } else {
+                            updateRequirements({ integrations: requirements.integrations.filter(i => i !== integration.id) });
+                          }
+                        }}
+                      />
+                      <Label htmlFor={integration.id} className="font-medium">{integration.name}</Label>
+                    </div>
+                    
+                    {requirements.integrations.includes(integration.id) && (
+                      <div className="ml-6">
+                        <p className="text-sm text-gray-600 mb-2">Popular options:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {integration.options.map(option => (
+                            <Badge key={option} variant="outline">{option}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="customIntegrations">Custom Integrations</Label>
+              <Textarea
+                id="customIntegrations"
+                value={requirements.customIntegrations.join('\n')}
+                onChange={(e) => updateRequirements({ customIntegrations: e.target.value.split('\n').filter(Boolean) })}
+                placeholder="List any specific tools or APIs you need to integrate (one per line)..."
+                className="mt-1"
+                rows={3}
+              />
+            </div>
+          </div>
+        );
+
+      case 9: // Analytics
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Analytics & Reporting Needs</Label>
+              <p className="text-sm text-gray-600 mb-4">What insights do you want to track?</p>
+              
+              <div className="space-y-2">
+                {[
+                  'Conversation volume and trends',
+                  'User satisfaction scores',
+                  'Response accuracy and effectiveness',
+                  'Popular topics and questions',
+                  'Conversion rates and sales metrics',
+                  'User engagement and retention',
+                  'Performance by channel',
+                  'Escalation rates and reasons',
+                  'Response time analytics',
+                  'User journey mapping'
+                ].map(need => (
+                  <div key={need} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={need}
+                      checked={requirements.analyticsNeeds.includes(need)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ analyticsNeeds: [...requirements.analyticsNeeds, need] });
+                        } else {
+                          updateRequirements({ analyticsNeeds: requirements.analyticsNeeds.filter(n => n !== need) });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={need} className="text-sm">{need}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="reportingFrequency">Reporting Frequency</Label>
+              <Select value={requirements.reportingFrequency} onValueChange={(value) => updateRequirements({ reportingFrequency: value })}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="How often do you want reports?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="realtime">Real-time dashboard</SelectItem>
+                  <SelectItem value="daily">Daily reports</SelectItem>
+                  <SelectItem value="weekly">Weekly summaries</SelectItem>
+                  <SelectItem value="monthly">Monthly reports</SelectItem>
+                  <SelectItem value="custom">Custom schedule</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case 10: // Advanced Features
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Advanced Features</Label>
+              <p className="text-sm text-gray-600 mb-4">Special capabilities for your chatbot</p>
+              
+              <div className="space-y-2">
+                {[
+                  'Voice message support',
+                  'Image and file handling',
+                  'Rich media responses (carousels, cards)',
+                  'Quick reply buttons',
+                  'Persistent menu',
+                  'Typing indicators',
+                  'Read receipts',
+                  'Broadcast messaging',
+                  'Scheduled messages',
+                  'A/B testing for responses',
+                  'Sentiment analysis',
+                  'Intent recognition training',
+                  'Custom webhook integrations',
+                  'API access for developers',
+                  'White-label branding'
+                ].map(feature => (
+                  <div key={feature} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={feature}
+                      checked={requirements.advancedFeatures.includes(feature)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateRequirements({ advancedFeatures: [...requirements.advancedFeatures, feature] });
+                        } else {
+                          updateRequirements({ advancedFeatures: requirements.advancedFeatures.filter(f => f !== feature) });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={feature} className="text-sm">{feature}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="customFeatures">Custom Requirements</Label>
+              <Textarea
+                id="customFeatures"
+                value={requirements.customFeatures.join('\n')}
+                onChange={(e) => updateRequirements({ customFeatures: e.target.value.split('\n').filter(Boolean) })}
+                placeholder="Describe any specific features or requirements not listed above..."
+                className="mt-1"
+                rows={4}
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return requirements.name && requirements.industry;
+      case 2:
+        return requirements.channels.length > 0 && requirements.primaryChannel;
+      case 3:
+        return requirements.languages.length > 0 && requirements.defaultLanguage;
+      case 4:
+        return requirements.useCases.length > 0;
+      default:
+        return true;
+    }
+  };
+
+  const handleFinish = async () => {
+    // Here you would save the requirements and generate the chatbot
+    console.log('Chatbot Requirements:', requirements);
+    
+    // You could send this to your API to:
+    // 1. Save the requirements
+    // 2. Generate initial chatbot configuration
+    // 3. Create knowledge base entries
+    // 4. Set up integrations
+    // 5. Configure conversation flows
+    
+    alert('Chatbot requirements saved! We\'ll now create your intelligent assistant.');
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Create Your Intelligent Chatbot
+        </h1>
+        <p className="text-gray-600">
+          Tell us about your needs and we'll build a custom AI assistant for your business
+        </p>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-gray-700">
+            Step {currentStep} of {STEPS.length}
+          </span>
+          <span className="text-sm text-gray-500">
+            {Math.round(progress)}% Complete
+          </span>
+        </div>
+        <Progress value={progress} className="h-2" />
+      </div>
+
+      {/* Step Navigation */}
+      <div className="mb-8">
+        <div className="flex flex-wrap gap-2">
+          {STEPS.map((step) => {
+            const Icon = step.icon;
+            const isActive = step.id === currentStep;
+            const isCompleted = step.id < currentStep;
+            
+            return (
+              <div
+                key={step.id}
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm ${
+                  isActive
+                    ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                    : isCompleted
+                    ? 'bg-green-100 text-green-700 border border-green-200'
+                    : 'bg-gray-100 text-gray-500 border border-gray-200'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{step.title}</span>
+                {isCompleted && <Check className="w-4 h-4" />}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Step Content */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            {React.createElement(STEPS[currentStep - 1].icon, { className: "w-5 h-5" })}
+            <span>{STEPS[currentStep - 1].title}</span>
+          </CardTitle>
+          <CardDescription>
+            {STEPS[currentStep - 1].description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {renderStepContent()}
+        </CardContent>
+      </Card>
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-between">
+        <Button
+          onClick={prevStep}
+          disabled={currentStep === 1}
+          variant="outline"
+        >
+          <ChevronLeft className="w-4 h-4 mr-2" />
+          Previous
+        </Button>
+
+        {currentStep === STEPS.length ? (
+          <Button onClick={handleFinish} className="bg-green-600 hover:bg-green-700">
+            <Check className="w-4 h-4 mr-2" />
+            Create My Chatbot
+          </Button>
+        ) : (
+          <Button
+            onClick={nextStep}
+            disabled={!isStepValid()}
+          >
+            Next
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+} 

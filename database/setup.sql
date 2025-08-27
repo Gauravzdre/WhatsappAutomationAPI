@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS public.content_generation (
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
     brand_id UUID REFERENCES public.brands(id) ON DELETE CASCADE NOT NULL,
     ai_agent_id UUID REFERENCES public.ai_agents(id) ON DELETE SET NULL,
-    content_type TEXT NOT NULL CHECK (content_type IN ('social_post', 'whatsapp', 'email', 'ad_copy', 'blog', 'sms')),
+    content_type TEXT NOT NULL CHECK (content_type IN ('social_post', 'whatsapp', 'email', 'ad_copy', 'blog', 'sms', 'image', 'text')),
     platform TEXT,
     brief TEXT NOT NULL,
     target_audience JSONB DEFAULT '{}'::jsonb,
