@@ -47,21 +47,30 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data to match expected format
-    const transformedContent = content?.map(item => ({
-      id: item.id,
-      content_type: item.content_type,
-      title: item.brief, // Use brief as title
-      text_content: item.generated_content,
-      image_url: null, // Can be added to metadata if needed
-      image_data: null, // Can be added to metadata if needed  
-      platform: item.platform,
-      metadata: item.metadata,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-      brand_name: item.brands?.name,
-      status: item.status,
-      quality_score: item.quality_score
-    }))
+    const transformedContent = content?.map(item => {
+      console.log('Raw item from DB:', item);
+      console.log('Item metadata:', item.metadata);
+      console.log('Extracted image_url:', item.metadata?.image_url);
+      
+      return {
+        id: item.id,
+        content_type: item.content_type,
+        title: item.brief, // Use brief as title
+        text_content: item.generated_content,
+        image_url: item.metadata?.image_url || null, // Extract image_url from metadata
+        image_data: item.metadata?.image_data || null, // Extract image_data from metadata
+        platform: item.platform,
+        metadata: item.metadata,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        brand_name: item.brands?.name,
+        status: item.status,
+        quality_score: item.quality_score
+      };
+    });
+
+    console.log('Transformed content:', transformedContent);
+    console.log('Content with images:', transformedContent?.filter(c => c.image_url).length || 0);
 
     return NextResponse.json({ content: transformedContent || [] })
 

@@ -56,4 +56,8 @@ node_modules/
 # OS specific
 # Task files
 tasks.json
-tasks/ 
+tasks/ # AI Testing
+test-results/
+tests/ai-generated/
+ai-analysis-*.txt
+failure-analysis-*.txt

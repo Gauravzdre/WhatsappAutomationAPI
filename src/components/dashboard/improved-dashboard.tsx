@@ -33,8 +33,8 @@ import {
 } from 'lucide-react'
 
 interface DashboardData {
-  totalClients: number
-  totalSchedules: number
+
+
   totalBrands: number
   totalAgents: number
   activeAgents: number
@@ -42,7 +42,7 @@ interface DashboardData {
   totalContent: number
   totalConversations: number
   activeConversations: number
-  pendingSchedules: number
+
   todayMessages: number
   todayContent: number
   weeklyMessages: number
@@ -112,15 +112,7 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
       gradient: 'from-purple-500 to-purple-600',
       priority: 'medium'
     },
-    {
-      id: 'clients',
-      title: 'Manage Clients',
-      description: 'Add and organize your client contacts',
-      href: '/clients',
-      icon: Users,
-      gradient: 'from-teal-500 to-teal-600',
-      priority: 'medium'
-    },
+
     {
       id: 'ai-agents',
       title: 'Configure AI Agents',
@@ -130,15 +122,7 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
       gradient: 'from-pink-500 to-pink-600',
       priority: 'medium'
     },
-    {
-      id: 'schedules',
-      title: 'Smart Scheduling',
-      description: 'Schedule automated messages',
-      href: '/schedules',
-      icon: Calendar,
-      gradient: 'from-orange-500 to-orange-600',
-      priority: 'low'
-    }
+
   ]
 
   // Sort actions by priority and completion status
@@ -160,8 +144,7 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
   // Check if user is new (no data)
   const isNewUser = !dashboardData || (
     dashboardData.totalMessages === 0 && 
-    dashboardData.totalContent === 0 && 
-    dashboardData.totalClients === 0
+    dashboardData.totalContent === 0
   )
 
   return (
@@ -264,21 +247,7 @@ export default function ImprovedDashboard({ dashboardData, brandExists }: Improv
             </EnhancedCardContent>
           </EnhancedCard>
 
-          <EnhancedCard variant="glass">
-            <EnhancedCardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {dashboardData?.totalClients || 0}
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Clients</p>
-                </div>
-              </div>
-            </EnhancedCardContent>
-          </EnhancedCard>
+
 
           <EnhancedCard variant="glass">
             <EnhancedCardContent className="p-4">

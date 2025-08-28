@@ -16,15 +16,20 @@
     "test:integration": "jest --config jest.integration.config.js",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:ai": "playwright test tests/ai-testing/",
+    "test:ai-generated": "playwright test tests/ai-generated/",
+    "test:ai-all": "npm run test:ai && npm run test:ai-generated",
+    "generate:ai-tests": "node scripts/generate-ai-tests.js",
     "test:security": "npm audit && npm run test:security:custom",
     "test:security:custom": "node scripts/security-audit.js",
     "test:performance": "lighthouse-ci autorun",
-    "test:all": "npm run type-check && npm run lint && npm run test:ci && npm run test:integration && npm run test:e2e",
+    "test:all": "npm run type-check && npm run lint && npm run test:ci && npm run test:integration && npm run test:e2e && npm run test:ai-all",
     "jobs": "node --loader ts-node/esm src/server/jobs/runner.ts",
     "setup": "node setup.js",
     "dev:start": "node start.js",
     "fix:database": "node scripts/fix-database.js",
-    "setup:smart-scheduling": "node scripts/apply-smart-scheduling-schema.js"
+    "setup:smart-scheduling": "node scripts/apply-smart-scheduling-schema.js",
+    "ai-test": "node scripts/ai-test-runner.js"
   },
   "dependencies": {
     "@composio/client": "^0.1.0-alpha.9",

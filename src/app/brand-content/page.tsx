@@ -49,14 +49,24 @@ export default function BrandContentPage() {
       const { content } = await response.json()
       
       // Convert database format to component format
-      const formattedContent: GeneratedContent[] = content.map((item: BrandContent) => ({
-        text: item.text_content || item.title || 'Content',
-        image: item.image_url,
-        platform: item.platform || 'general',
-        timestamp: new Date(item.created_at).getTime(),
-        id: item.id,
-        title: item.title
-      }))
+      const formattedContent: GeneratedContent[] = content.map((item: BrandContent) => {
+        console.log('Processing content item:', item);
+        console.log('Item image_url:', item.image_url);
+        console.log('Item metadata:', item.metadata);
+        
+        return {
+          text: item.text_content || item.title || 'Content',
+          image: item.image_url,
+          platform: item.platform || 'general',
+          timestamp: new Date(item.created_at).getTime(),
+          id: item.id,
+          title: item.title
+        };
+      });
+
+      console.log('Formatted content:', formattedContent);
+      console.log('Content with images:', formattedContent.filter(c => c.image).length);
+      console.log('Content without images:', formattedContent.filter(c => !c.image).length);
 
       setGeneratedContents(formattedContent)
     } catch (error) {

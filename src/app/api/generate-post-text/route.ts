@@ -3,17 +3,21 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import OpenAI from 'openai'
 
-// Initialize OpenAI client with optional API key for build time
+// Initialize AI client: prefer OpenRouter if configured, otherwise OpenAI
+const useOpenRouter = !!process.env.OPENROUTER_API_KEY
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy-key-for-build',
+  apiKey: useOpenRouter
+    ? process.env.OPENROUTER_API_KEY!
+    : (process.env.OPENAI_API_KEY || 'dummy-key-for-build'),
+  baseURL: useOpenRouter ? 'https://openrouter.ai/api/v1' : undefined,
 })
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if API key is configured
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build') {
+    // Check if at least one provider key is configured
+    if (!useOpenRouter && (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build')) {
       return NextResponse.json(
-        { error: 'OpenAI API key not configured' },
+        { error: 'No AI provider configured. Set OPENROUTER_API_KEY or OPENAI_API_KEY.' },
         { status: 500 }
       )
     }
@@ -184,8 +188,9 @@ FINAL REQUIREMENTS:
 Generate compelling content that will resonate with the target audience and drive engagement while staying true to the brand identity.
 `
 
+    const textModel = process.env.AI_TEXT_MODEL || (useOpenRouter ? 'deepseek/deepseek-chat:free' : 'gpt-4')
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: textModel,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
@@ -210,45 +215,66 @@ Generate compelling content that will resonate with the target audience and driv
         .single()
       brandId = brand?.id
     }
+    
+    // If no brand context, try to get the user's default brand
+    if (!brandId) {
+      const { data: defaultBrand } = await supabase
+        .from('brands')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+      brandId = defaultBrand?.id
+    }
+    
+    // If still no brand, we'll save without brand association (brand_id can be null)
+    if (!brandId) {
+      console.log('No brand found for user, saving content without brand association');
+    }
 
     // Save to database using the new content_generation table
+    const insertData = {
+      user_id: user.id,
+      content_type: 'text',
+      platform: platform,
+      brief: `${platform} post for ${productName}`,
+      generated_content: generatedText,
+      status: 'completed',
+      metadata: {
+        productName,
+        productDescription,
+        targetAudience,
+        keyBenefits,
+        callToAction,
+        tone,
+        contentType,
+        includeHashtags,
+        includeEmojis,
+        additionalPrompt,
+        brandContextUsed: !!brandContext,
+        brandInfo: brandContext ? {
+          name: brandContext.name,
+          voice: brandContext.brand_voice,
+          industry: brandContext.industry
+        } : null,
+        imageAnalysisUsed: !!imageAnalysis,
+        imagesAnalyzed: referenceImages?.length || 0,
+        generationParams: {
+          model: textModel,
+          temperature: 0.7,
+          visionModelUsed: !!imageAnalysis
+        },
+        created_via: 'post_text_generator'
+      }
+    };
+
+    // Only add brand_id if it exists
+    if (brandId) {
+      insertData.brand_id = brandId;
+    }
+
     const { data: savedContent, error: saveError } = await supabase
       .from('content_generation')
-      .insert({
-        user_id: user.id,
-        brand_id: brandId,
-        content_type: 'text',
-        platform: platform,
-        brief: `${platform} post for ${productName}`,
-        generated_content: generatedText,
-        status: 'completed',
-        metadata: {
-          productName,
-          productDescription,
-          targetAudience,
-          keyBenefits,
-          callToAction,
-          tone,
-          contentType,
-          includeHashtags,
-          includeEmojis,
-          additionalPrompt,
-          brandContextUsed: !!brandContext,
-          brandInfo: brandContext ? {
-            name: brandContext.name,
-            voice: brandContext.brand_voice,
-            industry: brandContext.industry
-          } : null,
-          imageAnalysisUsed: !!imageAnalysis,
-          imagesAnalyzed: referenceImages?.length || 0,
-          generationParams: {
-            model: 'gpt-4',
-            temperature: 0.7,
-            visionModelUsed: !!imageAnalysis
-          },
-          created_via: 'post_text_generator'
-        }
-      })
+      .insert(insertData)
       .select()
       .single()
 

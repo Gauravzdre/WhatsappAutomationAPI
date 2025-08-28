@@ -52,8 +52,6 @@ interface BrandData {
 }
 
 interface DashboardData {
-  totalClients: number
-  totalSchedules: number
   totalBrands: number
   totalAgents: number
   activeAgents: number
@@ -61,7 +59,6 @@ interface DashboardData {
   totalContent: number
   totalConversations: number
   activeConversations: number
-  pendingSchedules: number
   todayMessages: number
   todayContent: number
   weeklyMessages: number
@@ -160,19 +157,12 @@ export default function HomePage() {
       }
 
       // Fetch all data in parallel
-      // Fetch clients without user_id filter (temporary)...
-      console.log('Fetching clients without user_id filter (temporary)...')
-      const clientsResult = await supabase.from('clients').select('id, created_at', { count: 'exact' })
-      console.log('Fetched clients:', clientsResult.data)
-
       const [
-        schedulesResult, 
         brandsResult, 
         agentsResult,
         contentResult,
         conversationsResult
       ] = await Promise.all([
-        safeQuery('schedules', 'id, last_sent, created_at', { count: 'exact' }),
         safeQuery('brands', 'id, name, created_at', { count: 'exact' }),
         safeQuery('ai_agents', 'id, type, status, created_at', { count: 'exact' }),
         tryMultipleTables(['content_generation', 'brand_content'], 'id, created_at', { count: 'exact' }),
@@ -195,15 +185,12 @@ export default function HomePage() {
       }
 
       // Calculate metrics
-      const totalClients = clientsResult.count || 0
-      const totalSchedules = schedulesResult.count || 0
       const totalBrands = brandsResult.count || 0
       const totalAgents = agentsResult.count || 0
       const totalMessages = messagesResult.count || 0
       const totalContent = contentResult.count || 0
       const totalConversations = conversationsResult.count || 0
       const activeConversations = conversationsResult.data?.filter((conv: any) => conv.status === 'active').length || 0
-      const pendingSchedules = schedulesResult.data?.filter((schedule: any) => !schedule.last_sent).length || 0
 
       // Calculate today's metrics
       const today = new Date().toISOString().split('T')[0]
@@ -232,8 +219,6 @@ export default function HomePage() {
       ).length || 0
 
       setDashboardData({
-        totalClients,
-        totalSchedules,
         totalBrands,
         totalAgents,
         activeAgents: agentsResult.data?.filter((agent: any) => agent.status === 'active').length || 0,
@@ -241,7 +226,6 @@ export default function HomePage() {
         totalContent,
         totalConversations,
         activeConversations,
-        pendingSchedules,
         todayMessages,
         todayContent,
         weeklyMessages,

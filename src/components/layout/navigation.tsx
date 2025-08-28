@@ -88,13 +88,6 @@ export function Navigation() {
       description: 'Overview & quick actions'
     },
     { 
-      name: 'Strategy', 
-      href: '/strategy', 
-      icon: Target,
-      description: 'Content strategy management',
-      isNew: true
-    },
-    { 
       name: 'Templates', 
       href: '/templates', 
       icon: MessageSquare,
@@ -137,18 +130,7 @@ export function Navigation() {
       icon: Bot,
       description: 'Automation bots'
     },
-    { 
-      name: 'Clients', 
-      href: '/clients', 
-      icon: Users,
-      description: 'Contact management'
-    },
-    { 
-      name: 'Schedules', 
-      href: '/schedules', 
-      icon: Clock,
-      description: 'Message scheduling'
-    }
+
   ]
 
   const settingsNavigation = [
