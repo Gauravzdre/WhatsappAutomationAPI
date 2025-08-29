@@ -269,7 +269,7 @@ Generate compelling content that will resonate with the target audience and driv
 
     // Only add brand_id if it exists
     if (brandId) {
-      insertData.brand_id = brandId;
+      (insertData as any).brand_id = brandId;
     }
 
     const { data: savedContent, error: saveError } = await supabase

@@ -291,9 +291,9 @@ export async function POST(request: NextRequest) {
               }
               
               // Check for images array in the message (Gemini 2.5 Flash Image Preview format)
-              if (!imageUrl && message && message.images && Array.isArray(message.images)) {
+              if (!imageUrl && message && (message as any).images && Array.isArray((message as any).images)) {
                 console.log('Found images array in message, checking for base64 data...')
-                for (const imageItem of message.images) {
+                for (const imageItem of (message as any).images) {
                   if (imageItem.type === 'image_url' && imageItem.image_url) {
                     console.log('Found image_url in images array')
                     // Handle both URL strings and objects with url property
@@ -335,9 +335,9 @@ export async function POST(request: NextRequest) {
             }
             
             // Check for images array in the message (Gemini 2.5 Flash Image Preview format)
-            if (!imageUrl && message && message.images && Array.isArray(message.images)) {
+            if (!imageUrl && message && (message as any).images && Array.isArray((message as any).images)) {
               console.log('Found images array in message, checking for base64 data...')
-              for (const imageItem of message.images) {
+              for (const imageItem of (message as any).images) {
                 if (imageItem.type === 'image_url' && imageItem.image_url) {
                   console.log('Found image_url in images array')
                   // Handle both URL strings and objects with url property
@@ -431,10 +431,11 @@ export async function POST(request: NextRequest) {
                throw new Error('Fallback DALL-E 3 also failed')
              }
              
-             imageUrl = fallbackResponse.data[0]?.url
-             if (!imageUrl) {
-               throw new Error('No image URL in fallback response')
-             }
+                           const fallbackImageUrl = fallbackResponse.data[0]?.url
+              if (!fallbackImageUrl) {
+                throw new Error('No image URL in fallback response')
+              }
+              imageUrl = fallbackImageUrl
              
              console.log('Successfully generated image using DALL-E 3 fallback')
              
@@ -461,10 +462,11 @@ export async function POST(request: NextRequest) {
             throw new Error('No image data returned from OpenRouter')
           }
           
-          imageUrl = response.data[0]?.url
-          if (!imageUrl) {
+          const responseImageUrl = response.data[0]?.url
+          if (!responseImageUrl) {
             throw new Error('No image URL in response data')
           }
+          imageUrl = responseImageUrl
           
         } catch (openRouterError) {
           console.error('OpenRouter images.generate failed:', openRouterError)
@@ -487,11 +489,12 @@ export async function POST(request: NextRequest) {
         throw new Error('Failed to generate image')
       }
 
-      imageUrl = response.data[0]?.url
+      const openaiImageUrl = response.data[0]?.url
 
-      if (!imageUrl) {
+      if (!openaiImageUrl) {
         throw new Error('Failed to generate image')
       }
+      imageUrl = openaiImageUrl
     }
 
     // Get user's brand ID for saving content
@@ -557,7 +560,7 @@ export async function POST(request: NextRequest) {
 
     // Only add brand_id if it exists
     if (brandId) {
-      insertData.brand_id = brandId;
+      (insertData as any).brand_id = brandId;
     }
 
     const { data: savedContent, error: saveError } = await supabase
