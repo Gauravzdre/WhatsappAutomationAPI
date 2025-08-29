@@ -262,7 +262,7 @@ export default function SocialPostsPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Social Media Posts
+                Social Media Scheduler
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-2">
                 Schedule and manage your social media content with AI-powered scoring

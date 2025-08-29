@@ -159,12 +159,12 @@ export default function BrandContentPage() {
           {/* Page Header */}
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="p-3 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl shadow-lg">
-                <Palette className="h-8 w-8 text-white" />
+              <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
+                <Sparkles className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-                  Brand Content Studio
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  AI Content Generator
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 text-lg">
                   Create engaging social media content with AI-powered tools

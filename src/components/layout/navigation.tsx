@@ -37,7 +37,9 @@ import {
   TrendingUp,
   UserPlus,
   MoreHorizontal,
-  Target
+  Target,
+  Sparkles,
+  ImageIcon
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -79,7 +81,7 @@ export function Navigation() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
-  // Core navigation - most frequently used features
+  // Primary navigation - Core features (Content & Scheduling)
   const primaryNavigation = [
     { 
       name: 'Dashboard', 
@@ -88,41 +90,41 @@ export function Navigation() {
       description: 'Overview & quick actions'
     },
     { 
+      name: 'Create Content', 
+      href: '/brand-content', 
+      icon: Sparkles,
+      description: 'AI content generation',
+      isPrimary: true
+    },
+    { 
+      name: 'Schedule Posts', 
+      href: '/social-posts', 
+      icon: Calendar,
+      description: 'Social media scheduling',
+      isPrimary: true
+    },
+    { 
+      name: 'Analytics', 
+      href: '/analytics', 
+      icon: BarChart3,
+      description: 'Performance insights',
+      isPrimary: true
+    }
+  ]
+
+  // Secondary features accessible via "More" dropdown
+  const secondaryNavigation = [
+    { 
       name: 'Templates', 
       href: '/templates', 
       icon: MessageSquare,
       description: 'Message templates'
     },
     { 
-      name: 'Analytics', 
-      href: '/analytics', 
-      icon: BarChart3,
-      description: 'Performance metrics'
-    },
-    { 
-      name: 'Teams', 
-      href: '/teams', 
-      icon: Users,
-      description: 'Team collaboration',
-      isNew: true
-    }
-  ]
-
-  // Features accessible via "More" dropdown
-  const moreNavigation = [
-    { 
       name: 'Insights', 
       href: '/insights', 
       icon: TrendingUp,
-      description: 'AI-powered insights',
-      isNew: true
-    },
-    { 
-      name: 'Social Posts', 
-      href: '/social-posts', 
-      icon: Calendar,
-      description: 'Social media scheduling',
-      isNew: true
+      description: 'AI-powered insights'
     },
     { 
       name: 'AI Agents', 
@@ -130,7 +132,12 @@ export function Navigation() {
       icon: Bot,
       description: 'Automation bots'
     },
-
+    { 
+      name: 'Teams', 
+      href: '/teams', 
+      icon: Users,
+      description: 'Team collaboration'
+    }
   ]
 
   const settingsNavigation = [
@@ -139,18 +146,6 @@ export function Navigation() {
       href: brandExists ? '/brand-setup?edit=true' : '/brand-setup',
       icon: Brain,
       description: brandExists ? 'Edit brand' : 'Setup brand'
-    },
-    { 
-      name: 'Brand Content', 
-      href: '/brand-content', 
-      icon: Palette,
-      description: 'Content studio'
-    },
-    { 
-      name: 'Onboarding', 
-      href: '/onboarding', 
-      icon: UserPlus,
-      description: 'Setup wizard'
     },
     { 
       name: 'Settings', 
@@ -181,7 +176,7 @@ export function Navigation() {
                     Schedsy.ai
                   </h1>
                   <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                    Smart Automation
+                    Content & Social Media
                   </p>
                 </div>
               </Link>
@@ -198,8 +193,11 @@ export function Navigation() {
                     href={item.href}
                     className={cn(
                       'relative flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group',
+                      item.isPrimary 
+                        ? 'bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200/50 dark:border-blue-700/50'
+                        : '',
                       active
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                     )}
                   >
@@ -208,9 +206,9 @@ export function Navigation() {
                       active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'
                     )} />
                     <span>{item.name}</span>
-                    {item.isNew && (
-                      <Badge className="bg-green-500 text-white text-xs px-1.5 py-0.5 ml-1">
-                        New
+                    {item.isPrimary && (
+                      <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs px-1.5 py-0.5 ml-1">
+                        Core
                       </Badge>
                     )}
                     {active && (
@@ -233,8 +231,8 @@ export function Navigation() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Features</DropdownMenuLabel>
-                  {moreNavigation.map((item) => {
+                  <DropdownMenuLabel>Additional Features</DropdownMenuLabel>
+                  {secondaryNavigation.map((item) => {
                     const Icon = item.icon
                     return (
                       <DropdownMenuItem key={item.name} asChild>
@@ -243,12 +241,8 @@ export function Navigation() {
                           <div className="flex-1">
                             <div className="flex items-center space-x-2">
                               <span>{item.name}</span>
-                              {item.isNew && (
-                                <Badge className="bg-green-500 text-white text-xs px-1 py-0">
-                                  New
-                                </Badge>
-                              )}
                             </div>
+                            <p className="text-xs text-gray-500">{item.description}</p>
                           </div>
                         </Link>
                       </DropdownMenuItem>
@@ -328,7 +322,7 @@ export function Navigation() {
               {/* Primary Navigation */}
               <div className="space-y-1">
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
-                  Main
+                  Core Features
                 </p>
                 {primaryNavigation.map((item) => {
                   const Icon = item.icon
@@ -352,9 +346,9 @@ export function Navigation() {
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <span>{item.name}</span>
-                          {item.isNew && (
-                            <Badge className="bg-green-500 text-white text-xs">
-                              New
+                          {item.isPrimary && (
+                            <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs">
+                              Core
                             </Badge>
                           )}
                         </div>
@@ -367,12 +361,12 @@ export function Navigation() {
                 })}
               </div>
 
-              {/* More Features */}
+              {/* Secondary Features */}
               <div className="space-y-1 pt-4">
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
-                  Features
+                  Additional Features
                 </p>
-                {moreNavigation.map((item) => {
+                {secondaryNavigation.map((item) => {
                   const Icon = item.icon
                   const active = isActive(item.href)
                   return (
@@ -393,11 +387,6 @@ export function Navigation() {
                       )} />
                       <div className="flex items-center space-x-2">
                         <span>{item.name}</span>
-                        {item.isNew && (
-                          <Badge className="bg-green-500 text-white text-xs">
-                            New
-                          </Badge>
-                        )}
                       </div>
                     </Link>
                   )

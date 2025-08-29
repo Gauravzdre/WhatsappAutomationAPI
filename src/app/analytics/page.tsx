@@ -5,10 +5,10 @@ import { BarChart3 } from 'lucide-react'
 export default function AnalyticsPage() {
   return (
     <DashboardLayout
-      title="Analytics Dashboard"
-      description="Real-time insights into your messaging performance, automation flows, and user engagement metrics"
+      title="Content & Social Media Analytics"
+      description="Track performance, engagement, and optimize your content strategy across all social platforms"
       icon={<BarChart3 className="h-8 w-8" />}
-      gradient="blue"
+      gradient="purple"
     >
       <AnalyticsDashboard />
     </DashboardLayout>

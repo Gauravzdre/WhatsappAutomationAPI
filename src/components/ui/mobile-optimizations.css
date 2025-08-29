@@ -1,0 +1,187 @@
+/* Mobile-specific optimizations */
+
+/* Ensure minimum touch target size (44px) */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Larger buttons on mobile */
+  .mobile-button {
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Better spacing for mobile */
+  .mobile-spacing {
+    gap: 16px;
+  }
+  
+  /* Stack elements vertically on mobile */
+  .mobile-stack {
+    flex-direction: column;
+  }
+  
+  /* Full width cards on mobile */
+  .mobile-full-width {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  /* Better text sizing for mobile */
+  .mobile-text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Improved form inputs on mobile */
+  .mobile-input {
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+  
+  /* Better navigation for mobile */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: hsl(var(--background));
+    border-top: 1px solid hsl(var(--border));
+    padding: 8px 16px;
+    z-index: 50;
+  }
+  
+  /* Bottom sheet for mobile */
+  .mobile-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: hsl(var(--background));
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px;
+    z-index: 40;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  /* Swipe gestures */
+  .swipeable {
+    touch-action: pan-y;
+  }
+  
+  /* Better scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Hide scrollbars on mobile */
+  .mobile-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mobile-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Better focus states for mobile */
+  .mobile-focus:focus {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+  
+  /* Improved loading states for mobile */
+  .mobile-loading {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Better error states for mobile */
+  .mobile-error {
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+    background: hsl(var(--destructive) / 0.1);
+    border: 1px solid hsl(var(--destructive) / 0.2);
+  }
+  
+  /* Improved success states for mobile */
+  .mobile-success {
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+    background: hsl(142 76% 36% / 0.1);
+    border: 1px solid hsl(142 76% 36% / 0.2);
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-optimized {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  
+  .tablet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .retina-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode optimizations for mobile */
+@media (max-width: 768px) {
+  .dark .mobile-nav {
+    background: hsl(var(--background));
+    border-top-color: hsl(var(--border));
+  }
+  
+  .dark .mobile-bottom-sheet {
+    background: hsl(var(--background));
+  }
+}
+
+/* Landscape orientation optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-landscape {
+    padding-top: 60px; /* Account for mobile browser UI */
+  }
+  
+  .mobile-nav {
+    padding: 4px 16px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .mobile-xs {
+    padding: 12px;
+  }
+  
+  .mobile-xs .mobile-button {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
