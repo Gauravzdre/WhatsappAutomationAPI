@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
          // Generate image using selected provider/model
      const imageModel = process.env.AI_IMAGE_MODEL || (useOpenRouter ? 'google/gemini-2.5-flash-image-preview:free' : 'dall-e-3')
     
-    let imageUrl: string
+         let imageUrl: string = ''
     
     if (useOpenRouter) {
       // For OpenRouter models, we need to handle different model types
