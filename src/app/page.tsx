@@ -384,7 +384,7 @@ export default function HomePage() {
             </div>
             <div className="h-1 w-24 bg-gradient-to-r from-transparent via-current to-transparent opacity-20 rounded-full"></div>
           </div>
-
+          
           {/* Quick Actions - Core Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Create Content */}

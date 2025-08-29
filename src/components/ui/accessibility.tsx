@@ -288,7 +288,7 @@ export const accessibilityUtils = {
   generateId: (prefix = "id") => `${prefix}-${Math.random().toString(36).substr(2, 9)}`,
   
   // Check if element is focusable
-  isFocusable: (element: HTMLElement) => {
+  isFocusable: (element: HTMLElement): boolean => {
     const tabIndex = element.getAttribute('tabindex')
     return (
       element.tagName === 'BUTTON' ||
@@ -297,14 +297,14 @@ export const accessibilityUtils = {
       element.tagName === 'SELECT' ||
       element.tagName === 'TEXTAREA' ||
       tabIndex === '0' ||
-      (tabIndex && parseInt(tabIndex) >= 0)
+      (tabIndex !== null && parseInt(tabIndex) >= 0)
     )
   },
   
   // Get all focusable elements
   getFocusableElements: (container: HTMLElement) => {
     return Array.from(container.querySelectorAll('*')).filter(
-      (el): el is HTMLElement => accessibilityUtils.isFocusable(el)
+      (el): el is HTMLElement => el instanceof HTMLElement && accessibilityUtils.isFocusable(el)
     )
   }
 }

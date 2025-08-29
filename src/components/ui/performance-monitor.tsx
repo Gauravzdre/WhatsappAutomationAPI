@@ -2,6 +2,24 @@
 
 import { useEffect, useState } from "react"
 
+// Type definitions for performance APIs
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number
+  processingEnd: number
+  target?: EventTarget
+}
+
+interface LayoutShift extends PerformanceEntry {
+  value: number
+  hadRecentInput: boolean
+  lastInputTime: number
+  sources?: Array<{
+    node?: Node
+    currentRect?: DOMRectReadOnly
+    previousRect?: DOMRectReadOnly
+  }>
+}
+
 interface PerformanceMetrics {
   fcp: number | null // First Contentful Paint
   lcp: number | null // Largest Contentful Paint
@@ -49,8 +67,8 @@ export function PerformanceMonitor() {
     // Measure First Input Delay
     const fidObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries()
-      const fidEntry = entries[0]
-      if (fidEntry) {
+      const fidEntry = entries[0] as PerformanceEventTiming
+      if (fidEntry && 'processingStart' in fidEntry) {
         setMetrics(prev => ({ ...prev, fid: fidEntry.processingStart - fidEntry.startTime }))
       }
     })
@@ -61,8 +79,9 @@ export function PerformanceMonitor() {
     const clsObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries()
       for (const entry of entries) {
-        if (!entry.hadRecentInput) {
-          clsValue += (entry as any).value
+        const layoutShiftEntry = entry as LayoutShift
+        if (!layoutShiftEntry.hadRecentInput) {
+          clsValue += layoutShiftEntry.value
         }
       }
       setMetrics(prev => ({ ...prev, cls: clsValue }))

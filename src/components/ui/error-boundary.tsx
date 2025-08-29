@@ -140,7 +140,8 @@ export function AsyncErrorBoundary({
 
   if (error) {
     if (fallback) {
-      return <fallback error={error} retry={() => setError(null)} />
+      const FallbackComponent = fallback
+      return <FallbackComponent error={error} retry={() => setError(null)} />
     }
     
     return (
