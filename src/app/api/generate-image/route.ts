@@ -218,10 +218,6 @@ export async function POST(request: NextRequest) {
                ],
                max_tokens: 4000,
                temperature: 0.7,
-               extra_headers: {
-                 "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "https://schedsy.ai",
-                 "X-Title": "Schedsy.ai",
-               },
              })
              
                          content = response.choices[0]?.message?.content || ''
@@ -266,10 +262,6 @@ export async function POST(request: NextRequest) {
                ],
                max_tokens: 4000,
                temperature: 0.7,
-               extra_headers: {
-                 "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "https://schedsy.ai",
-                 "X-Title": "Schedsy.ai",
-               },
              })
              
                            content = response.choices[0]?.message?.content || ''
