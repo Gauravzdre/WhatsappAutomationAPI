@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
+import { OAuthConnectButtons } from '@/components/oauth-connect-buttons'
 
 interface WhatsAppSettings {
   id?: string
@@ -291,6 +292,21 @@ export default function SettingsPage() {
     }
   }
 
+  const handleOAuthSuccess = (platform: 'facebook' | 'instagram', accountName: string) => {
+    toast({
+      title: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Connected!`,
+      description: `Successfully connected to ${accountName}`,
+    })
+  }
+
+  const handleOAuthError = (platform: 'facebook' | 'instagram', error: string) => {
+    toast({
+      title: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Connection Failed`,
+      description: error,
+      variant: 'destructive'
+    })
+  }
+
   if (loading) {
     return (
       <DashboardLayout
@@ -416,6 +432,28 @@ export default function SettingsPage() {
                   <p className="text-sm">Generate a permanent access token</p>
                 </div>
               </div>
+            </EnhancedCardContent>
+          </EnhancedCard>
+
+          {/* OAuth Demo Link */}
+          <EnhancedCard variant="glass">
+            <EnhancedCardHeader>
+              <EnhancedCardTitle className="text-green-800 dark:text-green-300 flex items-center gap-2">
+                <Sparkles className="h-5 w-5" />
+                Try the New OAuth Integration!
+              </EnhancedCardTitle>
+            </EnhancedCardHeader>
+            <EnhancedCardContent className="text-green-700 dark:text-green-300">
+              <p className="mb-3">
+                🎉 We've simplified social media connections! Instead of copying and pasting access tokens, 
+                you can now connect your Facebook and Instagram accounts with just one click.
+              </p>
+              <Button 
+                onClick={() => window.open('/oauth-demo', '_blank')}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                🚀 Try OAuth Demo
+              </Button>
             </EnhancedCardContent>
           </EnhancedCard>
 
@@ -584,54 +622,19 @@ export default function SettingsPage() {
           </EnhancedCard>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Facebook & Instagram */}
+            {/* Facebook & Instagram - OAuth Integration */}
             <EnhancedCard variant="glass">
               <EnhancedCardHeader>
                 <EnhancedCardTitle className="text-blue-600 dark:text-blue-400">Facebook & Instagram</EnhancedCardTitle>
+                <p className="text-sm text-gray-500 mt-1">
+                  Connect your accounts securely with one click - no more copying access tokens!
+                </p>
               </EnhancedCardHeader>
-              <EnhancedCardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="facebook-token">Facebook Access Token</Label>
-                  <Input
-                    id="facebook-token"
-                    type="password"
-                    value={socialSettings.facebook_access_token}
-                    onChange={(e) => setSocialSettings({...socialSettings, facebook_access_token: e.target.value})}
-                    placeholder="EAAxxxxxxxxxxxxxxx"
-                    className="mt-2"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="facebook-page">Facebook Page ID</Label>
-                  <Input
-                    id="facebook-page"
-                    value={socialSettings.facebook_page_id}
-                    onChange={(e) => setSocialSettings({...socialSettings, facebook_page_id: e.target.value})}
-                    placeholder="123456789012345"
-                    className="mt-2"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="instagram-token">Instagram Access Token</Label>
-                  <Input
-                    id="instagram-token"
-                    type="password"
-                    value={socialSettings.instagram_access_token}
-                    onChange={(e) => setSocialSettings({...socialSettings, instagram_access_token: e.target.value})}
-                    placeholder="IGQxxxxxxxxxxxxxxx"
-                    className="mt-2"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="instagram-account">Instagram Account ID</Label>
-                  <Input
-                    id="instagram-account"
-                    value={socialSettings.instagram_account_id}
-                    onChange={(e) => setSocialSettings({...socialSettings, instagram_account_id: e.target.value})}
-                    placeholder="123456789012345"
-                    className="mt-2"
-                  />
-                </div>
+              <EnhancedCardContent>
+                                 <OAuthConnectButtons 
+                   onConnectionSuccess={handleOAuthSuccess}
+                   onConnectionError={handleOAuthError}
+                 />
               </EnhancedCardContent>
             </EnhancedCard>
 
