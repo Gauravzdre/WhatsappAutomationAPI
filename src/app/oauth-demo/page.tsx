@@ -4,11 +4,11 @@ import { OAuthConnectButtons } from '@/components/oauth-connect-buttons'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function OAuthDemoPage() {
-  const handleOAuthSuccess = (platform: 'facebook' | 'instagram', accountName: string) => {
+  const handleOAuthSuccess = (platform: 'facebook' | 'instagram' | 'google', accountName: string) => {
     console.log(`✅ ${platform} connected successfully: ${accountName}`)
   }
 
-  const handleOAuthError = (platform: 'facebook' | 'instagram', error: string) => {
+  const handleOAuthError = (platform: 'facebook' | 'instagram' | 'google', error: string) => {
     console.error(`❌ ${platform} connection failed: ${error}`)
   }
 
@@ -95,7 +95,7 @@ export default function OAuthDemoPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-3 p-3 border rounded-lg">
                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">f</span>
@@ -113,6 +113,16 @@ export default function OAuthDemoPage() {
                 <div>
                   <h4 className="font-medium">Instagram</h4>
                   <p className="text-sm text-gray-500">Posts, stories, comments, insights</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 p-3 border rounded-lg">
+                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">G</span>
+                </div>
+                <div>
+                  <h4 className="font-medium">Google</h4>
+                  <p className="text-sm text-gray-500">APIs, services, authentication</p>
                 </div>
               </div>
             </div>

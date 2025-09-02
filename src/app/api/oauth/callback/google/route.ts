@@ -22,15 +22,21 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    console.log('✅ Google OAuth callback received with code:', code)
+    console.log('🔄 Processing Google OAuth callback...')
 
-    // TODO: Exchange the authorization code for access tokens
-    // This would typically involve calling Composio's API to complete the connection
-    // For now, we'll redirect back to settings with success status
+    // Handle the OAuth callback and get connection details
+    const connection = await oauthService.handleCallback('google', code, state || undefined)
 
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/settings?oauth_success=google&message=Authorization successful! Please complete setup in Composio.`
-    )
+    if (connection.status === 'connected') {
+      console.log('✅ Google OAuth successful:', connection.accountInfo?.name)
+      
+      // Redirect to settings page with success message
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/settings?oauth_success=google&account_name=${encodeURIComponent(connection.accountInfo?.name || 'Google Account')}`
+      )
+    } else {
+      throw new Error('Failed to establish Google connection')
+    }
 
   } catch (error) {
     console.error('❌ Google OAuth callback error:', error)

@@ -7,13 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast'
 
 interface OAuthConnectButtonsProps {
-  onConnectionSuccess?: (platform: 'facebook' | 'instagram', accountName: string) => void
-  onConnectionError?: (platform: 'facebook' | 'instagram', error: string) => void
+  onConnectionSuccess?: (platform: 'facebook' | 'instagram' | 'google', accountName: string) => void
+  onConnectionError?: (platform: 'facebook' | 'instagram' | 'google', error: string) => void
 }
 
 interface ConnectionStatus {
   facebook: 'disconnected' | 'connecting' | 'connected' | 'error'
   instagram: 'disconnected' | 'connecting' | 'connected' | 'error'
+  google: 'disconnected' | 'connecting' | 'connected' | 'error'
 }
 
 export function OAuthConnectButtons({ 
@@ -22,16 +23,18 @@ export function OAuthConnectButtons({
 }: OAuthConnectButtonsProps) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>({
     facebook: 'disconnected',
-    instagram: 'disconnected'
+    instagram: 'disconnected',
+    google: 'disconnected'
   })
   const [connectedAccounts, setConnectedAccounts] = useState<{
     facebook?: string
     instagram?: string
+    google?: string
   }>({})
   
   const { toast } = useToast()
 
-  const handleConnect = async (platform: 'facebook' | 'instagram') => {
+  const handleConnect = async (platform: 'facebook' | 'instagram' | 'google') => {
     try {
       setConnectionStatus(prev => ({ ...prev, [platform]: 'connecting' }))
       
@@ -136,7 +139,7 @@ export function OAuthConnectButtons({
     }
   }
 
-  const getStatusText = (platform: 'facebook' | 'instagram') => {
+  const getStatusText = (platform: 'facebook' | 'instagram' | 'google') => {
     const status = connectionStatus[platform]
     
     switch (status) {
@@ -151,7 +154,7 @@ export function OAuthConnectButtons({
     }
   }
 
-  const getButtonVariant = (platform: 'facebook' | 'instagram') => {
+  const getButtonVariant = (platform: 'facebook' | 'instagram' | 'google') => {
     const status = connectionStatus[platform]
     
     switch (status) {
@@ -166,7 +169,7 @@ export function OAuthConnectButtons({
     }
   }
 
-  const getButtonText = (platform: 'facebook' | 'instagram') => {
+  const getButtonText = (platform: 'facebook' | 'instagram' | 'google') => {
     const status = connectionStatus[platform]
     
     switch (status) {
@@ -181,7 +184,7 @@ export function OAuthConnectButtons({
     }
   }
 
-  const isButtonDisabled = (platform: 'facebook' | 'instagram') => {
+  const isButtonDisabled = (platform: 'facebook' | 'instagram' | 'google') => {
     return connectionStatus[platform] === 'connecting'
   }
 
@@ -242,6 +245,36 @@ export function OAuthConnectButtons({
               className="min-w-[100px]"
             >
               {getButtonText('instagram')}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ExternalLink className="h-5 w-5 text-green-600" />
+            Google
+          </CardTitle>
+          <CardDescription>
+            Connect your Google account to access Google services and APIs
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {getStatusIcon('google')}
+              <span className="text-sm text-gray-600">
+                {getStatusText('google')}
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              disabled={true}
+              className="min-w-[100px] opacity-50 cursor-not-allowed"
+              title="Google OAuth not currently supported"
+            >
+              Coming Soon
             </Button>
           </div>
         </CardContent>

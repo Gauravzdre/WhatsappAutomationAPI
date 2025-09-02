@@ -292,14 +292,14 @@ export default function SettingsPage() {
     }
   }
 
-  const handleOAuthSuccess = (platform: 'facebook' | 'instagram', accountName: string) => {
+  const handleOAuthSuccess = (platform: 'facebook' | 'instagram' | 'google', accountName: string) => {
     toast({
       title: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Connected!`,
       description: `Successfully connected to ${accountName}`,
     })
   }
 
-  const handleOAuthError = (platform: 'facebook' | 'instagram', error: string) => {
+  const handleOAuthError = (platform: 'facebook' | 'instagram' | 'google', error: string) => {
     toast({
       title: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Connection Failed`,
       description: error,
