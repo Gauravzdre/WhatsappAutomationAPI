@@ -375,4 +375,10 @@ export const oauthService = new OAuthService({
   baseUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 })
 
+// Debug environment variables
+console.log('🔍 OAuth Service Environment Debug:')
+console.log('NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL)
+console.log('COMPOSIO_API_KEY:', process.env.COMPOSIO_API_KEY ? '✅ Set' : '❌ Not set')
+console.log('Redirect URI:', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000')
+
 export default OAuthService
