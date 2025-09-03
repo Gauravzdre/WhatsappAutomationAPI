@@ -139,7 +139,7 @@ class OAuthService {
       
       const connectionRequest = await this.client.connectedAccounts.create({
         auth_config: {
-          id: 'ac_-TIOTRR9vPrH' // Real Facebook auth config ID from Composio
+          id: oauthConfig.id
         },
         connection: {
           redirect_uri: `${this.config.redirectUri}/api/oauth/callback/facebook`,
@@ -197,7 +197,7 @@ class OAuthService {
       
       const connectionRequest = await this.client.connectedAccounts.create({
         auth_config: {
-          id: 'ac_-TIOTRR9vPrH' // Use Facebook auth config for Instagram (Meta platform)
+          id: oauthConfig.id
         },
         connection: {
           redirect_uri: `${this.config.redirectUri}/api/oauth/callback/instagram`,
