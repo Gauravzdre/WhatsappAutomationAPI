@@ -139,7 +139,7 @@ class OAuthService {
       
       const connectionRequest = await this.client.connectedAccounts.create({
         auth_config: {
-          id: oauthConfig.id
+          id: oauthConfig.name // Use name as identifier since id property doesn't exist
         },
         connection: {
           redirect_uri: `${this.config.redirectUri}/api/oauth/callback/facebook`,
@@ -152,6 +152,11 @@ class OAuthService {
       // For OAuth2, we need to redirect the user to the platform's authorization URL
       // The redirect_uri from the response should contain the OAuth URL
       if (connectionRequest.redirect_uri) {
+        // Check if the redirect URL is pointing to Composio's backend instead of our app
+        if (connectionRequest.redirect_uri.includes('backend.composio.dev')) {
+          console.warn('⚠️ Composio returned backend URL, this may cause redirect issues')
+          // You might need to construct the OAuth URL manually or check Composio dashboard settings
+        }
         return connectionRequest.redirect_uri
       } else {
         // If no redirect_uri is provided, we need to construct the OAuth URL manually
@@ -197,7 +202,7 @@ class OAuthService {
       
       const connectionRequest = await this.client.connectedAccounts.create({
         auth_config: {
-          id: oauthConfig.id
+          id: oauthConfig.name // Use name as identifier since id property doesn't exist
         },
         connection: {
           redirect_uri: `${this.config.redirectUri}/api/oauth/callback/instagram`,
@@ -210,6 +215,11 @@ class OAuthService {
       // For OAuth2, we need to redirect the user to the platform's authorization URL
       // The redirect_uri from the response should contain the OAuth URL
       if (connectionRequest.redirect_uri) {
+        // Check if the redirect URL is pointing to Composio's backend instead of our app
+        if (connectionRequest.redirect_uri.includes('backend.composio.dev')) {
+          console.warn('⚠️ Composio returned backend URL, this may cause redirect issues')
+          // You might need to construct the OAuth URL manually or check Composio dashboard settings
+        }
         return connectionRequest.redirect_uri
       } else {
         // If no redirect_uri is provided, we need to construct the OAuth URL manually
