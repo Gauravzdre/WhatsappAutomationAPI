@@ -18,14 +18,11 @@ interface OAuthConnection {
 }
 
 class OAuthService {
-  private client: Composio
+  private client: Composio | null = null
   private config: OAuthConfig
   private initialized: boolean = false
 
   constructor(config: OAuthConfig) {
-    this.client = new Composio({
-      apiKey: process.env.COMPOSIO_API_KEY
-    })
     this.config = config
   }
 
@@ -35,17 +32,31 @@ class OAuthService {
     try {
       console.log('🚀 Initializing OAuth service...')
       
-      // Verify required environment variables
+      // Check if Composio API key is available
       if (!process.env.COMPOSIO_API_KEY) {
-        throw new Error('COMPOSIO_API_KEY environment variable is required')
+        console.warn('⚠️ COMPOSIO_API_KEY not set - OAuth features will be limited')
+        this.initialized = true
+        return
       }
       
+      this.client = new Composio({
+        apiKey: process.env.COMPOSIO_API_KEY
+      })
+      
       this.initialized = true
-      console.log('✅ OAuth service initialized successfully')
+      console.log('✅ OAuth service initialized successfully with Composio')
     } catch (error) {
       console.error('❌ Failed to initialize OAuth service:', error)
-      throw error
+      // Don't throw error, just mark as initialized without client
+      this.initialized = true
     }
+  }
+
+  /**
+   * Check if Composio is available
+   */
+  private isComposioAvailable(): boolean {
+    return this.client !== null && process.env.COMPOSIO_API_KEY !== undefined
   }
 
   /**
@@ -55,7 +66,11 @@ class OAuthService {
     try {
       await this.initialize()
       
-      const toolkits = await this.client.toolkits.list()
+      if (!this.isComposioAvailable()) {
+        throw new Error('Composio is not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
+      const toolkits = await this.client!.toolkits.list()
       console.log('📱 Available toolkits:', toolkits.items.map(t => ({ slug: t.slug, name: t.name })))
       
       return toolkits.items
@@ -72,8 +87,12 @@ class OAuthService {
     try {
       await this.initialize()
       
+      if (!this.isComposioAvailable()) {
+        throw new Error('Composio is not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
       // Try to get Facebook toolkit
-      const facebookToolkit = await this.client.toolkits.retrieve('facebook')
+      const facebookToolkit = await this.client!.toolkits.retrieve('facebook')
       console.log('✅ Facebook toolkit found:', facebookToolkit.name)
       
       return facebookToolkit
@@ -81,12 +100,16 @@ class OAuthService {
       console.error('❌ Facebook toolkit not found:', error)
       // Try alternative names
       try {
-        const metaToolkit = await this.client.toolkits.retrieve('meta')
+        if (!this.isComposioAvailable()) {
+          throw new Error('Composio is not configured')
+        }
+        
+        const metaToolkit = await this.client!.toolkits.retrieve('meta')
         console.log('✅ Meta toolkit found:', metaToolkit.name)
         return metaToolkit
       } catch (metaError) {
         console.error('❌ Meta toolkit not found:', metaError)
-        throw new Error('Facebook/Meta toolkit not available in Composio')
+        throw new Error('Facebook/Meta toolkit not available in Composio. Please check your Composio configuration.')
       }
     }
   }
@@ -98,13 +121,17 @@ class OAuthService {
     try {
       await this.initialize()
       
-      const instagramToolkit = await this.client.toolkits.retrieve('instagram')
+      if (!this.isComposioAvailable()) {
+        throw new Error('Composio is not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
+      const instagramToolkit = await this.client!.toolkits.retrieve('instagram')
       console.log('✅ Instagram toolkit found:', instagramToolkit.name)
       
       return instagramToolkit
     } catch (error) {
       console.error('❌ Instagram toolkit not found:', error)
-      throw new Error('Instagram toolkit not available in Composio')
+      throw new Error('Instagram toolkit not available in Composio. Please check your Composio configuration.')
     }
   }
 
@@ -114,6 +141,10 @@ class OAuthService {
   async getFacebookConnectUrl(): Promise<string> {
     try {
       await this.initialize()
+      
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
       
       console.log('🔍 Getting Facebook toolkit...')
       const facebookToolkit = await this.getFacebookToolkit()
@@ -133,11 +164,12 @@ class OAuthService {
       }
       
       console.log('✅ Found Facebook OAuth config:', oauthConfig.name)
+      console.log('🔍 Auth config details:', JSON.stringify(oauthConfig, null, 2))
       
       // Use the real Facebook auth config ID from Composio
       console.log('🚀 Creating Facebook OAuth connection...')
       
-      const connectionRequest = await this.client.connectedAccounts.create({
+      const connectionRequest = await this.client!.connectedAccounts.create({
         auth_config: {
           id: oauthConfig.name // Use name as identifier since id property doesn't exist
         },
@@ -166,6 +198,18 @@ class OAuthService {
       
     } catch (error) {
       console.error('❌ Failed to get Facebook connect URL:', error)
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('COMPOSIO_API_KEY') || error.message.includes('not configured')) {
+          throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+        } else if (error.message.includes('toolkit not available')) {
+          throw new Error('Facebook OAuth is not available. Please check your Composio configuration.')
+        } else {
+          throw new Error(`Facebook OAuth failed: ${error.message}`)
+        }
+      }
+      
       throw new Error('Failed to initialize Facebook OAuth')
     }
   }
@@ -176,6 +220,10 @@ class OAuthService {
   async getInstagramConnectUrl(): Promise<string> {
     try {
       await this.initialize()
+      
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
       
       console.log('🔍 Getting Instagram toolkit...')
       const instagramToolkit = await this.getInstagramToolkit()
@@ -195,12 +243,13 @@ class OAuthService {
       }
       
       console.log('✅ Found Instagram OAuth config:', oauthConfig.name)
+      console.log('🔍 Auth config details:', JSON.stringify(oauthConfig, null, 2))
       
       // For Instagram, we'll use the Facebook auth config since Instagram is part of Meta
       // and can share the same OAuth flow
       console.log('🚀 Creating Instagram OAuth connection...')
       
-      const connectionRequest = await this.client.connectedAccounts.create({
+      const connectionRequest = await this.client!.connectedAccounts.create({
         auth_config: {
           id: oauthConfig.name // Use name as identifier since id property doesn't exist
         },
@@ -240,8 +289,6 @@ class OAuthService {
     try {
       await this.initialize()
       
-      console.log('🔍 Getting Google toolkit...')
-      
       // Since Google toolkit doesn't exist in Composio, we'll use a fallback approach
       // You can implement direct Google OAuth here if needed
       console.log('⚠️ Google toolkit not available in Composio')
@@ -262,9 +309,13 @@ class OAuthService {
     try {
       await this.initialize()
       
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
       console.log(`🔗 Creating ${platform} connected account...`)
       
-      const connectedAccount = await this.client.connectedAccounts.create({
+      const connectedAccount = await this.client!.connectedAccounts.create({
         auth_config: {
           id: authConfigId
         },
@@ -290,8 +341,12 @@ class OAuthService {
     try {
       await this.initialize()
       
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
       // List connected accounts for the platform
-      const connections = await this.client.connectedAccounts.list({
+      const connections = await this.client!.connectedAccounts.list({
         toolkit_slug: platform
       })
       
@@ -319,7 +374,11 @@ class OAuthService {
     try {
       await this.initialize()
       
-      const connection = await this.client.connectedAccounts.retrieve(connectionId)
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
+      
+      const connection = await this.client!.connectedAccounts.retrieve(connectionId)
       return connection.status === 'ACTIVE'
       
     } catch (error) {
@@ -334,6 +393,10 @@ class OAuthService {
   async handleCallback(platform: 'facebook' | 'instagram' | 'google', code: string, state?: string): Promise<OAuthConnection> {
     try {
       await this.initialize()
+      
+      if (!this.isComposioAvailable()) {
+        throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
+      }
       
       console.log(`🔄 Handling ${platform} OAuth callback...`)
       
