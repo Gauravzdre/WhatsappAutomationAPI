@@ -169,9 +169,13 @@ class OAuthService {
       // Use the real Facebook auth config ID from Composio
       console.log('🚀 Creating Facebook OAuth connection...')
       
+      // Use the specific Facebook auth config ID from Composio
+      const facebookAuthConfigId = 'ac_-TIOTRR9vPrH'
+      console.log('🔑 Using Facebook auth config ID:', facebookAuthConfigId)
+      
       const connectionRequest = await this.client!.connectedAccounts.create({
         auth_config: {
-          id: oauthConfig.name // Use name as identifier since id property doesn't exist
+          id: facebookAuthConfigId
         },
         connection: {
           redirect_uri: `${this.config.redirectUri}/api/oauth/callback/facebook`,
@@ -205,6 +209,8 @@ class OAuthService {
           throw new Error('OAuth not configured. Please set COMPOSIO_API_KEY environment variable.')
         } else if (error.message.includes('toolkit not available')) {
           throw new Error('Facebook OAuth is not available. Please check your Composio configuration.')
+        } else if (error.message.includes('Auth config not found')) {
+          throw new Error('Facebook OAuth auth configuration not found in Composio. Please check your Composio dashboard settings.')
         } else {
           throw new Error(`Facebook OAuth failed: ${error.message}`)
         }
